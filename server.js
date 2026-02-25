@@ -116,7 +116,7 @@ app.get("/dashboard", (req, res) => {
     <div class="card">
       <h2>Welcome, ${currentUser} 🌿</h2>
       <p>Points: ${users[currentUser].points}</p>
-      <img src="https://i.imgur.com/8Km9tLL.jpg" alt="Environment Image"/>
+      <img src="https://github.com/ECOSPHERE-8/Raisoni/blob/main/Screenshot%202026-02-25%20232100.png" alt="Environment Image"/>
       <br/>
       <a href="/learn"><button>Learn</button></a>
       <a href="/practice"><button>Practice</button></a>
