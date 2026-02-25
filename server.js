@@ -1,164 +1,222 @@
 const express = require("express");
 const app = express();
-const PORT = 3000;
 
 app.use(express.urlencoded({ extended: true }));
 
-// Simple in-memory user (demo only)
-const USER = { username: "student", password: "1234", points: 0 };
+// In-memory user store (temporary for demo)
+let users = {};
+let currentUser = null;
 
-function layout(title, content) {
-  return `
+// ===== LOGIN PAGE =====
+app.get("/", (req, res) => {
+  res.send(`
   <html>
   <head>
-    <title>${title}</title>
+    <title>Eco-Sphere Login</title>
     <style>
       body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        background: linear-gradient(to bottom right, #e8f5e9, #a5d6a7);
+        font-family: Arial;
+        background: linear-gradient(to right, #d4fc79, #96e6a1);
         text-align: center;
-      }
-      .container {
-        padding: 30px;
-      }
-      h1 {
-        color: #1b5e20;
+        padding: 50px;
       }
       .box {
         background: white;
-        padding: 25px;
+        padding: 30px;
+        border-radius: 15px;
+        width: 300px;
         margin: auto;
-        width: 80%;
-        max-width: 400px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        box-shadow: 0 0 10px gray;
       }
       input, button {
-        width: 90%;
-        padding: 10px;
         margin: 10px;
-        border-radius: 6px;
+        padding: 10px;
+        width: 90%;
+        border-radius: 8px;
         border: 1px solid #ccc;
       }
       button {
-        background: #2e7d32;
+        background: green;
         color: white;
-        font-weight: bold;
-        cursor: pointer;
-      }
-      button:hover {
-        background: #1b5e20;
-      }
-      .nav button {
-        width: 120px;
-      }
-      .placeholder {
-        border: 2px dashed #2e7d32;
-        padding: 40px;
-        margin: 20px;
-        color: #2e7d32;
+        border: none;
         font-weight: bold;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      ${content}
+    <div class="box">
+      <h2>🌱 ECO-SPHERE</h2>
+      <form method="POST" action="/login">
+        <input type="text" name="username" placeholder="Username" required/><br/>
+        <input type="password" name="password" placeholder="Password" required/><br/>
+        <button type="submit">Login / Register</button>
+      </form>
     </div>
   </body>
   </html>
-  `;
-}
-
-// Login Page
-app.get("/", (req, res) => {
-  res.send(layout("Login", `
-    <div class="box">
-      <h1>Ecosphere Login</h1>
-      <form method="POST" action="/login">
-        <input type="text" name="username" placeholder="Username" required />
-        <input type="password" name="password" placeholder="Password" required />
-        <button type="submit">Login</button>
-      </form>
-      <p>Demo Login → student / 1234</p>
-    </div>
-  `));
+  `);
 });
 
-// Login Auth
+// ===== LOGIN LOGIC =====
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
-  if (username === USER.username && password === USER.password) {
+
+  if (!users[username]) {
+    users[username] = { password, points: 0 };
+  }
+
+  if (users[username].password === password) {
+    currentUser = username;
     res.redirect("/dashboard");
   } else {
-    res.send(layout("Error", `<h2>Invalid Login</h2><a href="/">Try Again</a>`));
+    res.send("Incorrect password");
   }
 });
 
-// Dashboard
+// ===== DASHBOARD =====
 app.get("/dashboard", (req, res) => {
-  res.send(layout("Dashboard", `
-    <h1>Welcome to Ecosphere 🌍</h1>
-    <p><b>User:</b> ${USER.username}</p>
-    <p><b>Points Earned:</b> ${USER.points}</p>
+  if (!currentUser) return res.redirect("/");
 
-    <div class="nav">
+  res.send(`
+  <html>
+  <head>
+    <title>Dashboard</title>
+    <style>
+      body {
+        font-family: Arial;
+        background: #e8f5e9;
+        text-align: center;
+        padding: 40px;
+      }
+      .card {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        width: 400px;
+        margin: auto;
+        box-shadow: 0 0 10px gray;
+      }
+      button {
+        margin: 10px;
+        padding: 12px;
+        width: 150px;
+        border: none;
+        border-radius: 8px;
+        background: green;
+        color: white;
+        font-weight: bold;
+      }
+      img {
+        width: 100%;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h2>Welcome, ${currentUser} 🌿</h2>
+      <p>Points: ${users[currentUser].points}</p>
+      <img src="https://i.imgur.com/8Km9tLL.jpg" alt="Environment Image"/>
+      <br/>
       <a href="/learn"><button>Learn</button></a>
       <a href="/practice"><button>Practice</button></a>
       <a href="/about"><button>About Us</button></a>
     </div>
-  `));
+  </body>
+  </html>
+  `);
 });
 
-// Learn Page
+// ===== LEARN PAGE =====
 app.get("/learn", (req, res) => {
-  res.send(layout("Learn", `
-    <h1>Environmental Learning 🌱</h1>
-    <div class="placeholder">PI - Add Environment Awareness Video/Image Here</div>
-    <p>Learn about sustainability, recycling, and protecting nature through engaging content.</p>
-    <a href="/dashboard"><button>Back</button></a>
-  `));
+  res.send(`
+  <html>
+  <head>
+    <title>Learn</title>
+    <style>
+      body { font-family: Arial; background: #c8e6c9; text-align:center; padding:40px; }
+      .box { background:white; padding:20px; border-radius:15px; width:600px; margin:auto; }
+      iframe { border-radius:10px; }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <h2>🌍 Environmental Awareness</h2>
+      <iframe width="560" height="315"
+      src="https://www.youtube.com/embed/QQYgCxu988s"
+      allowfullscreen></iframe>
+      <br/><br/>
+      <a href="/dashboard">⬅ Back</a>
+    </div>
+  </body>
+  </html>
+  `);
 });
 
-// Practice Quiz
+// ===== PRACTICE QUIZ =====
 app.get("/practice", (req, res) => {
-  res.send(layout("Practice", `
-    <h1>Practice Case Study 🌿</h1>
-    <form method="POST" action="/submit">
-      <p><b>Q1:</b> What is Recycling?</p>
-      <input name="q1" placeholder="Your Answer" required />
-
-      <p><b>Q2:</b> Name one way to reduce plastic pollution.</p>
-      <input name="q2" placeholder="Your Answer" required />
-
-      <button type="submit">Submit Answers</button>
-    </form>
-    <a href="/dashboard"><button>Back</button></a>
-  `));
+  res.send(`
+  <html>
+  <head>
+    <title>Practice</title>
+    <style>
+      body { font-family: Arial; background:#a5d6a7; text-align:center; padding:40px; }
+      .quiz { background:white; padding:20px; border-radius:15px; width:500px; margin:auto; }
+      button { padding:10px; margin:10px; background:green; color:white; border:none; border-radius:8px; }
+    </style>
+  </head>
+  <body>
+    <div class="quiz">
+      <h2>♻️ Practice Quiz</h2>
+      <form method="POST" action="/practice">
+        <p>1. What is Recycling?</p>
+        <input type="radio" name="q1" value="a" required/> Reusing waste materials<br/>
+        <input type="radio" name="q1" value="b"/> Burning garbage<br/><br/>
+        <button type="submit">Submit</button>
+      </form>
+      <br/>
+      <a href="/dashboard">⬅ Back</a>
+    </div>
+  </body>
+  </html>
+  `);
 });
 
-// Submit Quiz
-app.post("/submit", (req, res) => {
-  USER.points += 10;
-  res.send(layout("Result", `
-    <h1>Great Job! 🎉</h1>
-    <p>You earned 10 points for completing the case study.</p>
-    <p>Total Points: ${USER.points}</p>
-    <a href="/dashboard"><button>Go to Dashboard</button></a>
-  `));
+app.post("/practice", (req, res) => {
+  if (req.body.q1 === "a") {
+    users[currentUser].points += 10;
+  }
+  res.redirect("/dashboard");
 });
 
-// About Page
+// ===== ABOUT PAGE =====
 app.get("/about", (req, res) => {
-  res.send(layout("About", `
-    <h1>About Ecosphere</h1>
-    <div class="placeholder">P2 - Add Environment Images Here</div>
-    <p>Ecosphere is an educational platform designed to promote environmental awareness through interactive learning and practice case studies.</p>
-    <a href="/dashboard"><button>Back</button></a>
-  `));
+  res.send(`
+  <html>
+  <head>
+    <title>About</title>
+    <style>
+      body { font-family: Arial; background:#dcedc8; text-align:center; padding:40px; }
+      .box { background:white; padding:20px; border-radius:15px; width:600px; margin:auto; }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <h2>About Eco-Sphere 🌱</h2>
+      <p>
+      Eco-Sphere is an environmental education platform that uses interactive
+      learning, quizzes, and gamification to create awareness about sustainability,
+      recycling, and climate responsibility among students.
+      </p>
+      <a href="/dashboard">⬅ Back</a>
+    </div>
+  </body>
+  </html>
+  `);
 });
 
+// ===== SERVER PORT FOR RENDER =====
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log("Server running on http://localhost:" + PORT);
+  console.log("Eco-Sphere running on port " + PORT);
 });
