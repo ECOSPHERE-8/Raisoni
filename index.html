@@ -6,20 +6,54 @@
     <title>Eco Sphere | Login</title>
     <style>
         body {
-            margin: 0; height: 100vh; display: flex; align-items: center; justify-content: center;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-family: 'Segoe UI', sans-serif;
             background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
                         url('https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=1350&q=80');
-            background-size: cover; background-position: center;
+            background-size: cover;
+            background-position: center;
         }
         .login-box {
-            background: rgba(255, 255, 255, 0.95); padding: 40px; border-radius: 20px;
-            text-align: center; width: 350px; backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            width: 350px;
+            backdrop-filter: blur(10px);
         }
-        h1 { color: #1b4332; margin: 0; font-size: 32px; }
-        p { color: #2d6a4f; font-style: italic; margin-bottom: 30px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #2d6a4f; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; }
+        h1 {
+            color: #1b4332;
+            margin: 0;
+            font-size: 32px;
+        }
+        p {
+            color: #2d6a4f;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #2d6a4f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -30,17 +64,17 @@
         <input type="password" id="pword" placeholder="Password" required>
         <button onclick="handleLogin()">Login</button>
     </div>
+
     <script>
         function handleLogin() {
             const u = document.getElementById('uname').value;
-            if(u) {
+            if (u.trim() !== "") {
                 localStorage.setItem('currentUser', u);
                 window.location.href = "dashboard.html";
             } else {
-                alert("Please enter a username 🌱");
+                alert("Please enter username 🌿");
             }
         }
     </script>
 </body>
 </html>
-
