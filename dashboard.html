@@ -1,41 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Dashboard | Eco Sphere</title>
-    <style>
-        body { font-family: sans-serif; background: #f0fdf4; margin: 0; padding: 20px; }
-        .header { background: white; padding: 20px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .stats { background: white; padding: 20px; border-radius: 15px; margin: 20px 0; }
-        .bar { background: #e2e8f0; height: 15px; border-radius: 10px; overflow: hidden; margin: 10px 0; }
-        #fill { background: #22c55e; width: 0%; height: 100%; transition: 1s; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .card { background: white; padding: 30px; border-radius: 15px; text-align: center; cursor: pointer; text-decoration: none; color: #1b4332; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-    </style>
+<meta charset="UTF-8">
+<title>Dashboard | Eco Sphere</title>
+<style>
+body { font-family: sans-serif; background: #f0fdf4; margin: 0; padding: 20px; }
+.header { background: white; padding: 20px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; }
+.stats { background: white; padding: 20px; border-radius: 15px; margin: 20px 0; }
+.bar { background: #e2e8f0; height: 15px; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+#fill { background: #22c55e; width: 0%; height: 100%; transition: 1s; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.card { background: white; padding: 30px; border-radius: 15px; text-align: center; text-decoration: none; color: #1b4332; transition: 0.3s; }
+.card:hover { transform: translateY(-5px); }
+</style>
 </head>
 <body>
-    <div class="header">
-        <h2>Hi, <span id="userDisp">Explorer</span>!</h2>
-        <div id="badgeCount">Badges: 0 🏆</div>
-    </div>
 
-    <div class="stats">
-        <strong>Learning Progress: <span id="progText">0</span>%</strong>
-        <div class="bar"><div id="fill"></div></div>
-    </div>
+<div class="header">
+<h2>Hi, <span id="userDisp">Explorer</span>!</h2>
+<div id="badgeCount">Badges: 🌟</div>
+</div>
 
-    <div class="grid">
-        <a href="learn.html" class="card"><h3>🌿 Learning</h3><p>AR Environmental Lessons</p></a>
-        <a href="practice.html" class="card"><h3>📝 Practice</h3><p>Scenario-Based Questions</p></a>
-        <a href="about.html" class="card"><h3>ℹ️ About Us</h3><p>Environmental Awareness</p></a>
-    </div>
+<div class="stats">
+<strong>Learning Progress: <span id="progText">0</span>%</strong>
+<div class="bar"><div id="fill"></div></div>
+</div>
 
-    <script>
-        document.getElementById('userDisp').innerText = localStorage.getItem('currentUser') || "User";
-        let p = localStorage.getItem('ecoProg') || 0;
-        document.getElementById('fill').style.width = p + "%";
-        document.getElementById('progText').innerText = p;
-    </script>
+<div class="grid">
+<a href="learn.html" class="card"><h3>🌿 Learning</h3><p>AR Environmental Lessons</p></a>
+<a href="practice.html" class="card"><h3>📝 Practice</h3><p>Scenario-Based Questions</p></a>
+<a href="about.html" class="card"><h3>ℹ️ About Us</h3><p>Environmental Awareness</p></a>
+</div>
+
+<script>
+document.getElementById('userDisp').innerText = localStorage.getItem('currentUser') || "User";
+let p = localStorage.getItem('ecoProg') || 0;
+document.getElementById('fill').style.width = p + "%";
+document.getElementById('progText').innerText = p;
+</script>
+
 </body>
 </html>
