@@ -1,21 +1,19 @@
-
-                <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Eco Sphere | AR Learning</title>
 
-<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+<!-- Stable Model Viewer CDN -->
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
 <style>
-body { display: flex; margin: 0; font-family: 'Segoe UI', sans-serif; background: #f0fdf4; height: 100vh; overflow: hidden; }
-.sidebar { width: 320px; background: #1b4332; color: white; padding: 25px; display: flex; flex-direction: column; overflow-y: auto; }
-.lesson-btn { background: #2d6a4f; border: none; color: white; width: 100%; padding: 15px; margin: 8px 0; border-radius: 10px; cursor: pointer; }
-.back-link { color: #b7e4c7; text-decoration: none; margin-top: auto; font-weight: bold; }
-.viewer-container { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-.info-card { background: white; padding: 20px; border-radius: 15px; margin-top: 20px; text-align: center; max-width: 600px; }
-model-viewer { width: 90%; height: 65vh; background: #ffffff; border-radius: 25px; }
+body { display: flex; margin: 0; font-family: sans-serif; background: #f0fdf4; height: 100vh; }
+.sidebar { width: 300px; background: #1b4332; color: white; padding: 20px; }
+.lesson-btn { width: 100%; padding: 12px; margin: 8px 0; background: #2d6a4f; color: white; border: none; border-radius: 8px; cursor: pointer; }
+.viewer { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+model-viewer { width: 80%; height: 60vh; background: white; border-radius: 20px; }
+.info { background: white; padding: 20px; margin-top: 20px; border-radius: 15px; text-align: center; }
 </style>
 </head>
 
@@ -23,49 +21,51 @@ model-viewer { width: 90%; height: 65vh; background: #ffffff; border-radius: 25p
 
 <div class="sidebar">
 <h2>AR Lessons</h2>
-<button class="lesson-btn" onclick="updateLesson(1)">1. Waste Bins</button>
-<button class="lesson-btn" onclick="updateLesson(2)">2. Air Pollution</button>
-<button class="lesson-btn" onclick="updateLesson(3)">3. Seed to Tree</button>
-<a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+<button class="lesson-btn" onclick="updateLesson(1)">Waste Bins</button>
+<button class="lesson-btn" onclick="updateLesson(2)">Air Pollution</button>
+<button class="lesson-btn" onclick="updateLesson(3)">Seed to Tree</button>
+<button class="lesson-btn" onclick="updateLesson(4)">Water Waste</button>
+<button class="lesson-btn" onclick="updateLesson(5)">Transport Gases</button>
+<button class="lesson-btn" onclick="updateLesson(6)">Paper Recycling</button>
+<button class="lesson-btn" onclick="updateLesson(7)">Wildlife Care</button>
+<button class="lesson-btn" onclick="updateLesson(8)">Food Waste</button>
+<a href="dashboard.html" style="color:white">← Back</a>
 </div>
 
-<div class="viewer-container">
-<model-viewer id="main-viewer"
-    src="https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/Models/MaterialsVariantsShoe/glTF/MaterialsVariantsShoe.gltf"
-    ar
-    ar-modes="webxr scene-viewer quick-look"
-    ar-scale="fixed"
-    camera-controls
-    auto-rotate
-    shadow-intensity="1">
-    <button slot="ar-button" style="background:white;border:none;border-radius:8px;padding:12px 20px;position:absolute;bottom:20px;right:20px;">
-        🌍 View in your Room
-    </button>
+<div class="viewer">
+<model-viewer id="mv" src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
+ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate shadow-intensity="1">
+<button slot="ar-button" style="padding:10px;border:none;border-radius:8px;background:white;">View in Room 🌍</button>
 </model-viewer>
 
-<div class="info-card">
-<h1 id="ltitle">Waste Management</h1>
-<p id="ldesc">Click lessons to explore environmental awareness in AR.</p>
+<div class="info">
+<h2 id="title">Waste Management</h2>
+<p id="desc">Click lessons to explore environmental awareness in AR.</p>
 </div>
 </div>
 
 <script>
-const lessons = {
-1:{t:"Waste Bins",d:"Use green bin for organic waste and blue for recyclables.",m:"https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/Models/MaterialsVariantsShoe/glTF/MaterialsVariantsShoe.gltf"},
-2:{t:"Air Pollution",d:"Burning plastic releases harmful gases that damage our lungs.",m:"https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/Models/Lantern/glTF/Lantern.gltf"},
-3:{t:"Seed to Tree",d:"A tiny seed grows into a tree providing oxygen and life.",m:"https://modelviewer.dev/shared-assets/models/Astronaut.glb"}
+const lessons={
+1:{t:"Waste Bins",d:"Sort waste: Green for organic, Blue for recyclables.",m:"https://modelviewer.dev/shared-assets/models/WaterBottle.glb"},
+2:{t:"Air Pollution",d:"Burning plastic releases harmful gases.",m:"https://modelviewer.dev/shared-assets/models/Lantern.glb"},
+3:{t:"Seed to Tree",d:"Plant trees to produce oxygen and balance nature.",m:"https://modelviewer.dev/shared-assets/models/Astronaut.glb"},
+4:{t:"Water Waste",d:"Closing taps saves thousands of litres yearly.",m:"https://modelviewer.dev/shared-assets/models/WaterBottle.glb"},
+5:{t:"Transport Gases",d:"Public transport reduces pollution.",m:"https://modelviewer.dev/shared-assets/models/Astronaut.glb"},
+6:{t:"Paper Recycling",d:"Recycling paper saves trees.",m:"https://modelviewer.dev/shared-assets/models/Astronaut.glb"},
+7:{t:"Wildlife Care",d:"Protect animals to preserve ecosystem balance.",m:"https://modelviewer.dev/shared-assets/models/Astronaut.glb"},
+8:{t:"Food Waste",d:"Avoid wasting food to save energy and water.",m:"https://modelviewer.dev/shared-assets/models/Astronaut.glb"}
 };
 
 function updateLesson(id){
-const lesson=lessons[id];
-document.getElementById('ltitle').innerText=lesson.t;
-document.getElementById('ldesc').innerText=lesson.d;
-document.getElementById('main-viewer').src=lesson.m;
-
+const l=lessons[id];
+document.getElementById('title').innerText=l.t;
+document.getElementById('desc').innerText=l.d;
+document.getElementById('mv').src=l.m;
 let p=parseInt(localStorage.getItem('ecoProg'))||0;
-localStorage.setItem('ecoProg',Math.min(p+10,100));
+localStorage.setItem('ecoProg',Math.min(p+5,100));
 }
 </script>
 
 </body>
 </html>
+
