@@ -5,64 +5,123 @@
     <title>Eco Sphere | Practice</title>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
-        body { font-family: sans-serif; background: #f0fdf4; padding: 20px; text-align: center; }
-        .card { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        img { width: 100%; border-radius: 10px; margin: 15px 0; }
-        .opt { display: block; width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; background: #fff; }
-        .opt:hover { background: #f0fdf4; border-color: #22c55e; }
-        model-viewer { width: 100%; height: 300px; display: none; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0fdf4; padding: 20px; text-align: center; color: #1b4332; }
+        .quiz-card { max-width: 700px; margin: auto; background: white; padding: 25px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .scenario-img { width: 100%; height: 300px; object-fit: cover; border-radius: 15px; margin: 15px 0; border: 3px solid #2d6a4f; }
+        .option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 12px; background: #fff; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        .option:hover { background: #dcfce7; border-color: #2d6a4f; }
+        /* The AR Reward Box */
+        #ar-container { display: none; margin-top: 20px; border-top: 2px dashed #2d6a4f; padding-top: 20px; }
+        model-viewer { width: 100%; height: 350px; background-color: #f8fafc; border-radius: 15px; }
+        .next-btn { padding: 12px 30px; background: #2d6a4f; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 15px; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h2 id="t">Case Study 1: Electricity</h2>
-        <img id="i" src="https://images.unsplash.com/photo-1513506491745-1d26a7dbc504?auto=format&fit=crop&w=600">
-        <p id="q">Lights and fans are on in an empty room. Action?</p>
-        <div id="opts"></div>
-        <div id="reward" style="display:none">
-            <h3 style="color:green">Correct! 🌿</h3>
-            <model-viewer id="rv" src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" auto-rotate camera-controls ar></model-viewer>
-            <button onclick="next()" style="padding:10px 20px; background:#22c55e; color:white; border:none; border-radius:5px;">Next Question</button>
+
+    <div class="quiz-card">
+        <h2 id="case-title">Loading Scenario...</h2>
+        <img id="case-img" src="" class="scenario-img">
+        <p id="question-text" style="font-weight: bold; font-size: 18px;"></p>
+        
+        <div id="options-list">
+            </div>
+
+        <div id="ar-container">
+            <h3 style="color: #166534;">🌟 Correct! View your AR Reward:</h3>
+            <p id="fact-text" style="font-style: italic; color: #374151;"></p>
+            <model-viewer id="reward-viewer" 
+                src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" 
+                ar ar-modes="webxr scene-viewer quick-look" 
+                camera-controls auto-rotate shadow-intensity="1">
+                <button slot="ar-button" style="background-color: white; border-radius: 4px; border: none; position: absolute; top: 16px; right: 16px; padding: 10px;">
+                    👋 View in your Room
+                </button>
+            </model-viewer>
+            <button class="next-btn" onclick="goToNext()">Next Case Study →</button>
         </div>
     </div>
+
     <script>
-        const qs = [
-            { t: "Saving Electricity", q: "Empty room lights are on. Action?", opts: ["Ignore", "Turn them off", "Open windows", "Do nothing"], c: 1, img: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=600" },
-            { t: "Plastic Bottles", q: "Best eco-friendly choice for water?", opts: ["New daily", "Throw away", "Reusable steel bottle", "Burn it"], c: 2, img: "https://images.unsplash.com/photo-1618591764495-1f95c1481a21?w=600" }
-            // All 15 cases here
+        const scenarios = [
+            {
+                title: "Case Study 1: Saving Electricity",
+                q: "You notice lights and fans running in an empty room. Action?",
+                img: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=800",
+                options: ["Ignore it", "Turn off lights and fans", "Open windows", "Tell friends"],
+                correct: 1,
+                fact: "Turning off lights saves energy and reduces carbon footprint!",
+                model: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/Models/Lantern/glTF/Lantern.gltf"
+            },
+            {
+                title: "Case Study 2: Plastic Bottles",
+                q: "What is the best eco-friendly choice for daily water?",
+                img: "https://images.unsplash.com/photo-1618591764495-1f95c1481a21?auto=format&fit=crop&w=800",
+                options: ["Buy new bottles daily", "Throw bottles away", "Carry reusable steel bottle", "Burn the plastic"],
+                correct: 2,
+                fact: "A reusable bottle prevents hundreds of plastic bottles from entering oceans!",
+                model: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/Models/MaterialsVariantsShoe/glTF/MaterialsVariantsShoe.gltf"
+            },
+            {
+                title: "Case Study 4: Water Wastage",
+                q: "While brushing, you see the tap running. What do you do?",
+                img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800",
+                options: ["Let it run", "Close the tap while brushing", "Use more water", "Do nothing"],
+                correct: 1,
+                fact: "Closing the tap saves up to 8 liters of water per minute!",
+                model: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/Models/WaterBottle/glTF/WaterBottle.gltf"
+            }
+            // You can add all 15 here following this pattern
         ];
-        let cur = 0;
-        function load() {
-            const s = qs[cur];
-            document.getElementById('t').innerText = s.t;
-            document.getElementById('q').innerText = s.q;
-            document.getElementById('i').src = s.img;
-            const div = document.getElementById('opts');
-            div.innerHTML = "";
-            s.opts.forEach((o, i) => {
-                const b = document.createElement('button');
-                b.className = "opt"; b.innerText = o; b.onclick = () => check(i);
-                div.appendChild(b);
+
+        let currentScenario = 0;
+
+        function loadScenario() {
+            const data = scenarios[currentScenario];
+            document.getElementById('case-title').innerText = data.title;
+            document.getElementById('case-img').src = data.img;
+            document.getElementById('question-text').innerText = data.q;
+            document.getElementById('ar-container').style.display = 'none';
+            document.getElementById('options-list').style.display = 'block';
+
+            const list = document.getElementById('options-list');
+            list.innerHTML = "";
+            data.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = "option";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(index);
+                list.appendChild(btn);
             });
         }
-        function check(i) {
-            if(i === qs[cur].c) {
-                document.getElementById('opts').style.display = 'none';
-                document.getElementById('reward').style.display = 'block';
-                document.getElementById('rv').style.display = 'block';
-                let p = parseInt(localStorage.getItem('ecoProg')) || 0;
-                localStorage.setItem('ecoProg', Math.min(p + 6, 100));
-            } else { alert("Try again!"); }
+
+        function checkAnswer(index) {
+            const data = scenarios[currentScenario];
+            if (index === data.correct) {
+                document.getElementById('options-list').style.display = 'none';
+                document.getElementById('ar-container').style.display = 'block';
+                document.getElementById('fact-text').innerText = data.fact;
+                document.getElementById('reward-viewer').src = data.model;
+                
+                // Update Global Progress
+                let prog = parseInt(localStorage.getItem('ecoProg')) || 0;
+                localStorage.setItem('ecoProg', Math.min(prog + 7, 100));
+            } else {
+                alert("Incorrect! Think about what's best for the Earth. 🌍");
+            }
         }
-        function next() {
-            cur++;
-            if(cur < qs.length) { 
-                document.getElementById('opts').style.display = 'block';
-                document.getElementById('reward').style.display = 'none';
-                load(); 
-            } else { location.href = "dashboard.html"; }
+
+        function goToNext() {
+            currentScenario++;
+            if (currentScenario < scenarios.length) {
+                loadScenario();
+            } else {
+                alert("Amazing! You are an Eco-Champion. Returning to Dashboard.");
+                window.location.href = "dashboard.html";
+            }
         }
-        load();
+
+        // Initialize on load
+        loadScenario();
     </script>
 </body>
 </html>
