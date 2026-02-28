@@ -2,47 +2,117 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Eco Sphere | Learn</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Sphere | AR Learning</title>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
-        body { display: flex; margin: 0; font-family: sans-serif; background: #f0fdf4; }
-        .sidebar { width: 300px; background: #1b4332; color: white; height: 100vh; padding: 20px; overflow-y: auto; }
-        .btn { background: #2d6a4f; border: none; color: white; width: 100%; padding: 15px; margin: 5px 0; text-align: left; border-radius: 8px; cursor: pointer; }
-        .viewer { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        model-viewer { width: 80%; height: 60vh; background: white; border-radius: 20px; }
-        .desc { padding: 20px; text-align: center; max-width: 600px; }
+        body { display: flex; margin: 0; font-family: 'Segoe UI', sans-serif; background: #f0fdf4; height: 100vh; overflow: hidden; }
+        
+        /* Sidebar Styles */
+        .sidebar { width: 320px; background: #1b4332; color: white; padding: 25px; display: flex; flex-direction: column; box-shadow: 4px 0 15px rgba(0,0,0,0.1); z-index: 10; overflow-y: auto; }
+        .sidebar h2 { margin-top: 0; color: #b7e4c7; font-size: 24px; border-bottom: 2px solid #2d6a4f; padding-bottom: 10px; }
+        .lesson-btn { background: #2d6a4f; border: none; color: white; width: 100%; padding: 15px; margin: 8px 0; text-align: left; border-radius: 10px; cursor: pointer; font-size: 15px; transition: 0.3s; }
+        .lesson-btn:hover { background: #40916c; transform: translateX(5px); }
+        .back-link { color: #b7e4c7; text-decoration: none; margin-top: auto; padding-top: 20px; font-weight: bold; }
+
+        /* AR Viewer Section */
+        .viewer-container { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; padding: 20px; }
+        .info-card { background: white; padding: 20px; border-radius: 15px; margin-top: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; max-width: 600px; }
+        #ltitle { color: #1b4332; margin: 0; }
+        #ldesc { color: #52b788; font-size: 16px; line-height: 1.5; }
+        
+        /* THE 3D CANVAS */
+        model-viewer { width: 90%; height: 65vh; background: #ffffff; border-radius: 25px; border: 4px solid #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
+
     <div class="sidebar">
-        <h3>AR Lessons</h3>
-        <button class="btn" onclick="show(1)">1. Waste Bins</button>
-        <button class="btn" onclick="show(2)">2. Air Pollution</button>
-        <button class="btn" onclick="show(3)">3. Seed to Tree</button>
-        <button class="btn" onclick="show(4)">4. Water Waste</button>
-        <button class="btn" onclick="show(5)">5. Transport Gases</button>
-        <button class="btn" onclick="show(6)">6. Paper Recycling</button>
-        <button class="btn" onclick="show(7)">7. Wildlife Care</button>
-        <button class="btn" onclick="show(8)">8. Food Waste</button>
-        <br><br>
-        <a href="dashboard.html" style="color:white">Back</a>
+        <h2>AR Lessons</h2>
+        <button class="lesson-btn" onclick="updateLesson(1)">1. Waste Bins</button>
+        <button class="lesson-btn" onclick="updateLesson(2)">2. Air Pollution</button>
+        <button class="lesson-btn" onclick="updateLesson(3)">3. Seed to Tree</button>
+        <button class="lesson-btn" onclick="updateLesson(4)">4. Water Waste</button>
+        <button class="lesson-btn" onclick="updateLesson(5)">5. Transport Gases</button>
+        <button class="lesson-btn" onclick="updateLesson(6)">6. Paper Recycling</button>
+        <button class="lesson-btn" onclick="updateLesson(7)">7. Wildlife Care</button>
+        <button class="lesson-btn" onclick="updateLesson(8)">8. Food Waste</button>
+        <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
     </div>
-    <div class="viewer">
-        <h2 id="ltitle">Select a Lesson</h2>
-        <model-viewer id="mv" src="" auto-rotate camera-controls ar></model-viewer>
-        <p class="desc" id="ldesc">Select a lesson to start.</p>
+
+    <div class="viewer-container">
+        <model-viewer id="main-viewer" 
+            src="https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/Models/MaterialsVariantsShoe/glTF/MaterialsVariantsShoe.gltf" 
+            ar ar-modes="webxr scene-viewer quick-look" 
+            camera-controls auto-rotate shadow-intensity="1">
+            <button slot="ar-button" style="background: white; border-radius: 8px; border: none; position: absolute; bottom: 20px; right: 20px; padding: 12px 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-weight: bold; cursor: pointer;">
+                🌍 View in your Room
+            </button>
+        </model-viewer>
+
+        <div class="info-card">
+            <h1 id="ltitle">Waste Management</h1>
+            <p id="ldesc">Click the dustbins! Use Green for Organic waste and Blue for Recyclables.</p>
+        </div>
     </div>
+
     <script>
-        const data = {
-            1: ["Waste Management", "Click bins to see what goes where!", "https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/Models/MaterialsVariantsShoe/glTF/MaterialsVariantsShoe.gltf"],
-            2: ["Air Pollution", "Visualizing toxic gases from burning plastic.", ""],
-            3: ["Reforestation", "Watch a seed grow into a tree in AR!", ""]
-            // Full 8 lessons logic here
+        const lessons = {
+            1: { 
+                t: "Waste Bins", 
+                d: "Dustbins help us sort waste. Organic waste (food) goes in green, while plastic and paper go in blue.", 
+                m: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/Models/MaterialsVariantsShoe/glTF/MaterialsVariantsShoe.gltf" 
+            },
+            2: { 
+                t: "Air Pollution", 
+                d: "Burning plastic releases harmful CO2 and toxic fumes that damage our lungs and the atmosphere.", 
+                m: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/Models/Lantern/glTF/Lantern.gltf" 
+            },
+            3: { 
+                t: "Seed to Tree", 
+                d: "Reforestation: Watch how a tiny seed grows into a massive tree, providing fruits, shade, and oxygen.", 
+                m: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/Models/Astronaut.glb" 
+            },
+            4: { 
+                t: "Water Waste", 
+                d: "A leaking tap can waste over 2,000 gallons of water a year. Always turn off the tap tightly!", 
+                m: "https://modelviewer.dev/shared-assets/models/WaterBottle.glb" 
+            },
+            5: { 
+                t: "Transport Gases", 
+                d: "Vehicles release nitrogen oxides and CO2. Using bicycles or public transport helps keep the air clean.", 
+                m: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" 
+            },
+            6: { 
+                t: "Paper Recycling", 
+                d: "Paper comes from trees. Recycling 1 ton of paper can save 17 fully grown trees from being cut.", 
+                m: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" 
+            },
+            7: { 
+                t: "Wildlife Care", 
+                d: "Do not buy products made from animal skins. Protecting wildlife ensures a balanced ecosystem.", 
+                m: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" 
+            },
+            8: { 
+                t: "Food Waste", 
+                d: "Take only what is required on your plate. Wasted food means wasted water and energy used to grow it.", 
+                m: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" 
+            }
         };
-        function show(id) {
-            document.getElementById('ltitle').innerText = data[id][0];
-            document.getElementById('ldesc').innerText = data[id][1];
-            document.getElementById('mv').src = data[id][2];
+
+        function updateLesson(id) {
+            const lesson = lessons[id];
+            // Update Text
+            document.getElementById('ltitle').innerText = lesson.t;
+            document.getElementById('ldesc').innerText = lesson.d;
+            
+            // Update 3D Model
+            const viewer = document.getElementById('main-viewer');
+            viewer.src = lesson.m;
+
+            // Save Learning Progress
+            let currentProg = parseInt(localStorage.getItem('ecoProg')) || 0;
+            localStorage.setItem('ecoProg', Math.min(currentProg + 5, 100));
         }
     </script>
 </body>
