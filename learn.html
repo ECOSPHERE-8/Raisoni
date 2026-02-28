@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>3D Learning | EcoLearn</title>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    <style>
+        body { margin: 0; font-family: sans-serif; background: #0b1d12; color: white; text-align: center; }
+        model-viewer { width: 100%; height: 80vh; background: #e8f5e9; }
+        .nav { padding: 20px; display: flex; justify-content: space-around; align-items: center; }
+        .btn { color: white; border: 1px solid white; padding: 10px 20px; border-radius: 5px; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <model-viewer 
+        src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" 
+        alt="3D Eco Model" auto-rotate camera-controls ar>
+    </model-viewer>
+
+    <div class="nav">
+        <a href="dashboard.html" class="btn">Back to Menu</a>
+        <button class="btn" onclick="addLearnProgress()">I've Learned This! ✅</button>
+    </div>
+
+    <script>
+        function addLearnProgress() {
+            let p = parseInt(localStorage.getItem('eco_progress')) || 0;
+            localStorage.setItem('eco_progress', Math.min(p + 20, 100));
+            alert("Progress Updated! Check your badges.");
+        }
+    </script>
+</body>
+</html>
