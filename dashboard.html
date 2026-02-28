@@ -19,15 +19,18 @@
         <h2>Hi, <span id="userDisp">Explorer</span>!</h2>
         <div id="badgeCount">Badges: 0 🏆</div>
     </div>
+
     <div class="stats">
         <strong>Learning Progress: <span id="progText">0</span>%</strong>
         <div class="bar"><div id="fill"></div></div>
     </div>
+
     <div class="grid">
         <a href="learn.html" class="card"><h3>🌿 Learning</h3><p>AR Environmental Lessons</p></a>
         <a href="practice.html" class="card"><h3>📝 Practice</h3><p>Scenario-Based Questions</p></a>
-        <div class="card"><h3>ℹ️ About Us</h3><p>Environmental Awareness</p></div>
+        <a href="about.html" class="card"><h3>ℹ️ About Us</h3><p>Environmental Awareness</p></a>
     </div>
+
     <script>
         document.getElementById('userDisp').innerText = localStorage.getItem('currentUser') || "User";
         let p = localStorage.getItem('ecoProg') || 0;
