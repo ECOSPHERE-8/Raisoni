@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Eco Sphere | Practice</title>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    <style>
+        body { font-family: sans-serif; background: #f0fdf4; padding: 20px; text-align: center; }
+        .card { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        img { width: 100%; border-radius: 10px; margin: 15px 0; }
+        .opt { display: block; width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; background: #fff; }
+        .opt:hover { background: #f0fdf4; border-color: #22c55e; }
+        model-viewer { width: 100%; height: 300px; display: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2 id="t">Case Study 1: Electricity</h2>
+        <img id="i" src="https://images.unsplash.com/photo-1513506491745-1d26a7dbc504?auto=format&fit=crop&w=600">
+        <p id="q">Lights and fans are on in an empty room. Action?</p>
+        <div id="opts"></div>
+        <div id="reward" style="display:none">
+            <h3 style="color:green">Correct! 🌿</h3>
+            <model-viewer id="rv" src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" auto-rotate camera-controls ar></model-viewer>
+            <button onclick="next()" style="padding:10px 20px; background:#22c55e; color:white; border:none; border-radius:5px;">Next Question</button>
+        </div>
+    </div>
+    <script>
+        const qs = [
+            { t: "Saving Electricity", q: "Empty room lights are on. Action?", opts: ["Ignore", "Turn them off", "Open windows", "Do nothing"], c: 1, img: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=600" },
+            { t: "Plastic Bottles", q: "Best eco-friendly choice for water?", opts: ["New daily", "Throw away", "Reusable steel bottle", "Burn it"], c: 2, img: "https://images.unsplash.com/photo-1618591764495-1f95c1481a21?w=600" }
+            // All 15 cases here
+        ];
+        let cur = 0;
+        function load() {
+            const s = qs[cur];
+            document.getElementById('t').innerText = s.t;
+            document.getElementById('q').innerText = s.q;
+            document.getElementById('i').src = s.img;
+            const div = document.getElementById('opts');
+            div.innerHTML = "";
+            s.opts.forEach((o, i) => {
+                const b = document.createElement('button');
+                b.className = "opt"; b.innerText = o; b.onclick = () => check(i);
+                div.appendChild(b);
+            });
+        }
+        function check(i) {
+            if(i === qs[cur].c) {
+                document.getElementById('opts').style.display = 'none';
+                document.getElementById('reward').style.display = 'block';
+                document.getElementById('rv').style.display = 'block';
+                let p = parseInt(localStorage.getItem('ecoProg')) || 0;
+                localStorage.setItem('ecoProg', Math.min(p + 6, 100));
+            } else { alert("Try again!"); }
+        }
+        function next() {
+            cur++;
+            if(cur < qs.length) { 
+                document.getElementById('opts').style.display = 'block';
+                document.getElementById('reward').style.display = 'none';
+                load(); 
+            } else { location.href = "dashboard.html"; }
+        }
+        load();
+    </script>
+</body>
+</html>
