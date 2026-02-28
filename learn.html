@@ -4,68 +4,169 @@
 <meta charset="UTF-8">
 <title>Eco Sphere | AR Learning</title>
 
-<!-- Stable Model Viewer CDN -->
+<!-- Stable Model Viewer -->
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
 <style>
-body { display: flex; margin: 0; font-family: sans-serif; background: #f0fdf4; height: 100vh; }
-.sidebar { width: 300px; background: #1b4332; color: white; padding: 20px; }
-.lesson-btn { width: 100%; padding: 12px; margin: 8px 0; background: #2d6a4f; color: white; border: none; border-radius: 8px; cursor: pointer; }
-.viewer { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-model-viewer { width: 80%; height: 60vh; background: white; border-radius: 20px; }
-.info { background: white; padding: 20px; margin-top: 20px; border-radius: 15px; text-align: center; }
+body {
+    display: flex;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f0fdf4;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 300px;
+    background: #1b4332;
+    color: white;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.sidebar h2 {
+    margin-top: 0;
+}
+
+.lesson-btn {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    background: #2d6a4f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.lesson-btn:hover {
+    background: #40916c;
+}
+
+.viewer {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+model-viewer {
+    width: 85%;
+    height: 60vh;
+    background: white;
+    border-radius: 20px;
+}
+
+.info {
+    background: white;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 600px;
+}
 </style>
 </head>
 
 <body>
 
 <div class="sidebar">
-<h2>AR Lessons</h2>
-<button class="lesson-btn" onclick="updateLesson(1)">Waste Bins</button>
-<button class="lesson-btn" onclick="updateLesson(2)">Air Pollution</button>
-<button class="lesson-btn" onclick="updateLesson(3)">Seed to Tree</button>
-<button class="lesson-btn" onclick="updateLesson(4)">Water Waste</button>
-<button class="lesson-btn" onclick="updateLesson(5)">Transport Gases</button>
-<button class="lesson-btn" onclick="updateLesson(6)">Paper Recycling</button>
-<button class="lesson-btn" onclick="updateLesson(7)">Wildlife Care</button>
-<button class="lesson-btn" onclick="updateLesson(8)">Food Waste</button>
-<a href="dashboard.html" style="color:white">← Back</a>
+    <h2>AR Lessons 🌱</h2>
+    <button class="lesson-btn" onclick="updateLesson(1)">Waste Bins</button>
+    <button class="lesson-btn" onclick="updateLesson(2)">Air Pollution</button>
+    <button class="lesson-btn" onclick="updateLesson(3)">Seed to Tree</button>
+    <button class="lesson-btn" onclick="updateLesson(4)">Water Waste</button>
+    <button class="lesson-btn" onclick="updateLesson(5)">Transport Gases</button>
+    <button class="lesson-btn" onclick="updateLesson(6)">Paper Recycling</button>
+    <button class="lesson-btn" onclick="updateLesson(7)">Wildlife Care</button>
+    <button class="lesson-btn" onclick="updateLesson(8)">Food Waste</button>
+    <a href="dashboard.html" style="color:white;display:block;margin-top:20px;">← Back to Dashboard</a>
 </div>
 
 <div class="viewer">
-<model-viewer id="mv" src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
-ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate shadow-intensity="1">
-<button slot="ar-button" style="padding:10px;border:none;border-radius:8px;background:white;">View in Room 🌍</button>
-</model-viewer>
+    <!-- Default model shown on load -->
+    <model-viewer id="mv"
+        src="https://modelviewer.dev/shared-assets/models/WaterBottle.glb"
+        ar
+        ar-modes="webxr scene-viewer quick-look"
+        camera-controls
+        auto-rotate
+        shadow-intensity="1">
+        <button slot="ar-button"
+            style="padding:10px;border:none;border-radius:8px;background:white;">
+            🌍 View in Room
+        </button>
+    </model-viewer>
 
-<div class="info">
-<h2 id="title">Waste Management</h2>
-<p id="desc">Click lessons to explore environmental awareness in AR.</p>
-</div>
+    <div class="info">
+        <h2 id="title">Waste Management</h2>
+        <p id="desc">Click lessons to explore environmental awareness in AR.</p>
+    </div>
 </div>
 
 <script>
-const lessons={
-1:{t:"Waste Bins",d:"Sort waste: Green for organic, Blue for recyclables.",m:"https://modelviewer.dev/shared-assets/models/WaterBottle.glb"},
-2:{t:"Air Pollution",d:"Burning plastic releases harmful gases.",m:"https://modelviewer.dev/shared-assets/models/Lantern.glb"},
-3:{t:"Seed to Tree",d:"Plant trees to produce oxygen and balance nature.",m:"https://modelviewer.dev/shared-assets/models/Astronaut.glb"},
-4:{t:"Water Waste",d:"Closing taps saves thousands of litres yearly.",m:"https://modelviewer.dev/shared-assets/models/WaterBottle.glb"},
-5:{t:"Transport Gases",d:"Public transport reduces pollution.",m:"https://modelviewer.dev/shared-assets/models/Astronaut.glb"},
-6:{t:"Paper Recycling",d:"Recycling paper saves trees.",m:"https://modelviewer.dev/shared-assets/models/Astronaut.glb"},
-7:{t:"Wildlife Care",d:"Protect animals to preserve ecosystem balance.",m:"https://modelviewer.dev/shared-assets/models/Astronaut.glb"},
-8:{t:"Food Waste",d:"Avoid wasting food to save energy and water.",m:"https://modelviewer.dev/shared-assets/models/Astronaut.glb"}
+const lessons = {
+
+    1: {
+        t: "Waste Bins",
+        d: "Use green bins for organic waste and blue bins for recyclables.",
+        m: "https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/0JHDsr640sL" // 🔁 Upload dustbin .glb and paste link
+    },
+
+    2: {
+        t: "Air Pollution",
+        d: "Factories and vehicles release harmful gases affecting air quality.",
+        m: "PASTE_AIR_POLLUTION_MODEL_LINK_HERE" // 🔁 Upload pollution model
+    },
+
+    3: {
+        t: "Seed to Tree",
+        d: "A small seed grows into a tree providing oxygen and shelter.",
+        m: "PASTE_TREE_GROWTH_MODEL_LINK_HERE" // 🔁 Upload tree model
+    },
+
+    4: {
+        t: "Water Waste",
+        d: "Closing taps properly saves thousands of litres of water.",
+        m: "PASTE_WATER_TAP_MODEL_LINK_HERE" // 🔁 Upload tap or water model
+    },
+
+    5: {
+        t: "Transport Gases",
+        d: "Public transport and cycling reduce harmful emissions.",
+        m: "PASTE_VEHICLE_POLLUTION_MODEL_LINK_HERE" // 🔁 Upload car pollution model
+    },
+
+    6: {
+        t: "Paper Recycling",
+        d: "Recycling paper saves trees and protects forests.",
+        m: "PASTE_PAPER_RECYCLING_MODEL_LINK_HERE" // 🔁 Upload recycling model
+    },
+
+    7: {
+        t: "Wildlife Care",
+        d: "Protecting animals helps maintain ecological balance.",
+        m: "PASTE_WILDLIFE_MODEL_LINK_HERE" // 🔁 Upload animals/forest model
+    },
+
+    8: {
+        t: "Food Waste",
+        d: "Avoid wasting food to conserve water, energy, and resources.",
+        m: "PASTE_FOOD_WASTE_MODEL_LINK_HERE" // 🔁 Upload compost/food model
+    }
 };
 
-function updateLesson(id){
-const l=lessons[id];
-document.getElementById('title').innerText=l.t;
-document.getElementById('desc').innerText=l.d;
-document.getElementById('mv').src=l.m;
-let p=parseInt(localStorage.getItem('ecoProg'))||0;
-localStorage.setItem('ecoProg',Math.min(p+5,100));
+function updateLesson(id) {
+    const lesson = lessons[id];
+    document.getElementById('title').innerText = lesson.t;
+    document.getElementById('desc').innerText = lesson.d;
+    document.getElementById('mv').src = lesson.m;
+
+    let p = parseInt(localStorage.getItem('ecoProg')) || 0;
+    localStorage.setItem('ecoProg', Math.min(p + 5, 100));
 }
 </script>
 
 </body>
 </html>
-
