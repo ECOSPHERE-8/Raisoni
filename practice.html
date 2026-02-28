@@ -1,69 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Eco Sphere | Practice</title>
-<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
-<style>
-body { font-family: 'Segoe UI', sans-serif; background: #f0fdf4; margin: 0; padding: 20px; text-align: center; color: #1b4332; }
-.quiz-card { max-width: 650px; margin: auto; background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-.opt { display: block; width: 100%; padding: 14px; margin: 10px 0; border-radius: 10px; cursor: pointer; }
-#ar-zone { display: none; margin-top: 20px; }
-model-viewer { width: 100%; height: 350px; background-color: #f8fafc; border-radius: 15px; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Sphere | Practice</title>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0fdf4; margin: 0; padding: 20px; text-align: center; color: #1b4332; }
+        .quiz-card { max-width: 650px; margin: auto; background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .scenario-img { width: 100%; height: 280px; object-fit: cover; border-radius: 15px; margin-bottom: 15px; border: 3px solid #2d6a4f; }
+        .opt { display: block; width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 10px; background: white; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        .opt:hover { background: #dcfce7; border-color: #2d6a4f; }
+        #ar-zone { display: none; margin-top: 20px; border-top: 2px dashed #2d6a4f; padding-top: 20px; }
+        model-viewer { width: 100%; height: 350px; background-color: #f8fafc; border-radius: 15px; }
+        .next-btn { padding: 12px 30px; background: #2d6a4f; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 15px; font-weight: bold; }
+    </style>
 </head>
-
 <body>
-<div class="quiz-card">
-<h2 id="title">Loading...</h2>
-<p id="question"></p>
-<div id="options"></div>
 
-<div id="ar-zone">
-<h3>🌟 Correct! Reward Unlocked:</h3>
-<p id="fact"></p>
-<model-viewer id="rv"
-    src=""
-    ar
-    ar-modes="webxr scene-viewer quick-look"
-    ar-scale="fixed"
-    camera-controls
-    auto-rotate>
-</model-viewer>
-<button onclick="next()">Next →</button>
-</div>
+<div class="quiz-card">
+    <h2 id="title">Loading...</h2>
+    <img id="pic" src="" class="scenario-img">
+    <p id="question" style="font-weight: bold;"></p>
+    <div id="options"></div>
+
+    <div id="ar-zone">
+        <h3 style="color: #166534;">🌟 Correct! Reward Unlocked:</h3>
+        <p id="fact" style="font-style: italic; color: #4b5563;"></p>
+        <model-viewer id="rv" src="" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate shadow-intensity="1">
+            <button slot="ar-button" style="background: white; border: none; border-radius: 5px; padding: 10px; position: absolute; top: 10px; right: 10px;">👋 View in Room</button>
+        </model-viewer>
+        <button class="next-btn" onclick="next()">Next Scenario →</button>
+    </div>
 </div>
 
 <script>
-const scenarios=[
-{t:"Electricity",q:"Lights on in empty room?",o:["Ignore","Turn off","Do nothing"],c:1,f:"Saving electricity protects Earth!",m:"https://modelviewer.dev/shared-assets/models/Lantern.glb"}
+const scenarios = [
+    { t:"Case 1: Electricity", q:"Empty room lights are on. Action?", i:"https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=600", o:["Ignore","Turn them off","Open windows","Do nothing"], c:1, f:"Saving power protects the climate!", m:"https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/Models/Lantern/glTF/Lantern.gltf" },
+
+    { t:"Case 2: Plastic Bottles", q:"Best choice for daily water?", i:"https://images.unsplash.com/photo-1618591764495-1f95c1481a21?w=600", o:["New daily","Throw away","Reusable steel bottle","Burn it"], c:2, f:"Reusable bottles reduce ocean waste!", m:"https://modelviewer.dev/shared-assets/models/WaterBottle.glb" },
+
+    { t:"Case 3: Waste Segregation", q:"Where should wet kitchen waste go?", i:"https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600", o:["Dry bin","Compost bin","Roadside","Burn it"], c:1, f:"Composting turns waste into natural fertilizer!", m:"https://modelviewer.dev/shared-assets/models/RobotExpressive.glb" },
+
+    { t:"Case 4: Water Waste", q:"Tap is running while brushing. Action?", i:"https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600", o:["Let it run","Close the tap","Use more","Ignore"], c:1, f:"Every drop saved helps our rivers!", m:"https://modelviewer.dev/shared-assets/models/WaterBottle.glb" },
+
+    { t:"Case 5: Tree Plantation", q:"What is best during a tree drive?", i:"https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=600", o:["Plant and forget","Water regularly","Cut branches","Ignore growth"], c:1, f:"Plants need care to grow into trees!", m:"https://modelviewer.dev/shared-assets/models/Tree.glb" },
+
+    { t:"Case 6: Public Transport", q:"Best eco-friendly travel option?", i:"https://images.unsplash.com/photo-1502877338535-766e1452684a?w=600", o:["Single car ride","Bus/Metro","Bike with fuel","Taxi daily"], c:1, f:"Public transport reduces carbon emissions!", m:"https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
+
+    { t:"Case 7: Paper Usage", q:"How to reduce paper waste?", i:"https://images.unsplash.com/photo-1519681393784-d120267933ba?w=600", o:["Print everything","Use digital notes","Throw unused","Ignore"], c:1, f:"Digital use saves trees and forests!", m:"https://modelviewer.dev/shared-assets/models/Book.glb" },
+
+    { t:"Case 8: Air Pollution", q:"What helps reduce air pollution?", i:"https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=600", o:["Burn waste","Plant trees","Use crackers daily","Ignore"], c:1, f:"Trees act as natural air purifiers!", m:"https://modelviewer.dev/shared-assets/models/Tree.glb" },
+
+    { t:"Case 9: Food Waste", q:"Leftover food should be?", i:"https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600", o:["Thrown away","Shared/Composted","Stored forever","Burned"], c:1, f:"Reducing food waste saves resources!", m:"https://modelviewer.dev/shared-assets/models/FoodCart.glb" },
+
+    { t:"Case 10: E-Waste", q:"How to dispose of an old broken phone?", i:"https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=600", o:["Regular bin","Sell scrap","Authorized recycling center","Burn it"], c:2, f:"E-waste centers safely remove toxins!", m:"https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
+
+    { t:"Case 11: Water Conservation", q:"Best way to save water at home?", i:"https://images.unsplash.com/photo-1563453392212-326f5e854473?w=600", o:["Long showers","Fix leaks","Keep taps open","Ignore"], c:1, f:"Fixing leaks saves thousands of liters yearly!", m:"https://modelviewer.dev/shared-assets/models/WaterBottle.glb" },
+
+    { t:"Case 12: Plastic Bags", q:"Shopping eco-friendly option?", i:"https://images.unsplash.com/photo-1597484661643-2f5fef640dd1?w=600", o:["Plastic bags","Cloth bags","Multiple plastics","Burn bags"], c:1, f:"Cloth bags reduce plastic pollution!", m:"https://modelviewer.dev/shared-assets/models/ShoppingCart.glb" },
+
+    { t:"Case 13: Energy Saving", q:"Best device to save electricity?", i:"https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600", o:["Incandescent bulb","LED bulb","Tube always on","Decor lights"], c:1, f:"LED bulbs consume far less energy!", m:"https://modelviewer.dev/shared-assets/models/Lamp.glb" },
+
+    { t:"Case 14: Rainwater Harvesting", q:"Purpose of rainwater harvesting?", i:"https://images.unsplash.com/photo-1502303756788-6a4d0cda2a2f?w=600", o:["Waste water","Store for reuse","Ignore rain","Drain quickly"], c:1, f:"Harvesting rainwater helps during shortages!", m:"https://modelviewer.dev/shared-assets/models/WaterBottle.glb" },
+
+    { t:"Case 15: Clean Surroundings", q:"Litter seen in park. What to do?", i:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=600", o:["Ignore","Pick & use bin","Kick aside","Wait for others"], c:1, f:"Clean habits inspire community responsibility!", m:"https://modelviewer.dev/shared-assets/models/TrashCan.glb" }
 ];
-let cur=0;
 
-function load(){
-const s=scenarios[cur];
-title.innerText=s.t;
-question.innerText=s.q;
-options.innerHTML="";
-ar-zone.style.display="none";
+let cur = 0;
 
-s.o.forEach((opt,i)=>{
-let b=document.createElement('button');
-b.className="opt";
-b.innerText=opt;
-b.onclick=()=>{
-if(i===s.c){
-options.style.display="none";
-ar-zone.style.display="block";
-fact.innerText=s.f;
-rv.src=s.m;
-}else{alert("Try again 🌱");}
-};
-options.appendChild(b);
-});
+function load() {
+    const s = scenarios[cur];
+    document.getElementById('title').innerText = s.t;
+    document.getElementById('pic').src = s.i;
+    document.getElementById('question').innerText = s.q;
+    document.getElementById('ar-zone').style.display = 'none';
+    document.getElementById('options').style.display = 'block';
+
+    const div = document.getElementById('options');
+    div.innerHTML = "";
+    s.o.forEach((opt, idx) => {
+        const b = document.createElement('button');
+        b.className = "opt"; b.innerText = opt;
+        b.onclick = () => {
+            if(idx === s.c) {
+                div.style.display = 'none';
+                document.getElementById('ar-zone').style.display = 'block';
+                document.getElementById('fact').innerText = s.f;
+                document.getElementById('rv').src = s.m;
+            } else { alert("Try again for the Earth! 🌍"); }
+        };
+        div.appendChild(b);
+    });
 }
-function next(){window.location.href="dashboard.html";}
+
+function next() {
+    cur++;
+    if(cur < scenarios.length) { load(); } 
+    else { alert("Eco Master! Returning to Dashboard."); window.location.href="dashboard.html"; }
+}
+
 load();
 </script>
 </body>
