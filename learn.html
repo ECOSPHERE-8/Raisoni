@@ -2,31 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>3D Learning | EcoLearn</title>
+    <title>Eco Sphere | Learn</title>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
-        body { margin: 0; font-family: sans-serif; background: #0b1d12; color: white; text-align: center; }
-        model-viewer { width: 100%; height: 80vh; background: #e8f5e9; }
-        .nav { padding: 20px; display: flex; justify-content: space-around; align-items: center; }
-        .btn { color: white; border: 1px solid white; padding: 10px 20px; border-radius: 5px; text-decoration: none; }
+        body { display: flex; margin: 0; font-family: sans-serif; background: #f0fdf4; }
+        .sidebar { width: 300px; background: #1b4332; color: white; height: 100vh; padding: 20px; overflow-y: auto; }
+        .btn { background: #2d6a4f; border: none; color: white; width: 100%; padding: 15px; margin: 5px 0; text-align: left; border-radius: 8px; cursor: pointer; }
+        .viewer { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        model-viewer { width: 80%; height: 60vh; background: white; border-radius: 20px; }
+        .desc { padding: 20px; text-align: center; max-width: 600px; }
     </style>
 </head>
 <body>
-    <model-viewer 
-        src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" 
-        alt="3D Eco Model" auto-rotate camera-controls ar>
-    </model-viewer>
-
-    <div class="nav">
-        <a href="dashboard.html" class="btn">Back to Menu</a>
-        <button class="btn" onclick="addLearnProgress()">I've Learned This! ✅</button>
+    <div class="sidebar">
+        <h3>AR Lessons</h3>
+        <button class="btn" onclick="show(1)">1. Waste Bins</button>
+        <button class="btn" onclick="show(2)">2. Air Pollution</button>
+        <button class="btn" onclick="show(3)">3. Seed to Tree</button>
+        <button class="btn" onclick="show(4)">4. Water Waste</button>
+        <button class="btn" onclick="show(5)">5. Transport Gases</button>
+        <button class="btn" onclick="show(6)">6. Paper Recycling</button>
+        <button class="btn" onclick="show(7)">7. Wildlife Care</button>
+        <button class="btn" onclick="show(8)">8. Food Waste</button>
+        <br><br>
+        <a href="dashboard.html" style="color:white">Back</a>
     </div>
-
+    <div class="viewer">
+        <h2 id="ltitle">Select a Lesson</h2>
+        <model-viewer id="mv" src="" auto-rotate camera-controls ar></model-viewer>
+        <p class="desc" id="ldesc">Select a lesson to start.</p>
+    </div>
     <script>
-        function addLearnProgress() {
-            let p = parseInt(localStorage.getItem('eco_progress')) || 0;
-            localStorage.setItem('eco_progress', Math.min(p + 20, 100));
-            alert("Progress Updated! Check your badges.");
+        const data = {
+            1: ["Waste Management", "Click bins to see what goes where!", "https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/Models/MaterialsVariantsShoe/glTF/MaterialsVariantsShoe.gltf"],
+            2: ["Air Pollution", "Visualizing toxic gases from burning plastic.", ""],
+            3: ["Reforestation", "Watch a seed grow into a tree in AR!", ""]
+            // Full 8 lessons logic here
+        };
+        function show(id) {
+            document.getElementById('ltitle').innerText = data[id][0];
+            document.getElementById('ldesc').innerText = data[id][1];
+            document.getElementById('mv').src = data[id][2];
         }
     </script>
 </body>
