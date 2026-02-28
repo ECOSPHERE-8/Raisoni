@@ -2,82 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | EcoLearn</title>
+    <title>Dashboard | Eco Sphere</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0fdf4; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: auto; }
-        .header { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        
-        .progress-box { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; }
-        .bar-bg { background: #dcfce7; height: 15px; border-radius: 10px; overflow: hidden; margin: 10px 0; }
-        #bar-fill { background: #22c55e; width: 0%; height: 100%; transition: 1s; }
-        
-        .badge-list { display: flex; gap: 10px; margin-top: 10px; }
-        .badge { width: 50px; height: 50px; opacity: 0.2; filter: grayscale(1); transition: 0.5s; }
-        .badge.earned { opacity: 1; filter: grayscale(0); }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
-        .card { background: white; padding: 20px; border-radius: 15px; text-align: center; text-decoration: none; color: #1b4332; border: 2px solid transparent; transition: 0.3s; cursor: pointer; }
-        .card:hover { border-color: #52b788; transform: translateY(-5px); }
-        .card img { width: 60px; margin-bottom: 10px; }
+        body { font-family: sans-serif; background: #f0fdf4; margin: 0; padding: 20px; }
+        .header { background: white; padding: 20px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .stats { background: white; padding: 20px; border-radius: 15px; margin: 20px 0; }
+        .bar { background: #e2e8f0; height: 15px; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        #fill { background: #22c55e; width: 0%; height: 100%; transition: 1s; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .card { background: white; padding: 30px; border-radius: 15px; text-align: center; cursor: pointer; text-decoration: none; color: #1b4332; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h2>Hi, <span id="display-name">Learner</span>! 👋</h2>
-            <img src="https://cdn-icons-png.flaticon.com/512/188/188333.png" width="40" alt="profile">
-        </div>
-
-        <div class="progress-box">
-            <strong>Learning Progress: <span id="percent">0</span>%</strong>
-            <div class="bar-bg"><div id="bar-fill"></div></div>
-            <div class="badge-list">
-                <img id="b1" src="https://cdn-icons-png.flaticon.com/512/2913/2913520.png" class="badge" title="Beginner">
-                <img id="b2" src="https://cdn-icons-png.flaticon.com/512/892/892926.png" class="badge" title="Guardian">
-                <img id="b3" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="badge" title="Master">
-            </div>
-        </div>
-
-        <div class="grid">
-            <a href="learn.html" class="card">
-                <img src="https://cdn-icons-png.flaticon.com/512/1598/1598191.png">
-                <h3>Learning</h3>
-                <p>3D Environmental AR</p>
-            </a>
-            <div class="card" onclick="bananaQuiz()">
-                <img src="https://cdn-icons-png.flaticon.com/512/1135/1135544.png">
-                <h3>Practice</h3>
-                <p>The Banana Peel Challenge</p>
-            </div>
-        </div>
+    <div class="header">
+        <h2>Hi, <span id="userDisp">Explorer</span>!</h2>
+        <div id="badgeCount">Badges: 0 🏆</div>
     </div>
-
+    <div class="stats">
+        <strong>Learning Progress: <span id="progText">0</span>%</strong>
+        <div class="bar"><div id="fill"></div></div>
+    </div>
+    <div class="grid">
+        <a href="learn.html" class="card"><h3>🌿 Learning</h3><p>AR Environmental Lessons</p></a>
+        <a href="practice.html" class="card"><h3>📝 Practice</h3><p>Scenario-Based Questions</p></a>
+        <div class="card"><h3>ℹ️ About Us</h3><p>Environmental Awareness</p></div>
+    </div>
     <script>
-        document.getElementById('display-name').innerText = localStorage.getItem('eco_user') || "Friend";
-
-        function updateUI() {
-            let p = parseInt(localStorage.getItem('eco_progress')) || 0;
-            document.getElementById('percent').innerText = p;
-            document.getElementById('bar-fill').style.width = p + "%";
-            if(p >= 20) document.getElementById('b1').classList.add('earned');
-            if(p >= 60) document.getElementById('b2').classList.add('earned');
-            if(p >= 100) document.getElementById('b3').classList.add('earned');
-        }
-
-        function bananaQuiz() {
-            let choice = confirm("You have a banana peel. Should it go in the GREEN organic bin? (OK for Yes, Cancel for No)");
-            if(choice) {
-                alert("Correct! Organic waste helps make compost!");
-                let p = parseInt(localStorage.getItem('eco_progress')) || 0;
-                localStorage.setItem('eco_progress', Math.min(p + 20, 100));
-                updateUI();
-            } else {
-                alert("Try again! Banana peels are organic.");
-            }
-        }
-        updateUI();
+        document.getElementById('userDisp').innerText = localStorage.getItem('currentUser') || "User";
+        let p = localStorage.getItem('ecoProg') || 0;
+        document.getElementById('fill').style.width = p + "%";
+        document.getElementById('progText').innerText = p;
     </script>
 </body>
 </html>
