@@ -104,8 +104,8 @@ model-viewer {
     <button class="lesson-btn" onclick="updateLesson(7)">Paper Recycling</button>
     <button class="lesson-btn" onclick="updateLesson(8)">Wildlife Care</button>
     <button class="lesson-btn" onclick="updateLesson(9)">Food Waste</button>
-    <button class="lesson-btn" onclick="updateLesson(9)">Dustbin</button>
-    <button class="lesson-btn" onclick="updateLesson(9)">Factory-waste</button>
+    <button class="lesson-btn" onclick="updateLesson(10)">Dustbin</button>
+    <button class="lesson-btn" onclick="updateLesson(11)">Factory Waste</button>
     <a href="dashboard.html" style="color:white;display:block;margin-top:20px;text-align:center;">← Back to Dashboard</a>
 </div>
 
@@ -152,7 +152,7 @@ const lessons = {
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Dead%20Trees.glb"
 },
 5: {
-    t: "Water ",
+    t: "Water Waste",
     d: "Closing taps and fixing leaks can save thousands of litres of water yearly.",
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Waterfall.glb"
 },
@@ -175,20 +175,17 @@ const lessons = {
     t: "Food Waste",
     d: "Avoid wasting food — it saves natural resources and reduces landfill pollution.",
     m: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/WaterBottle/glTF-Binary/WaterBottle.glb"
-}
+},
 10: {
     t: "Dustbin",
-    d: "Avoid wasting food — it saves natural resources and reduces landfill pollution.",
+    d: "Proper waste segregation keeps the environment clean and healthy.",
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Trashcan.glb"
-}
+},
 11: {
-    t: "Factory-waste ",
-    d: "Avoid wasting food — it saves natural resources and reduces landfill pollution.",
+    t: "Factory Waste",
+    d: "Industrial waste must be treated properly to avoid harming nature.",
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/trash.glb"
 }
-
-
-    
 };
 
 function updateLesson(id) {
