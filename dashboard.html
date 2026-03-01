@@ -2,41 +2,134 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard | Eco Sphere</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eco Sphere | Dashboard</title>
+
 <style>
-body { font-family: sans-serif; background: #f0fdf4; margin: 0; padding: 20px; }
-.header { background: white; padding: 20px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; }
-.stats { background: white; padding: 20px; border-radius: 15px; margin: 20px 0; }
-.bar { background: #e2e8f0; height: 15px; border-radius: 10px; overflow: hidden; margin: 10px 0; }
-#fill { background: #22c55e; width: 0%; height: 100%; transition: 1s; }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-.card { background: white; padding: 30px; border-radius: 15px; text-align: center; text-decoration: none; color: #1b4332; transition: 0.3s; }
-.card:hover { transform: translateY(-5px); }
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    background: #f0fdf4;
+    text-align: center;
+    color: #1b4332;
+}
+
+.header {
+    background: #1b4332;
+    color: white;
+    padding: 20px;
+}
+
+.container {
+    padding: 30px;
+}
+
+.progress-card, .badge-card {
+    background: white;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.badges {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.badge {
+    padding: 15px;
+    border-radius: 15px;
+    background: #e5e7eb;
+    width: 120px;
+    transition: 0.3s;
+}
+
+.badge.unlocked {
+    background: #b7e4c7;
+    color: #1b4332;
+    font-weight: bold;
+}
+
+.badge span {
+    display: block;
+    font-size: 30px;
+}
+
+button {
+    padding: 12px 25px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #2d6a4f;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
 </style>
 </head>
+
 <body>
 
 <div class="header">
-<h2>Hi, <span id="userDisp">Explorer</span>!</h2>
-<div id="badgeCount">Badges: 🌟</div>
+    <h1>🌍 Eco Sphere Dashboard</h1>
+    <p>Your Environmental Awareness Journey</p>
 </div>
 
-<div class="stats">
-<strong>Learning Progress: <span id="progText">0</span>%</strong>
-<div class="bar"><div id="fill"></div></div>
-</div>
+<div class="container">
 
-<div class="grid">
-<a href="learn.html" class="card"><h3>🌿 Learning</h3><p>AR Environmental Lessons</p></a>
-<a href="practice.html" class="card"><h3>📝 Practice</h3><p>Scenario-Based Questions</p></a>
-<a href="about.html" class="card"><h3>ℹ️ About Us</h3><p>Environmental Awareness</p></a>
+    <!-- Progress Card -->
+    <div class="progress-card">
+        <h2>Your Practice Progress</h2>
+        <p>You have completed <strong id="completed">0</strong> out of 15 scenarios.</p>
+        <button onclick="goPractice()">Continue Practice →</button>
+    </div>
+
+    <!-- Badge Section -->
+    <div class="badge-card">
+        <h2>Your Eco Badges 🏅</h2>
+        <div class="badges">
+            <div id="b1" class="badge">
+                <span>🌱</span>
+                Beginner
+            </div>
+            <div id="b2" class="badge">
+                <span>🌿</span>
+                Eco Learner
+            </div>
+            <div id="b3" class="badge">
+                <span>🌍</span>
+                Eco Master
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script>
-document.getElementById('userDisp').innerText = localStorage.getItem('currentUser') || "User";
-let p = localStorage.getItem('ecoProg') || 0;
-document.getElementById('fill').style.width = p + "%";
-document.getElementById('progText').innerText = p;
+function loadDashboard() {
+    let done = parseInt(localStorage.getItem("practiceDone")) || 0;
+    document.getElementById("completed").innerText = done;
+
+    // Badge Unlock Logic
+    if(done >= 5) {
+        document.getElementById("b1").classList.add("unlocked");
+    }
+    if(done >= 10) {
+        document.getElementById("b2").classList.add("unlocked");
+    }
+    if(done >= 15) {
+        document.getElementById("b3").classList.add("unlocked");
+    }
+}
+
+function goPractice(){
+    window.location.href = "practice.html";
+}
+
+loadDashboard();
 </script>
 
 </body>
