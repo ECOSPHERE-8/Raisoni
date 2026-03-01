@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>Eco Sphere | AR Learning</title>
 
-<!-- Stable Model Viewer -->
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
 <style>
@@ -12,20 +11,24 @@ body {
     display: flex;
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background: #f0fdf4;
+    background: linear-gradient(to right, #e6f9f0, #f0fdf4);
     height: 100vh;
 }
 
+/* Sidebar */
 .sidebar {
-    width: 300px;
+    width: 280px;
     background: #1b4332;
     color: white;
     padding: 20px;
     overflow-y: auto;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
 }
 
 .sidebar h2 {
     margin-top: 0;
+    text-align: center;
+    letter-spacing: 1px;
 }
 
 .lesson-btn {
@@ -35,36 +38,55 @@ body {
     background: #2d6a4f;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 15px;
 }
 
 .lesson-btn:hover {
     background: #40916c;
+    transform: scale(1.02);
 }
 
+/* Viewer */
 .viewer {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 20px;
 }
 
 model-viewer {
-    width: 85%;
-    height: 60vh;
+    width: 80%;
+    height: 55vh;
     background: white;
     border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
+/* Info Card */
 .info {
     background: white;
-    padding: 20px;
+    padding: 22px;
     margin-top: 20px;
-    border-radius: 15px;
+    border-radius: 18px;
     text-align: center;
-    max-width: 600px;
+    max-width: 620px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.info h2 {
+    margin-bottom: 10px;
+    color: #1b4332;
+}
+
+.info p {
+    font-size: 16px;
+    color: #333;
+    line-height: 1.5;
 }
 </style>
 </head>
@@ -75,17 +97,17 @@ model-viewer {
     <h2>AR Lessons 🌱</h2>
     <button class="lesson-btn" onclick="updateLesson(1)">Waste Bins</button>
     <button class="lesson-btn" onclick="updateLesson(2)">Air Pollution</button>
-    <button class="lesson-btn" onclick="updateLesson(3)">Seed to Tree</button>
-    <button class="lesson-btn" onclick="updateLesson(4)">Water Waste</button>
-    <button class="lesson-btn" onclick="updateLesson(5)">Transport Gases</button>
-    <button class="lesson-btn" onclick="updateLesson(6)">Paper Recycling</button>
-    <button class="lesson-btn" onclick="updateLesson(7)">Wildlife Care</button>
-    <button class="lesson-btn" onclick="updateLesson(8)">Food Waste</button>
-    <a href="dashboard.html" style="color:white;display:block;margin-top:20px;">← Back to Dashboard</a>
+    <button class="lesson-btn" onclick="updateLesson(3)">Afforestation</button>
+    <button class="lesson-btn" onclick="updateLesson(4)">Deforestation</button>
+    <button class="lesson-btn" onclick="updateLesson(5)">Water Waste</button>
+    <button class="lesson-btn" onclick="updateLesson(6)">Transport Gases</button>
+    <button class="lesson-btn" onclick="updateLesson(7)">Paper Recycling</button>
+    <button class="lesson-btn" onclick="updateLesson(8)">Wildlife Care</button>
+    <button class="lesson-btn" onclick="updateLesson(9)">Food Waste</button>
+    <a href="dashboard.html" style="color:white;display:block;margin-top:20px;text-align:center;">← Back to Dashboard</a>
 </div>
 
 <div class="viewer">
-    <!-- Default model shown on load -->
     <model-viewer id="mv"
         src="https://modelviewer.dev/shared-assets/models/WaterBottle.glb"
         ar
@@ -94,8 +116,8 @@ model-viewer {
         auto-rotate
         shadow-intensity="1">
         <button slot="ar-button"
-            style="padding:10px;border:none;border-radius:8px;background:white;">
-            🌍 View in Room
+            style="padding:10px 16px;border:none;border-radius:10px;background:#1b4332;color:white;font-weight:bold;">
+            🌍 View in Your Room
         </button>
     </model-viewer>
 
@@ -109,54 +131,47 @@ model-viewer {
 const lessons = {
 1: {
     t: "Waste Bins",
-    d: "Use green bins for organic waste and blue bins for recyclables.",
+    d: "Use green bins for organic waste and blue bins for recyclable materials.",
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Planet%20(1).glb"
 },
 2: {
     t: "Air Pollution",
-    d: "Burning plastic releases harmful gases harmful for health.",
+    d: "Burning plastic releases toxic gases that harm health and the atmosphere.",
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Campfire.glb"
 },
 3: {
     t: "Afforestation",
-    d: "Plant trees to produce oxygen and balance nature.",
-    m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Tree.glb
-"
+    d: "Planting trees increases oxygen levels and helps restore ecological balance.",
+    m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Tree.glb"
 },
-
-    4: {
+4: {
     t: "Deforestation",
-    d: "Plant trees to produce oxygen and balance nature.",
+    d: "Cutting trees disturbs climate balance and destroys wildlife habitats.",
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Dead%20Trees.glb"
 },
-
-
-
-
-    
-4: {
-    t: "Water Waste",
-    d: "Closing taps saves thousands of litres of water yearly.",
-    m: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/WaterBottle/glTF-Binary/WaterBottle.glb"
-},
 5: {
-    t: "Transport Gases",
-    d: "Using public transport reduces air pollution.",
-    m: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoomBox/glTF-Binary/BoomBox.glb"
+    t: "Water Waste",
+    d: "Closing taps and fixing leaks can save thousands of litres of water yearly.",
+    m: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/WaterBottle/glTF-Binary/WaterBottle.glb"
 },
 6: {
-    t: "Paper Recycling",
-    d: "Recycling paper helps save trees and energy.",
-    m: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/WaterBottle/glTF-Binary/WaterBottle.glb"
+    t: "Transport Gases",
+    d: "Using public transport reduces fuel consumption and lowers air pollution.",
+    m: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoomBox/glTF-Binary/BoomBox.glb"
 },
 7: {
-    t: "Wildlife Care",
-    d: "Protect animals to maintain ecosystem balance.",
-    m: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Lantern/glTF-Binary/Lantern.glb"
+    t: "Paper Recycling",
+    d: "Recycling paper saves trees, water, and energy used in paper production.",
+    m: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/WaterBottle/glTF-Binary/WaterBottle.glb"
 },
 8: {
+    t: "Wildlife Care",
+    d: "Protecting animals helps maintain the balance of the ecosystem.",
+    m: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Lantern/glTF-Binary/Lantern.glb"
+},
+9: {
     t: "Food Waste",
-    d: "Avoid wasting food to save resources and energy.",
+    d: "Avoid wasting food — it saves natural resources and reduces landfill pollution.",
     m: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/WaterBottle/glTF-Binary/WaterBottle.glb"
 }
 };
@@ -167,8 +182,8 @@ function updateLesson(id) {
     document.getElementById('desc').innerText = lesson.d;
     document.getElementById('mv').src = lesson.m;
 
-    let p = parseInt(localStorage.getItem('ecoProg')) || 0;
-    localStorage.setItem('ecoProg', Math.min(p + 5, 100));
+    let progress = parseInt(localStorage.getItem('ecoProg')) || 0;
+    localStorage.setItem('ecoProg', Math.min(progress + 5, 100));
 }
 </script>
 
