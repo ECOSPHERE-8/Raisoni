@@ -101,11 +101,12 @@ model-viewer {
     <button class="lesson-btn" onclick="updateLesson(4)">Deforestation</button>
     <button class="lesson-btn" onclick="updateLesson(5)">Water Waste</button>
     <button class="lesson-btn" onclick="updateLesson(6)">Transport Gases</button>
-    <button class="lesson-btn" onclick="updateLesson(7)">Paper Recycling</button>
+    <button class="lesson-btn" onclick="updateLesson(7)">recycling-bin</button>
     <button class="lesson-btn" onclick="updateLesson(8)">Wildlife Care</button>
     <button class="lesson-btn" onclick="updateLesson(9)">Food Waste</button>
     <button class="lesson-btn" onclick="updateLesson(10)">Dustbin</button>
     <button class="lesson-btn" onclick="updateLesson(11)">Factory Waste</button>
+    <button class="lesson-btn" onclick="updateLesson(12)">Disease</button>
     <a href="dashboard.html" style="color:white;display:block;margin-top:20px;text-align:center;">← Back to Dashboard</a>
 </div>
 
@@ -157,24 +158,27 @@ const lessons = {
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Waterfall.glb"
 },
 6: {
-    t: "Transport Gases",
+    t: "Transport",
     d: "Using public transport reduces fuel consumption and lowers air pollution.",
-    m: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoomBox/glTF-Binary/BoomBox.glb"
+    m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Bike.glb"
 },
 7: {
-    t: "Paper Recycling",
+    t: "recyling-bin",
     d: "Recycling paper saves trees, water, and energy used in paper production.",
-    m: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/WaterBottle/glTF-Binary/WaterBottle.glb"
+    m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Recycle%20bin.glb
+"
 },
 8: {
     t: "Wildlife Care",
     d: "Protecting animals helps maintain the balance of the ecosystem.",
-    m: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Lantern/glTF-Binary/Lantern.glb"
+    m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cow.glb
+"
+    
 },
 9: {
     t: "Food Waste",
     d: "Avoid wasting food — it saves natural resources and reduces landfill pollution.",
-    m: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/WaterBottle/glTF-Binary/WaterBottle.glb"
+    m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/food.glb"
 },
 10: {
     t: "Dustbin",
@@ -185,6 +189,12 @@ const lessons = {
     t: "Factory Waste",
     d: "Industrial waste must be treated properly to avoid harming nature.",
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/trash.glb"
+}
+    12: {
+    t: "Disease",
+    d: "Industrial waste must be treated properly to avoid harming nature.",
+    m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Human%20Immunodeficiency%20Virus.glb
+"
 }
 };
 
