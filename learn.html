@@ -86,7 +86,8 @@ model-viewer {
 .info p {
     font-size: 16px;
     color: #333;
-    line-height: 1.5;
+    line-height: 1.6;
+    white-space: pre-line; /* IMPORTANT: shows line breaks correctly */
 }
 </style>
 </head>
@@ -107,17 +108,17 @@ model-viewer {
     <button class="lesson-btn" onclick="updateLesson(10)">Dustbin</button>
     <button class="lesson-btn" onclick="updateLesson(11)">Factory Waste</button>
     <button class="lesson-btn" onclick="updateLesson(12)">Disease</button>
-    <a href="dashboard.html" style="color:white;display:block;margin-top:20px;text-align:center;">← Back to Dashboard</a>
 </div>
 
 <div class="viewer">
     <model-viewer id="mv"
-        src="https://modelviewer.dev/shared-assets/models/WaterBottle.glb"
+        src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Planet%20(1).glb"
         ar
         ar-modes="webxr scene-viewer quick-look"
         camera-controls
         auto-rotate
-        shadow-intensity="1">
+        shadow-intensity="1"
+        alt="3D Environmental Model">
         <button slot="ar-button"
             style="padding:10px 16px;border:none;border-radius:10px;background:#1b4332;color:white;font-weight:bold;">
             🌍 View in Your Room
@@ -125,7 +126,7 @@ model-viewer {
     </model-viewer>
 
     <div class="info">
-        <h2 id="title">Waste Management</h2>
+        <h2 id="title">Earth</h2>
         <p id="desc">Click lessons to explore environmental awareness in AR.</p>
     </div>
 </div>
@@ -134,188 +135,169 @@ model-viewer {
 const lessons = {
 1: {
     t: "Earth",
-    d: "🌍 Earth
+    d: `🌍 Earth
 
 Earth is our home 🏠💙. It gives us air 🌬️, water 💧, food 🍎, and a place to live.
+
 What can we do?
+• Do not litter 🚯
+• Plant trees 🌳
+• Save water 💦
+• Switch off lights when not needed 💡
 
-Do not litter 🚯
-
-Plant trees 🌳
-
-Save water 💦
-
-Switch off lights when not needed 💡
-When we care for Earth, we protect all living things 🐶🐦🌼.",
+When we care for Earth, we protect all living things 🐶🐦🌼.`,
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Planet%20(1).glb"
 },
 2: {
     t: "Air Pollution",
-    d: "🌫️ Air Pollution
+    d: `🌫️ Air Pollution
 
 Air pollution makes the air dirty and unhealthy 🤧🌫️.
+
 What can we do?
+• Ride a bicycle 🚲
+• Walk to nearby places 🚶
+• Use public transport 🚌
+• Plant more trees 🌳
 
-Ride a bicycle 🚲 instead of using a car for short distances
-
-Walk to nearby places 🚶
-
-Use public transport 🚌
-
-Plant more trees 🌳
-These small actions help keep the air fresh and clean 💚.",
+These small actions keep the air fresh 💚.`,
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Campfire.glb"
 },
 3: {
     t: "Afforestation",
-    d: "🌳 Afforestation
+    d: `🌳 Afforestation
 
-Afforestation means planting more trees 🌱🌳. Trees give us oxygen and shade 🌬️☀️.
+Planting more trees helps Earth breathe 🌱.
+
 What can we do?
+• Plant a tree on birthdays 🎂🌳
+• Water plants regularly 💧
+• Care for small plants 🪴
 
-Plant a tree on your birthday 🎂🌳
-
-Water plants regularly 💧
-
-Take care of small plants at home 🪴
-More trees = healthier Earth 🌍💚.",
+More trees = healthier planet 🌍💚.`,
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Tree.glb"
 },
 4: {
     t: "Deforestation",
-    d: "🪓 Deforestation
+    d: `🪓 Deforestation
 
-Cutting too many trees harms animals and makes Earth hotter 🐒🔥.
+Cutting too many trees harms animals and increases heat 🔥.
+
 What can we do?
+• Use both sides of paper 📄
+• Avoid wasting notebooks 📚
+• Say no to unnecessary paper 🙅
 
-Use both sides of paper 📄
-
-Avoid wasting notebooks 📚
-
-Say no to unnecessary paper use 🙅
-Saving paper means saving trees 🌲💚.",
+Saving paper means saving trees 🌲.`,
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Dead%20Trees.glb"
 },
 5: {
     t: "Water Waste",
-    d: "💧 Water Waste
+    d: `💧 Water Waste
 
-Water is very precious 💙. Wasting water can cause shortages 🚱.
+Water is precious 💙.
+
 What can we do?
+• Turn off taps while brushing 🚰
+• Use bucket instead of shower 🪣
+• Do not play with water 💦
 
-Turn off taps while brushing 🚰
-
-Use a bucket instead of a shower 🪣
-
-Do not play with water 💦
-Saving water today helps tomorrow 🌈.",
+Save water today, survive tomorrow 🌈.`,
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Waterfall.glb"
 },
 6: {
     t: "Transport",
-    d: "🚌 Transport
+    d: `🚌 Transport
 
-Vehicles produce smoke that pollutes the air 🚗🌫️.
+Vehicles create smoke that pollutes air 🚗🌫️.
+
 What can we do?
+• Use bicycles 🚲
+• Walk short distances 🚶
+• Carpool 🚘
+• Use buses or trains 🚆
 
-Use a bicycle 🚲 to go to school if nearby
-
-Walk for short distances 🚶
-
-Share a car (carpool) 🚘
-
-Use buses or trains for long distances 🚆
-Less smoke = cleaner air 🌬️💚.",
+Less smoke = cleaner air 💚.`,
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Bike.glb"
 },
 7: {
     t: "Recycling Bin",
-    d: "♻️ Recycling Bin
+    d: `♻️ Recycling
 
-Recycling helps reduce waste and saves resources ♻️.
+Recycling reduces waste and saves resources.
+
 What can we do?
+• Put plastic in recycle bins 🧴
+• Reuse notebooks 📒
+• Convert old clothes 👕
 
-Put plastic bottles in recycling bins 🧴
-
-Reuse old notebooks 📒
-
-Turn old clothes into cleaning cloths 👕
-Recycling gives old things a new life ✨.",
+Recycling gives items a new life ✨.`,
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Recycle%20bin.glb"
 },
 8: {
     t: "Wildlife Care",
-    d: "🐾 Wildlife Care
+    d: `🐾 Wildlife Care
 
-Animals need clean forests and water to live 🐘🌳.
+Animals need clean forests and water.
+
 What can we do?
+• Do not throw plastic 🚯
+• Feed birds grains 🐦
+• Never harm animals 🐕
 
-Do not throw plastic in parks 🚯
-
-Feed birds grains and water in summer 🐦
-
-Never harm animals 🐕
-Protecting animals keeps nature balanced ⚖️💚.",
+Protecting animals keeps nature balanced ⚖️.`,
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cow.glb"
 },
 9: {
     t: "Food Waste",
-    d: "🍎 Food Waste
+    d: `🍎 Food Waste
 
-Wasting food wastes water, energy, and farmers’ hard work 👩‍🌾💧.
+Wasting food wastes farmers' hard work 👩‍🌾.
+
 What can we do?
+• Take only what you eat 🍽️
+• Finish your lunch 🥪
+• Share extra food 🤝
 
-Take only what you can eat 🍽️
-
-Finish your lunch 🥪
-
-Share extra food 🤝
-Saving food saves the planet 🌍💚.",
+Saving food saves the planet 🌍.`,
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/food.glb"
 },
 10: {
     t: "Dustbin",
-    d: "🗑️ Dustbin
+    d: `🗑️ Dustbin
 
-Throwing waste properly keeps places clean 🧹✨.
+Proper waste disposal keeps surroundings clean.
+
 What can we do?
-
-Always use a dustbin 🚮
-
-Separate wet and dry waste 🗂️
-
-Remind friends not to litter 😊
-Clean surroundings keep us healthy 💪.",
+• Always use dustbin 🚮
+• Separate wet & dry waste 🗂️
+• Remind friends not to litter 😊`,
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Trashcan.glb"
 },
 11: {
     t: "Factory Waste",
-    d: "🏭 Factory Waste
+    d: `🏭 Factory Waste
 
-Factories can cause pollution if waste is not managed properly 🌫️.
+Factories cause pollution if waste is unmanaged.
+
 What can we do?
-
-Save electricity at home 💡
-
-Support eco-friendly products 🌿
-
-Reduce plastic use 🛍️
-When we make smart choices, factories also reduce pollution 🌍.",
+• Save electricity 💡
+• Use eco-friendly products 🌿
+• Reduce plastic 🛍️`,
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/trash.glb"
 },
 12: {
     t: "Disease",
-    d: "🦠 Disease
+    d: `🦠 Disease
 
-Dirty surroundings can spread germs 🤒🦠.
+Dirty surroundings spread germs.
+
 What can we do?
+• Keep home & school clean 🏫
+• Plant more trees 🌳
+• Avoid littering 🚯
 
-Plant more and more trees
-
-Keep your home and school clean 🏫
-
-Do not litter 🚯
-Clean environment = healthy people 💪🌈.",
+Clean environment = healthy life 💪🌈.`,
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Human%20Immunodeficiency%20Virus.glb"
 }
 };
