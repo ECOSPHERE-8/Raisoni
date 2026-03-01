@@ -17,22 +17,45 @@ body {
 .header {
     background: #1b4332;
     color: white;
-    padding: 20px;
+    padding: 25px;
 }
 
 .container {
     padding: 30px;
 }
 
-.progress-card, .badge-card {
+/* Navigation Buttons */
+.nav-buttons {
+    margin: 20px 0;
+}
+
+.nav-buttons button {
+    padding: 12px 25px;
+    margin: 10px;
+    border: none;
+    border-radius: 10px;
+    background: #2d6a4f;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.nav-buttons button:hover {
+    background: #40916c;
+}
+
+/* Cards */
+.card {
     background: white;
-    max-width: 600px;
-    margin: 20px auto;
+    max-width: 650px;
+    margin: 25px auto;
     padding: 25px;
     border-radius: 20px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 
+/* Badges */
 .badges {
     display: flex;
     justify-content: space-around;
@@ -43,7 +66,7 @@ body {
     padding: 15px;
     border-radius: 15px;
     background: #e5e7eb;
-    width: 120px;
+    width: 130px;
     transition: 0.3s;
 }
 
@@ -57,17 +80,6 @@ body {
     display: block;
     font-size: 30px;
 }
-
-button {
-    padding: 12px 25px;
-    margin-top: 15px;
-    border: none;
-    border-radius: 8px;
-    background: #2d6a4f;
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
-}
 </style>
 </head>
 
@@ -75,20 +87,26 @@ button {
 
 <div class="header">
     <h1>🌍 Eco Sphere Dashboard</h1>
-    <p>Your Environmental Awareness Journey</p>
+    <p>Learn • Practice • Grow • Protect Earth</p>
 </div>
 
 <div class="container">
 
+    <!-- Navigation Section -->
+    <div class="nav-buttons">
+        <button onclick="goLearn()">📘 Learn (AR Lessons)</button>
+        <button onclick="goPractice()">📝 Practice Scenarios</button>
+        <button onclick="goAbout()">ℹ️ About Us</button>
+    </div>
+
     <!-- Progress Card -->
-    <div class="progress-card">
+    <div class="card">
         <h2>Your Practice Progress</h2>
         <p>You have completed <strong id="completed">0</strong> out of 15 scenarios.</p>
-        <button onclick="goPractice()">Continue Practice →</button>
     </div>
 
     <!-- Badge Section -->
-    <div class="badge-card">
+    <div class="card">
         <h2>Your Eco Badges 🏅</h2>
         <div class="badges">
             <div id="b1" class="badge">
@@ -109,11 +127,11 @@ button {
 </div>
 
 <script>
+// Load Progress + Unlock Badges
 function loadDashboard() {
     let done = parseInt(localStorage.getItem("practiceDone")) || 0;
     document.getElementById("completed").innerText = done;
 
-    // Badge Unlock Logic
     if(done >= 5) {
         document.getElementById("b1").classList.add("unlocked");
     }
@@ -125,8 +143,17 @@ function loadDashboard() {
     }
 }
 
+// Navigation Functions
+function goLearn(){
+    window.location.href = "learn.html";
+}
+
 function goPractice(){
     window.location.href = "practice.html";
+}
+
+function goAbout(){
+    window.location.href = "about.html";
 }
 
 loadDashboard();
