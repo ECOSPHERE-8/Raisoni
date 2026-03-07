@@ -3,60 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eco Sphere | AR Games</title>
+    <title>Eco Sphere | Sequential AR Game</title>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #064e3b; color: white; text-align: center; margin: 0; padding: 20px; }
         .game-container { max-width: 600px; margin: auto; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
-        .stats { display: flex; justify-content: space-around; font-size: 20px; font-weight: bold; margin-bottom: 15px; background: #065f46; padding: 10px; border-radius: 10px; }
-        
-        /* The 3D Viewer Box */
+        .stats { display: flex; justify-content: space-around; font-size: 18px; font-weight: bold; margin-bottom: 15px; background: #065f46; padding: 10px; border-radius: 10px; }
         model-viewer { width: 100%; height: 400px; background: #ffffff; border-radius: 15px; margin-bottom: 15px; }
-        
         .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .game-btn { padding: 15px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.2s; }
+        .game-btn { padding: 15px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; }
         .blue { background: #2563eb; color: white; }
         .green { background: #16a34a; color: white; }
-        #over { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); flex-direction: column; align-items: center; justify-content: center; z-index: 10; }
+        
+        /* Message Overlay */
+        #over { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); flex-direction: column; align-items: center; justify-content: center; z-index: 10; padding: 20px; }
+        .msg { font-size: 24px; margin-bottom: 20px; line-height: 1.5; }
+        .progress-text { font-size: 14px; color: #b7e4c7; margin-top: 5px; }
     </style>
 </head>
 <body>
 
     <div class="game-container">
         <h1>Eco Warrior Games</h1>
-        
         <div class="stats">
             <div>Score: <span id="score">0</span></div>
             <div>Time: <span id="timer">30</span>s</div>
+            <div>Progress: <span id="current-num">1</span>/<span id="total-num">3</span></div>
         </div>
 
         <div id="game-zone">
             <h3 id="instruction">Sort the Waterbottle!</h3>
-            
-            <model-viewer id="obj" 
-                src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Waterbottle.glb" 
-                ar ar-modes="webxr scene-viewer quick-look" 
-                camera-controls auto-rotate shadow-intensity="1">
+            <model-viewer id="obj" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Waterbottle.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate shadow-intensity="1">
                 <button slot="ar-button" style="background: white; border: none; border-radius: 5px; padding: 8px; position: absolute; top: 10px; right: 10px;">View in AR</button>
             </model-viewer>
             
             <div class="btn-grid">
-                <button class="game-btn blue" onclick="check('dry')">BLUE BIN (Recyclable)</button>
+                <button class="game-btn blue" onclick="check('dry')">BLUE BIN (Recycle)</button>
                 <button class="game-btn green" onclick="check('wet')">GREEN BIN (Organic)</button>
             </div>
+            <p class="progress-text">Complete all items to become an Eco Hero!</p>
         </div>
     </div>
 
     <div id="over">
-        <h1>Time's Up!</h1>
-        <h2 id="final-score">Score: 0</h2>
-        <button class="game-btn" style="background: white; color: black; padding: 10px 30px;" onclick="location.reload()">Try Again</button>
+        <div id="status-icon" style="font-size: 60px; margin-bottom: 10px;">🌟</div>
+        <div id="message-text" class="msg"></div>
+        <button class="game-btn" style="background: white; color: black; padding: 10px 40px;" onclick="location.reload()">Play Again</button>
         <br>
-        <a href="dashboard.html" style="color: #b7e4c7; text-decoration: none; margin-top: 20px;">Back to Dashboard</a>
+        <a href="dashboard.html" style="color: #b7e4c7; text-decoration: none;">Return to Dashboard</a>
     </div>
 
     <script>
-        // Updated items array with RAW links and correct capitalization
+        // Exact names from your repository
         const items = [
             { name: "Waterbottle", type: "dry", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Waterbottle.glb" },
             { name: "Pineapple", type: "wet", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Pineapple.glb" },
@@ -65,37 +63,53 @@
 
         let score = 0;
         let timeLeft = 30;
-        let currentItem = 0;
+        let currentIdx = 0;
+
+        // Initialize total count on screen
+        document.getElementById('total-num').innerText = items.length;
 
         const timerId = setInterval(() => {
             timeLeft--;
             document.getElementById('timer').innerText = timeLeft;
-            if(timeLeft <= 0) endGame();
+            if(timeLeft <= 0) endGame(false); 
         }, 1000);
 
         function check(choice) {
-            if(choice === items[currentItem].type) {
+            if(choice === items[currentIdx].type) {
                 score += 10;
                 document.getElementById('score').innerText = score;
-                nextItem();
+                
+                currentIdx++; 
+
+                if (currentIdx < items.length) {
+                    // Update the display for the next item
+                    document.getElementById('obj').src = items[currentIdx].m;
+                    document.getElementById('instruction').innerText = "Sort the " + items[currentIdx].name + "!";
+                    document.getElementById('current-num').innerText = currentIdx + 1; // Update counter
+                } else {
+                    endGame(true); // User finished all 3 items
+                }
             } else {
-                alert("Wrong bin! 🌍");
-                timeLeft -= 3; 
+                alert("Incorrect Bin! Try again! 🌍");
+                timeLeft -= 2; 
             }
         }
 
-        function nextItem() {
-            currentItem = Math.floor(Math.random() * items.length);
-            // Swaps the model source
-            document.getElementById('obj').src = items[currentItem].m;
-            document.getElementById('instruction').innerText = "Sort the " + items[currentItem].name + "!";
-        }
-
-        function endGame() {
+        function endGame(isWin) {
             clearInterval(timerId);
-            localStorage.setItem("ecoHighScore", score);
-            document.getElementById('over').style.display = 'flex';
-            document.getElementById('final-score').innerText = "Final Score: " + score;
+            const overScreen = document.getElementById('over');
+            const msgText = document.getElementById('message-text');
+            const icon = document.getElementById('status-icon');
+            
+            overScreen.style.display = 'flex';
+
+            if(isWin) {
+                icon.innerText = "🏆";
+                msgText.innerHTML = "<strong>Hurray!</strong> You have learned a lot today.<br>Your quick thinking is helping the planet! 🌍✨";
+            } else {
+                icon.innerText = "⏳";
+                msgText.innerHTML = "<strong>Nice try!</strong> You're becoming a great Eco Warrior.<br>Let's try one more time to save the environment! 💪♻️";
+            }
         }
     </script>
 </body>
