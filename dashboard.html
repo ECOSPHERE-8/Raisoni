@@ -1,86 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Eco Sphere | Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Sphere | Dashboard</title>
 
-<style>
-body {
-    font-family: 'Segoe UI', sans-serif;
-    margin: 0;
-    background: #f0fdf4;
-    text-align: center;
-    color: #1b4332;
-}
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            background: #f0fdf4;
+            text-align: center;
+            color: #1b4332;
+        }
 
-.header {
-    background: #1b4332;
-    color: white;
-    padding: 25px;
-}
+        .header {
+            background: #1b4332;
+            color: white;
+            padding: 25px;
+        }
 
-.container {
-    padding: 30px;
-}
+        .container {
+            padding: 30px;
+        }
 
-/* Navigation Buttons */
-.nav-buttons {
-    margin: 20px 0;
-}
+        /* Navigation Buttons */
+        .nav-buttons {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
 
-.nav-buttons button {
-    padding: 12px 25px;
-    margin: 10px;
-    border: none;
-    border-radius: 10px;
-    background: #2d6a4f;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s;
-}
+        .nav-buttons button {
+            padding: 12px 25px;
+            margin: 10px;
+            border: none;
+            border-radius: 10px;
+            background: #2d6a4f;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-.nav-buttons button:hover {
-    background: #40916c;
-}
+        .nav-buttons button:hover {
+            background: #40916c;
+            transform: translateY(-2px);
+        }
 
-/* Cards */
-.card {
-    background: white;
-    max-width: 650px;
-    margin: 25px auto;
-    padding: 25px;
-    border-radius: 20px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-}
+        /* The New Game Button Highlight */
+        .btn-game {
+            background: #059669 !important;
+            font-weight: bold;
+            border: 2px solid #b7e4c7 !important;
+        }
 
-/* Badges */
-.badges {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-}
+        /* Cards */
+        .card {
+            background: white;
+            max-width: 650px;
+            margin: 25px auto;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
 
-.badge {
-    padding: 15px;
-    border-radius: 15px;
-    background: #e5e7eb;
-    width: 130px;
-    transition: 0.3s;
-}
+        /* Badges */
+        .badges {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
 
-.badge.unlocked {
-    background: #b7e4c7;
-    color: #1b4332;
-    font-weight: bold;
-}
+        .badge {
+            padding: 15px;
+            border-radius: 15px;
+            background: #e5e7eb;
+            width: 110px;
+            transition: 0.3s;
+            filter: grayscale(1);
+            opacity: 0.6;
+        }
 
-.badge span {
-    display: block;
-    font-size: 30px;
-}
-</style>
+        .badge.unlocked {
+            background: #b7e4c7;
+            color: #1b4332;
+            font-weight: bold;
+            filter: grayscale(0);
+            opacity: 1;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .badge span {
+            display: block;
+            font-size: 30px;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+    </style>
 </head>
 
 <body>
@@ -92,20 +117,27 @@ body {
 
 <div class="container">
 
-    <!-- Navigation Section -->
     <div class="nav-buttons">
-        <button onclick="goLearn()">📘 Learn (AR Lessons)</button>
+        <button onclick="goLearn()">📘 Learn Lessons</button>
         <button onclick="goPractice()">📝 Practice Scenarios</button>
+        <button onclick="goGame()" class="btn-game">🎮 Play AR Game</button>
         <button onclick="goAbout()">ℹ️ About Us</button>
     </div>
 
-    <!-- Progress Card -->
     <div class="card">
-        <h2>Your Practice Progress</h2>
-        <p>You have completed <strong id="completed">0</strong> out of 15 scenarios.</p>
+        <h2>Your Eco Stats</h2>
+        <div class="stat-grid">
+            <div style="border-right: 1px solid #eee;">
+                <p>Scenarios Completed</p>
+                <strong id="completed" style="font-size: 24px;">0</strong> / 15
+            </div>
+            <div>
+                <p>Game High Score</p>
+                <strong id="highScore" style="font-size: 24px;">0</strong>
+            </div>
+        </div>
     </div>
 
-    <!-- Badge Section -->
     <div class="card">
         <h2>Your Eco Badges 🏅</h2>
         <div class="badges">
@@ -129,16 +161,22 @@ body {
 <script>
 // Load Progress + Unlock Badges
 function loadDashboard() {
+    // Practice Progress
     let done = parseInt(localStorage.getItem("practiceDone")) || 0;
     document.getElementById("completed").innerText = done;
 
-    if(done >= 5) {
+    // High Score from your game.html
+    let score = parseInt(localStorage.getItem("ecoHighScore")) || 0;
+    document.getElementById("highScore").innerText = score;
+
+    // Badge Logic
+    if(done >= 5 || score >= 50) {
         document.getElementById("b1").classList.add("unlocked");
     }
-    if(done >= 10) {
+    if(done >= 10 || score >= 100) {
         document.getElementById("b2").classList.add("unlocked");
     }
-    if(done >= 15) {
+    if(done >= 15 || score >= 200) {
         document.getElementById("b3").classList.add("unlocked");
     }
 }
@@ -152,11 +190,16 @@ function goPractice(){
     window.location.href = "practice.html";
 }
 
+function goGame(){
+    window.location.href = "game.html";
+}
+
 function goAbout(){
     window.location.href = "about.html";
 }
 
-loadDashboard();
+// Check for updates every time the page loads
+window.onload = loadDashboard;
 </script>
 
 </body>
