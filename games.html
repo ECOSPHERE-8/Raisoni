@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Sphere | AR Games</title>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #064e3b; color: white; text-align: center; margin: 0; padding: 20px; }
+        .game-container { max-width: 600px; margin: auto; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 20px; backdrop-filter: blur(10px); }
+        .stats { display: flex; justify-content: space-around; font-size: 20px; font-weight: bold; margin-bottom: 15px; background: #065f46; padding: 10px; border-radius: 10px; }
+        model-viewer { width: 100%; height: 350px; background: #f8fafc; border-radius: 15px; margin-bottom: 15px; }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .game-btn { padding: 15px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.2s; }
+        .blue { background: #2563eb; color: white; }
+        .green { background: #16a34a; color: white; }
+        .game-btn:active { transform: scale(0.95); }
+        #over { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); flex-direction: column; align-items: center; justify-content: center; z-index: 10; }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>Eco Warrior Games</h1>
+        
+        <div class="stats">
+            <div>Score: <span id="score">0</span></div>
+            <div>Time: <span id="timer">30</span>s</div>
+        </div>
+
+        <div id="game-zone">
+            <h3 id="instruction">Sort this item!</h3>
+            <model-viewer id="obj" src="https://modelviewer.dev/shared-assets/models/WaterBottle.glb" auto-rotate camera-controls></model-viewer>
+            
+            <div class="btn-grid">
+                <button class="game-btn blue" onclick="check('dry')">BLUE BIN (Recyclable)</button>
+                <button class="game-btn green" onclick="check('wet')">GREEN BIN (Organic)</button>
+            </div>
+            <p style="margin-top: 15px; font-style: italic;">Hint: Blue for dry plastic/paper, Green for food/seeds!</p>
+        </div>
+    </div>
+
+    <div id="over">
+        <h1>Game Over!</h1>
+        <h2 id="final-score">Score: 0</h2>
+        <p id="msg"></p>
+        <button class="game-btn" style="background: white; color: black;" onclick="location.reload()">Play Again</button>
+        <br>
+        <a href="dashboard.html" style="color: #b7e4c7; text-decoration: none; margin-top: 20px;">Back to Home</a>
+    </div>
+
+    <script>
+        // Game 1: Sorting logic
+        // Game 3: Visual growth logic
+        
+        const items = [
+            { name: "Plastic Bottle", type: "dry", m: "https://modelviewer.dev/shared-assets/models/WaterBottle.glb" },
+            { name: "Tree Seed", type: "wet", m: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/Models/Lantern/glTF/Lantern.gltf" }, // Lantern as seed/energy
+            { name: "Paper Scrap", type: "dry", m: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/Models/MaterialsVariantsShoe/glTF/MaterialsVariantsShoe.gltf" },
+            { name: "Old Fruit", type: "wet", m: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/Models/PineTree/glTF/PineTree.gltf" } // Tree as "Growth" result
+        ];
+
+        let score = 0;
+        let timeLeft = 30;
+        let currentItem = 0;
+
+        const timerId = setInterval(() => {
+            timeLeft--;
+            document.getElementById('timer').innerText = timeLeft;
+            if(timeLeft <= 0) endGame();
+        }, 1000);
+
+        function check(choice) {
+            if(choice === items[currentItem].type) {
+                score += 10;
+                document.getElementById('score').innerText = score;
+                // Game 3 Twist: Change model to a growing tree if score is high!
+                if(score >= 30) {
+                    document.getElementById('instruction').innerText = "Look! The environment is recovering! 🌳";
+                }
+                nextItem();
+            } else {
+                alert("Wrong bin! Try again 🌍");
+                timeLeft -= 2; // Penalty
+            }
+        }
+
+        function nextItem() {
+            currentItem = Math.floor(Math.random() * items.length);
+            document.getElementById('obj').src = items[currentItem].m;
+        }
+
+        function endGame() {
+            clearInterval(timerId);
+            document.getElementById('over').style.display = 'flex';
+            document.getElementById('final-score').innerText = "Final Score: " + score;
+            if(score >= 30) {
+                document.getElementById('msg').innerText = "You saved the forest!";
+            } else {
+                document.getElementById('msg').innerText = "Keep practicing to save more trees!";
+            }
+        }
+    </script>
+</body>
+</html>
