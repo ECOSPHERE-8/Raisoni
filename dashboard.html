@@ -4,203 +4,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eco Sphere | Dashboard</title>
-
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            background: #f0fdf4;
-            text-align: center;
-            color: #1b4332;
-        }
-
-        .header {
-            background: #1b4332;
-            color: white;
-            padding: 25px;
-        }
-
-        .container {
-            padding: 30px;
-        }
-
-        /* Navigation Buttons */
-        .nav-buttons {
-            margin: 20px 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
             display: flex;
             justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .nav-buttons button {
-            padding: 12px 25px;
-            margin: 10px;
-            border: none;
-            border-radius: 10px;
-            background: #2d6a4f;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
             align-items: center;
-            gap: 8px;
+            /* High-quality soothing environmental background */
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
+                        url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
 
-        .nav-buttons button:hover {
-            background: #40916c;
-            transform: translateY(-2px);
+        .dashboard-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
-        /* The New Game Button Highlight */
-        .btn-game {
-            background: #059669 !important;
-            font-weight: bold;
-            border: 2px solid #b7e4c7 !important;
+        h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        /* Cards */
-        .card {
-            background: white;
-            max-width: 650px;
-            margin: 25px auto;
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        p {
+            color: #e2e8f0;
+            margin-bottom: 30px;
+            font-style: italic;
         }
 
-        /* Badges */
-        .badges {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-        }
-
-        .badge {
-            padding: 15px;
-            border-radius: 15px;
-            background: #e5e7eb;
-            width: 110px;
-            transition: 0.3s;
-            filter: grayscale(1);
-            opacity: 0.6;
-        }
-
-        .badge.unlocked {
-            background: #b7e4c7;
-            color: #1b4332;
-            font-weight: bold;
-            filter: grayscale(0);
-            opacity: 1;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        .badge span {
-            display: block;
-            font-size: 30px;
-        }
-
-        .stat-grid {
+        .menu-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
             gap: 15px;
+        }
+
+        .menu-btn {
+            padding: 18px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Distinct Colors for each button */
+        .learn { background-color: #10b981; color: white; } /* Emerald */
+        .practice { background-color: #3b82f6; color: white; } /* Blue */
+        .about { background-color: #f59e0b; color: white; } /* Amber */
+        .logout { background-color: rgba(239, 68, 68, 0.8); color: white; margin-top: 10px; }
+
+        .menu-btn:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .menu-btn:active {
+            transform: translateY(0);
         }
     </style>
 </head>
-
 <body>
 
-<div class="header">
-    <h1>🌍 Eco Sphere Dashboard</h1>
-    <p>Learn • Practice • Grow • Protect Earth</p>
-</div>
+    <div class="dashboard-container">
+        <h1>Eco Sphere</h1>
+        <p>Your journey to a greener planet begins here.</p>
 
-<div class="container">
-
-    <div class="nav-buttons">
-        <button onclick="goLearn()">📘 Learn Lessons</button>
-        <button onclick="goPractice()">📝 Practice Scenarios</button>
-        <button onclick="goGame()" class="btn-game">🎮 Play AR Game</button>
-        <button onclick="goAbout()">ℹ️ About Us</button>
-    </div>
-
-    <div class="card">
-        <h2>Your Eco Stats</h2>
-        <div class="stat-grid">
-            <div style="border-right: 1px solid #eee;">
-                <p>Scenarios Completed</p>
-                <strong id="completed" style="font-size: 24px;">0</strong> / 15
-            </div>
-            <div>
-                <p>Game High Score</p>
-                <strong id="highScore" style="font-size: 24px;">0</strong>
-            </div>
+        <div class="menu-grid">
+            <a href="learn.html" class="menu-btn learn">📖 Learn</a>
+            <a href="games.html" class="menu-btn practice">🚀 Practice AR</a>
+            <a href="about.html" class="menu-btn about">🌿 About Us</a>
+            <a href="index.html" class="menu-btn logout">Logout</a>
         </div>
     </div>
-
-    <div class="card">
-        <h2>Your Eco Badges 🏅</h2>
-        <div class="badges">
-            <div id="b1" class="badge">
-                <span>🌱</span>
-                Beginner
-            </div>
-            <div id="b2" class="badge">
-                <span>🌿</span>
-                Eco Learner
-            </div>
-            <div id="b3" class="badge">
-                <span>🌍</span>
-                Eco Master
-            </div>
-        </div>
-    </div>
-
-</div>
-
-<script>
-// Load Progress + Unlock Badges
-function loadDashboard() {
-    // Practice Progress
-    let done = parseInt(localStorage.getItem("practiceDone")) || 0;
-    document.getElementById("completed").innerText = done;
-
-    // High Score from your game.html
-    let score = parseInt(localStorage.getItem("ecoHighScore")) || 0;
-    document.getElementById("highScore").innerText = score;
-
-    // Badge Logic
-    if(done >= 5 || score >= 50) {
-        document.getElementById("b1").classList.add("unlocked");
-    }
-    if(done >= 10 || score >= 100) {
-        document.getElementById("b2").classList.add("unlocked");
-    }
-    if(done >= 15 || score >= 200) {
-        document.getElementById("b3").classList.add("unlocked");
-    }
-}
-
-// Navigation Functions
-function goLearn(){
-    window.location.href = "learn.html";
-}
-
-function goPractice(){
-    window.location.href = "practice.html";
-}
-
-function goGame(){
-    window.location.href = "games.html";
-}
-
-function goAbout(){
-    window.location.href = "about.html";
-}
-
-// Check for updates every time the page loads
-window.onload = loadDashboard;
-</script>
 
 </body>
 </html>
