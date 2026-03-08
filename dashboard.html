@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eco Sphere | Main Dashboard</title>
+    <title>Eco Sphere | Dashboard</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -13,7 +13,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            /* High-quality, soothing nature background */
             background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
                         url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
@@ -31,83 +30,101 @@
             width: 90%;
             max-width: 480px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            transition: 0.5s;
         }
 
-        h1 {
-            color: white;
-            font-size: 3rem;
-            margin-bottom: 5px;
-            font-weight: 700;
-        }
+        h1 { color: white; font-size: 2.8rem; margin-bottom: 5px; }
+        .tagline { color: #d1fae5; margin-bottom: 30px; font-size: 15px; }
 
-        .tagline {
-            color: #d1fae5;
-            margin-bottom: 35px;
-            font-size: 16px;
-            letter-spacing: 1px;
-            font-weight: 300;
-        }
-
-        .menu-grid {
-            display: grid;
-            gap: 15px;
-        }
+        .menu-grid { display: grid; gap: 12px; }
 
         .menu-btn {
-            padding: 20px;
-            font-size: 18px;
+            padding: 18px;
+            font-size: 17px;
             font-weight: 600;
             border: none;
-            border-radius: 18px;
+            border-radius: 15px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s ease;
             text-decoration: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
             color: white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        /* Unique Color Palette for Clarity */
-        .learn { background: #059669; } /* Emerald Green */
-        .practice { background: #d97706; } /* Amber */
-        .game { background: #2563eb; } /* Royal Blue */
-        .about { background: #7c3aed; } /* Purple */
-        
-        .logout { 
-            background: rgba(255, 255, 255, 0.1); 
-            border: 1px solid rgba(255,255,255,0.3); 
-            margin-top: 15px; 
-            font-size: 15px;
-            font-weight: 400;
+        /* Main Menu Colors */
+        .learn { background: #059669; }
+        .practice { background: #d97706; }
+        .games-main { background: #2563eb; }
+        .about { background: #7c3aed; }
+        .logout { background: rgba(255, 255, 255, 0.15); margin-top: 10px; font-size: 14px; }
+
+        /* Game Selection Overlay (Hidden by Default) */
+        #game-selector {
+            display: none; /* Only shows when 'Games' is clicked */
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            animation: fadeIn 0.4s ease;
         }
 
-        .menu-btn:hover {
-            transform: scale(1.05);
-            filter: brightness(1.1);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+        .game-choice {
+            background: rgba(255, 255, 255, 0.9);
+            color: #1e3a8a;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 12px;
+            text-decoration: none;
+            display: block;
+            font-weight: bold;
+            transition: 0.2s;
         }
 
-        .menu-btn:active { transform: scale(0.98); }
+        .game-choice:hover { background: #white; transform: scale(1.02); color: #2563eb; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .menu-btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
     </style>
 </head>
 <body>
 
     <div class="dashboard-container">
-        <h1>Eco Sphere</h1>
-        <p class="tagline">Empowering the Eco-Warriors of Tomorrow</p>
+        <div id="main-menu">
+            <h1>Eco Sphere</h1>
+            <p class="tagline">Empowering the Eco-Warriors of Tomorrow</p>
 
-        <div class="menu-grid">
-            <a href="learn.html" class="menu-btn learn">🖼️ Learn Concepts</a>
-            <a href="practice.html" class="menu-btn practice">📝 Practice Quiz </a>
-            <a href="games.html" class="menu-btn game">🎮 Game</a>
-            <a href="about.html" class="menu-btn about">🌿 About Our Team</a>
-            
-            <a href="index.html" class="menu-btn logout">Logout</a>
+            <div class="menu-grid">
+                <a href="learn.html" class="menu-btn learn">🖼️ Learn Concepts</a>
+                <a href="practice.html" class="menu-btn practice">📝 Practice Quiz (15 Qs)</a>
+                
+                <button onclick="showGames()" class="menu-btn games-main">🎮 Play Games</button>
+                
+                <a href="about.html" class="menu-btn about">🌿 About Us</a>
+                <a href="index.html" class="menu-btn logout">Logout</a>
+            </div>
+        </div>
+
+        <div id="game-selector">
+            <h2 style="color: white; margin-bottom: 15px;">Choose Your Mission</h2>
+            <a href="games.html" class="game-choice">🗑️ AR Waste Segregation</a>
+            <a href="explorer.html" class="game-choice">🔍 3D Eco-Detective (Laptop)</a>
+            <button onclick="hideGames()" style="background:none; border:none; color:#d1fae5; cursor:pointer; margin-top:10px;">← Back to Menu</button>
         </div>
     </div>
 
+    <script>
+        function showGames() {
+            document.getElementById('main-menu').style.display = 'none';
+            document.getElementById('game-selector').style.display = 'block';
+        }
+
+        function hideGames() {
+            document.getElementById('game-selector').style.display = 'none';
+            document.getElementById('main-menu').style.display = 'block';
+        }
+    </script>
 </body>
 </html>
