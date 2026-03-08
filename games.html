@@ -3,19 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eco Sphere | Sequential AR Game</title>
+    <title>Eco Sphere | Eco Warrior AR</title>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #064e3b; color: white; text-align: center; margin: 0; padding: 20px; }
         .game-container { max-width: 600px; margin: auto; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
         .stats { display: flex; justify-content: space-around; font-size: 18px; font-weight: bold; margin-bottom: 15px; background: #065f46; padding: 10px; border-radius: 10px; }
-        model-viewer { width: 100%; height: 400px; background: #ffffff; border-radius: 15px; margin-bottom: 15px; }
+        
+        model-viewer { width: 100%; height: 350px; background: #ffffff; border-radius: 15px; margin-bottom: 15px; }
+        
         .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .game-btn { padding: 15px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; }
+        .game-btn { padding: 15px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.2s; }
         .blue { background: #2563eb; color: white; }
         .green { background: #16a34a; color: white; }
-        #over { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); flex-direction: column; align-items: center; justify-content: center; z-index: 10; padding: 20px; }
-        .msg { font-size: 24px; margin-bottom: 20px; line-height: 1.5; }
+        
+        /* Final Review Screen */
+        #over { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); flex-direction: column; align-items: center; overflow-y: auto; z-index: 10; padding: 40px 20px; }
+        .review-card { background: white; color: #333; width: 100%; max-width: 500px; padding: 15px; border-radius: 10px; margin-bottom: 10px; text-align: left; border-left: 8px solid #ef4444; }
+        .review-card.correct { border-left-color: #10b981; }
+        .final-score-text { font-size: 28px; margin-bottom: 20px; color: #fbbf24; }
     </style>
 </head>
 <body>
@@ -25,12 +31,15 @@
         <div class="stats">
             <div>Score: <span id="score">0</span></div>
             <div>Time: <span id="timer">60</span>s</div>
-            <div>Progress: <span id="current-num">1</span>/<span id="total-num">11</span></div>
+            <div>Item: <span id="current-num">1</span>/12</div>
         </div>
 
         <div id="game-zone">
             <h3 id="instruction">Sort the Waterbottle!</h3>
-            <model-viewer id="obj" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Waterbottle.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate shadow-intensity="1">
+            <model-viewer id="obj" 
+                src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Waterbottle.glb" 
+                ar ar-modes="webxr scene-viewer quick-look" 
+                camera-controls auto-rotate shadow-intensity="1">
                 <button slot="ar-button" style="background: white; border: none; border-radius: 5px; padding: 8px; position: absolute; top: 10px; right: 10px;">View in AR</button>
             </model-viewer>
             
@@ -42,79 +51,84 @@
     </div>
 
     <div id="over">
-        <div id="status-icon" style="font-size: 60px; margin-bottom: 10px;">🌟</div>
-        <div id="message-text" class="msg"></div>
-        <button class="game-btn" style="background: white; color: black; padding: 10px 40px;" onclick="location.reload()">Play Again</button>
+        <h1 id="final-status">Game Complete!</h1>
+        <div id="final-score-display" class="final-score-text"></div>
+        <div id="review-list"></div>
+        <button class="game-btn" style="background: white; color: black; margin: 20px 0; padding: 10px 40px;" onclick="location.reload()">Try Again</button>
         <br>
         <a href="dashboard.html" style="color: #b7e4c7; text-decoration: none;">Return to Dashboard</a>
     </div>
 
     <script>
+        // Full list of 12 items with educational info
         const items = [
-            // Your Original 3
-            { name: "Waterbottle", type: "dry", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Waterbottle.glb" },
-            { name: "Pineapple", type: "wet", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Pineapple.glb" },
-            { name: "LightDesk", type: "dry", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/LightDesk.glb" },
-
-            // Your New 6 Uploads
-            { name: "Bannana", type: "wet", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Bannana.glb" },
-            { name: "Smashed Glass", type: "dry", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Smashed_Glass.glb" },
-            { name: "Shoes", type: "dry", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Shoes.glb" },
-            { name: "Cardboard Box", type: "dry", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cardboard_Box.glb" },
-            { name: "Cola Can", type: "dry", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cola_Can.glb" },
-            { name: "Apple", type: "wet", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Apple.glb" },
-
-            // Unique items to make 11 total
-            { name: "Safety Helmet", type: "dry", m: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb" },
-            { name: "Avocado", type: "wet", m: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF-Binary/Avocado.glb" },
-            
+            { name: "Waterbottle", type: "dry", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Waterbottle.glb", info: "Plastic bottles can take 450 years to decompose. Recycling them saves energy!" },
+            { name: "Pineapple", type: "wet", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Pineapple.glb", info: "Fruit waste is organic and can be turned into fertilizer for your garden." },
+            { name: "LightDesk", type: "dry", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/LightDesk.glb", info: "Furniture contains wood and metal that should be reused or recycled." },
+            { name: "Bannana", type: "wet", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Bannana.glb", info: "Banana peels are 100% biodegradable and belong in the green bin." },
+            { name: "Smashed Glass", type: "dry", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Smashed_Glass.glb", info: "Glass is 100% recyclable and can be recycled an infinite number of times." },
+            { name: "Shoes", type: "dry", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Shoes.glb", info: "Old shoes are made of complex materials that need special recycling." },
+            { name: "Cardboard Box", type: "dry", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cardboard_Box.glb", info: "Recycling cardboard saves trees and reduces landfill waste." },
+            { name: "Cola Can", type: "dry", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cola_Can.glb", info: "Aluminum cans can be recycled and back on the shelf in just 60 days!" },
+            { name: "Apple", type: "wet", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Apple.glb", info: "Leftover fruit parts are organic waste and perfect for composting." },
+            { name: "Safety Helmet", type: "dry", m: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb", info: "Hard hats are made of industrial plastic that should be recycled as dry waste." },
+            { name: "Avocado", type: "wet", m: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF-Binary/Avocado.glb", info: "Avocado pits and skins are organic matter that helps the soil." },
+            { name: "Dinosaur Bone", type: "wet", m: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BrainStem/glTF-Binary/BrainStem.glb", info: "Fossils and bones are biological material, making them organic/wet waste!" }
         ];
 
         let score = 0;
-        let timeLeft = 60; // Set to 1 minute
+        let timeLeft = 60; // 1-minute timer
         let currentIdx = 0;
-
-        document.getElementById('total-num').innerText = items.length;
+        let gameHistory = []; // Tracks mistakes for the final report
 
         const timerId = setInterval(() => {
             timeLeft--;
             document.getElementById('timer').innerText = timeLeft;
-            if(timeLeft <= 0) endGame(false); 
+            if(timeLeft <= 0) endGame(); 
         }, 1000);
 
         function check(choice) {
-            if(choice === items[currentIdx].type) {
-                score += 10;
-                document.getElementById('score').innerText = score;
-                currentIdx++; 
+            const isCorrect = (choice === items[currentIdx].type);
+            if(isCorrect) score += 10;
+            
+            // Log for the final educational report
+            gameHistory.push({ item: items[currentIdx], userCorrect: isCorrect });
 
-                if (currentIdx < items.length) {
-                    document.getElementById('obj').src = items[currentIdx].m;
-                    document.getElementById('instruction').innerText = "Sort the " + items[currentIdx].name + "!";
-                    document.getElementById('current-num').innerText = currentIdx + 1;
-                } else {
-                    endGame(true); 
-                }
+            currentIdx++;
+            if (currentIdx < items.length) {
+                // Load next item
+                document.getElementById('obj').src = items[currentIdx].m;
+                document.getElementById('instruction').innerText = "Sort the " + items[currentIdx].name + "!";
+                document.getElementById('current-num').innerText = currentIdx + 1;
+                document.getElementById('score').innerText = score;
             } else {
-                alert("Incorrect Bin! Try again! 🌍");
-                timeLeft -= 2; 
+                endGame();
             }
         }
 
-        function endGame(isWin) {
+        function endGame() {
             clearInterval(timerId);
-            const overScreen = document.getElementById('over');
-            const msgText = document.getElementById('message-text');
-            const icon = document.getElementById('status-icon');
-            overScreen.style.display = 'flex';
+            document.getElementById('over').style.display = 'flex';
+            document.getElementById('final-score-display').innerText = "Final Score: " + score;
+            
+            // Set message based on time/completion
+            const statusMsg = (currentIdx === items.length) 
+                ? "Hurray! You have learned a lot today! 🌍✨" 
+                : "Nice try! Let's learn more and try again! 💪♻️";
+            document.getElementById('final-status').innerText = statusMsg;
 
-            if(isWin) {
-                icon.innerText = "🏆";
-                msgText.innerHTML = "<strong>Hurray!</strong> You have learned a lot today.<br>Your quick thinking is helping the planet! 🌍✨";
-            } else {
-                icon.innerText = "⏳";
-                msgText.innerHTML = "<strong>Nice try!</strong> You're becoming a great Eco Warrior.<br>Let's try one more time to save the environment! 💪♻️";
-            }
+            let reviewHTML = "";
+            gameHistory.forEach(entry => {
+                const cardClass = entry.userCorrect ? "correct" : "";
+                const symbol = entry.userCorrect ? "✅" : "❌";
+                reviewHTML += `
+                    <div class="review-card ${cardClass}">
+                        <strong>${symbol} ${entry.item.name}</strong><br>
+                        <em>Fact:</em> ${entry.item.info}
+                    </div>
+                `;
+            });
+            document.getElementById('review-list').innerHTML = reviewHTML;
         }
     </script>
 </body>
