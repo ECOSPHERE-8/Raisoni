@@ -8,42 +8,43 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            /* High-quality soothing environmental background */
-            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
-                        url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            /* High-quality soothing forest background */
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
+                        url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
         }
 
         .dashboard-container {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(18px);
             padding: 40px;
             border-radius: 30px;
             border: 1px solid rgba(255, 255, 255, 0.2);
             text-align: center;
             width: 90%;
             max-width: 450px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
         }
 
         h1 {
             color: white;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-size: 2.8rem;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
         }
 
-        p {
-            color: #e2e8f0;
+        .tagline {
+            color: #d1fae5;
             margin-bottom: 30px;
-            font-style: italic;
+            font-size: 16px;
+            font-weight: 300;
         }
 
         .menu-grid {
@@ -60,36 +61,40 @@
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        /* Distinct Colors for each button */
-        .learn { background-color: #10b981; color: white; } /* Emerald */
-        .practice { background-color: #3b82f6; color: white; } /* Blue */
-        .about { background-color: #f59e0b; color: white; } /* Amber */
-        .logout { background-color: rgba(239, 68, 68, 0.8); color: white; margin-top: 10px; }
+        /* Menu Button Colors */
+        .learn { background-color: #059669; color: white; }
+        .quiz { background-color: #d97706; color: white; }
+        .game { background-color: #2563eb; color: white; }
+        .about { background-color: #7c3aed; color: white; }
+        .logout { background-color: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255,255,255,0.3); margin-top: 10px; font-size: 14px; }
 
         .menu-btn:hover {
-            transform: translateY(-3px);
-            filter: brightness(1.1);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transform: translateY(-4px);
+            filter: brightness(1.15);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
 
-        .menu-btn:active {
-            transform: translateY(0);
-        }
+        .menu-btn:active { transform: translateY(0); }
     </style>
 </head>
 <body>
 
     <div class="dashboard-container">
         <h1>Eco Sphere</h1>
-        <p>Your journey to a greener planet begins here.</p>
+        <p class="tagline">Protect. Sort. Sustain.</p>
 
         <div class="menu-grid">
-            <a href="learn.html" class="menu-btn learn">📖 Learn</a>
-            <a href="games.html" class="menu-btn practice">🚀 Practice AR</a>
-            <a href="about.html" class="menu-btn about">🌿 About Us</a>
+            <a href="learn.html" class="menu-btn learn">📖 Learn Concepts</a>
+            <a href="practice.html" class="menu-btn quiz">🧠 Practice Quiz (15 Qs)</a>
+            <a href="games.html" class="menu-btn game">🚀 AR Waste Sorter</a>
+            <a href="about.html" class="menu-btn about">🌿 About Our Mission</a>
+            
             <a href="index.html" class="menu-btn logout">Logout</a>
         </div>
     </div>
