@@ -30,19 +30,20 @@
             margin-bottom: 20px;
         }
 
+        /* 3x3 Matrix Grid */
         .matrix {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
             width: 95%;
-            max-width: 600px;
+            max-width: 650px;
             margin-bottom: 20px;
         }
 
         .box {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
-            aspect-ratio: 0.85; /* Adjusted height to fit the text label below the model */
+            aspect-ratio: 0.85; 
             cursor: pointer;
             transition: 0.3s;
             border: 4px solid transparent;
@@ -52,29 +53,30 @@
             justify-content: space-between;
             padding: 10px;
             overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
 
-        .box:hover { transform: scale(1.05); background: white; }
+        .box:hover { transform: scale(1.03); background: white; }
         
+        /* State Indicators */
         .box.selected { border-color: #3b82f6; }
         .box.hazard.selected { border-color: #ef4444; }
 
-        /* Label styling for the item names */
         .item-label {
             color: #333;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
             text-align: center;
             margin-top: 5px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
+        /* Final Results Overlay */
         #results-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.96);
             z-index: 1000;
             flex-direction: column;
             align-items: center;
@@ -88,9 +90,11 @@
         }
 
         .btn-action {
-            padding: 12px 30px; border: none; border-radius: 10px;
-            cursor: pointer; background: white; color: #064e3b; font-weight: bold;
+            padding: 14px 40px; border: none; border-radius: 12px;
+            cursor: pointer; background: #10b981; color: white; font-weight: bold;
+            font-size: 18px; transition: 0.2s;
         }
+        .btn-action:hover { background: #059669; transform: scale(1.05); }
     </style>
 </head>
 <body>
@@ -100,25 +104,26 @@
     <div class="matrix" id="game-grid"></div>
 
     <div id="results-overlay">
-        <h1 id="final-status-text" style="font-size: 32px; margin-bottom: 10px;">Mission Ended</h1>
-        <p id="final-stats" style="color: #d1fae5; margin-bottom: 30px;"></p>
-        <div id="report-list"></div>
-        <button class="btn-action" onclick="location.reload()">Restart Scanner</button>
+        <h1 id="final-status-text" style="font-size: 36px; margin-bottom: 10px;">End of Scan</h1>
+        <p id="final-stats" style="color: #d1fae5; margin-bottom: 30px; font-size: 20px;"></p>
+        <div id="report-list" style="width: 100%; display: flex; flex-direction: column; align-items: center;"></div>
+        <button class="btn-action" onclick="location.reload()">Start New Scan</button>
         <br>
-        <a href="dashboard.html" style="color: white; text-decoration: none; margin-top: 15px; display: inline-block;">← Back to Dashboard</a>
+        <a href="dashboard.html" style="color: white; text-decoration: none; border-bottom: 1px solid white;">Return to Dashboard</a>
     </div>
 
     <script>
+        // Your Custom GitHub 3D Models
         const items = [
-            { id: 0, name: "Solar Panel", model: "https://path-to-your-model/solar.glb", isHazard: false },
-            { id: 1, name: "Car Exhaust", model: "https://path-to-your-model/exhaust.glb", isHazard: true, fact: "Exhaust releases CO2 and pollutants, harming our atmosphere." },
-            { id: 2, name: "Oak Tree", model: "https://path-to-your-model/tree.glb", isHazard: false },
-            { id: 3, name: "Factory", model: "https://path-to-your-model/factory.glb", isHazard: true, fact: "Factories often release toxic waste into our air and water systems." },
-            { id: 4, name: "Eco Bag", model: "https://path-to-your-model/bag.glb", isHazard: false },
-            { id: 5, name: "Plastic Bottle", model: "https://path-to-your-model/bottle.glb", isHazard: true, fact: "Plastic takes centuries to decompose and harms wildlife." },
-            { id: 6, name: "Recycle Bin", model: "https://path-to-your-model/bin.glb", isHazard: false },
-            { id: 7, name: "Coal Mine", model: "https://path-to-your-model/coal.glb", isHazard: true, fact: "Mining destroys land and burning coal is a top source of CO2." },
-            { id: 8, name: "Wind Turbine", model: "https://path-to-your-model/turbine.glb", isHazard: false }
+            { id: 0, name: "Solar Battery", model: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Solarbattery.glb", isHazard: false },
+            { id: 1, name: "Car Exhaust", model: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxInterleaved/glTF-Binary/BoxInterleaved.glb", isHazard: true, fact: "Car exhaust releases pollutants that cause smog and trap heat in our atmosphere." },
+            { id: 2, name: "Big Tree", model: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/BigTree.glb", isHazard: false },
+            { id: 3, name: "Factory", model: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Factory.glb", isHazard: true, fact: "Industrial factories are major sources of greenhouse gases and chemical waste." },
+            { id: 4, name: "Eco Bag", model: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Bag.glb", isHazard: false },
+            { id: 5, name: "Water Bottle", model: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Waterbottle.glb", isHazard: true, fact: "Plastic bottles contribute to ocean pollution and take 450+ years to decompose." },
+            { id: 6, name: "Recycle Bin", model: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Recycle%20bin.glb", isHazard: false },
+            { id: 7, name: "Coal Mine", model: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Lantern/glTF-Binary/Lantern.glb", isHazard: true, fact: "Coal mining destroys natural habitats and burning it is the #1 cause of CO2 emissions." },
+            { id: 8, name: "Windmill", model: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Windmill.glb", isHazard: false }
         ];
 
         let foundCount = 0;
@@ -132,9 +137,9 @@
                 box.className = 'box';
                 box.id = `box-${item.id}`;
                 
-                // Added the label div at the bottom of the box
+                // Set up the 3D viewer for each grid cell
                 box.innerHTML = `
-                    <model-viewer src="${item.model}" auto-rotate rotation-per-second="30deg" 
+                    <model-viewer src="${item.model}" auto-rotate rotation-per-second="40deg" 
                     style="width: 100%; height: 80%; pointer-events: none;"></model-viewer>
                     <div class="item-label">${item.name}</div>
                 `;
@@ -159,6 +164,7 @@
                 foundHazards.push(item);
             }
 
+            // Game end conditions
             if(foundCount === 4) endGame(true);
             else if(chancesUsed === 5) endGame(false);
         }
@@ -166,20 +172,24 @@
         function endGame(isWin) {
             setTimeout(() => {
                 document.getElementById('results-overlay').style.display = 'flex';
-                document.getElementById('final-status-text').innerText = isWin ? "SUCCESS 🟢" : "FAILED 🔴";
-                document.getElementById('final-stats').innerText = `You identified ${foundCount} / 4 hazards.`;
+                const status = document.getElementById('final-status-text');
+                status.innerText = isWin ? "MISSION SUCCESS 🟢" : "MISSION FAILED 🔴";
+                status.style.color = isWin ? "#10b981" : "#ef4444";
+                
+                document.getElementById('final-stats').innerText = `You identified ${foundCount} out of 4 hazardous items in ${chancesUsed} clicks.`;
 
+                // Display the "Why" report
                 let reportHTML = "";
                 items.filter(i => i.isHazard).forEach(item => {
-                    const status = foundHazards.includes(item) ? "✅ Found" : "❌ Missed";
+                    const resultLabel = foundHazards.includes(item) ? "✅ CORRECT" : "❌ MISSED";
                     reportHTML += `
                         <div class="report-card">
-                            <strong>${item.name}</strong> <span style="float:right; font-weight:bold;">${status}</span><br><br>
-                            ${item.fact}
+                            <h3 style="margin-bottom:10px;">${item.name} <span style="float:right; font-size:14px;">${resultLabel}</span></h3>
+                            <p>${item.fact}</p>
                         </div>`;
                 });
                 document.getElementById('report-list').innerHTML = reportHTML;
-            }, 500);
+            }, 600);
         }
 
         window.onload = initGame;
