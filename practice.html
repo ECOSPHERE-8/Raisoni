@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,60 +6,137 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eco Sphere | Practice Quiz</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #064e3b; color: white; text-align: center; margin: 0; padding: 20px; }
-        .quiz-container { max-width: 600px; margin: auto; background: rgba(255,255,255,0.1); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
-        .question-box { margin-bottom: 25px; }
-        .options-grid { display: grid; gap: 10px; }
-        .option-btn { padding: 15px; border: none; border-radius: 10px; cursor: pointer; background: white; color: #333; font-weight: bold; transition: 0.3s; }
-        .option-btn:hover { background: #d1fae5; }
-        
-        /* Clue Box */
-        #clue-box { display: none; margin-top: 15px; padding: 15px; background: #b45309; border-radius: 10px; font-style: italic; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* End Screen */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                        url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            padding: 35px;
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            width: 95%;
+            max-width: 600px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+
+        h1 { margin-bottom: 10px; font-size: 2rem; }
+        .q-progress { margin-bottom: 20px; font-size: 14px; color: #d1fae5; }
+        
+        .question-text { font-size: 22px; margin-bottom: 25px; line-height: 1.4; }
+
+        .options-grid { display: grid; gap: 12px; }
+
+        .option-btn {
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            background: white;
+            color: #064e3b;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .option-btn:hover {
+            background: #d1fae5;
+            transform: translateY(-2px);
+        }
+
+        /* Clue Box Styling */
+        #clue-box {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: #b45309; /* Warm Amber for hints */
+            color: white;
+            border-radius: 12px;
+            font-style: italic;
+            font-size: 15px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Results Screen */
         #results { display: none; flex-direction: column; align-items: center; }
-        .review-card { background: white; color: #333; width: 100%; margin-bottom: 10px; padding: 15px; border-radius: 10px; text-align: left; }
+        .final-score { font-size: 40px; margin: 20px 0; color: #fbbf24; }
+        .nav-links { margin-top: 25px; display: flex; gap: 20px; }
+        .nav-links a { color: #d1fae5; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div class="quiz-container">
-        <h1>Eco Practice Quiz</h1>
         <div id="quiz-zone">
-            <p>Question <span id="q-num">1</span> of 15</p>
-            <div class="question-box">
-                <h2 id="question-text">Loading...</h2>
-            </div>
+            <h1>Eco Practice</h1>
+            <p class="q-progress">Question <span id="q-num">1</span> of 15</p>
+            
+            <p id="question-text" class="question-text">Loading your first challenge...</p>
+            
             <div id="options" class="options-grid"></div>
+            
             <div id="clue-box"></div>
         </div>
 
         <div id="results">
-            <h2>Quiz Complete!</h2>
-            <div id="final-stats" style="font-size: 24px; margin: 20px 0;"></div>
-            <div id="review-list"></div>
-            <button class="option-btn" onclick="location.reload()" style="width: 200px; margin-top: 20px;">Try Again</button>
-            <br>
-            <a href="dashboard.html" style="color: #b7e4c7; text-decoration: none; margin-top: 10px; display: inline-block;">Back to Dashboard</a>
+            <h1>Quiz Complete!</h1>
+            <div class="final-score" id="final-stats">0/15</div>
+            <p>Great job, Eco-Warrior! You are learning fast.</p>
+            
+            <button class="option-btn" onclick="location.reload()" style="width: 200px; margin-top: 25px;">Restart Quiz</button>
+            
+            <div class="nav-links">
+                <a href="dashboard.html">← Back to Dashboard</a>
+                <a href="games.html">Go to AR Game →</a>
+            </div>
         </div>
     </div>
 
     <script>
         const questions = [
-            { q: "Which bin should a plastic milk bottle go into?", options: ["Blue Bin", "Green Bin"], correct: 0, clue: "Hint: Plastic is a dry, recyclable material." },
+            { q: "Which bin should a plastic milk bottle go into?", options: ["Blue Bin (Dry)", "Green Bin (Wet)"], correct: 0, clue: "Hint: Plastic is a dry, recyclable material." },
             { q: "Is a banana peel considered wet or dry waste?", options: ["Wet", "Dry"], correct: 0, clue: "Hint: If it comes from nature and can rot, it's organic!" },
-            { q: "What should you do with an old newspaper?", options: ["Burn it", "Recycle in Blue Bin"], correct: 1, clue: "Hint: Paper is made from trees and can be used again." },
-            // ... Add your other 12 questions here following this same format
-            { q: "Where does an apple core belong?", options: ["Blue Bin", "Green Bin"], correct: 1, clue: "Hint: Fruit waste can be turned into compost." }
+            { q: "What should you do with an old newspaper?", options: ["Burn it", "Recycle in Blue Bin"], correct: 1, clue: "Hint: Paper is made from trees and can be recycled." },
+            { q: "Where does an apple core belong?", options: ["Blue Bin", "Green Bin"], correct: 1, clue: "Hint: Fruit waste can be turned into nutrient-rich compost." },
+            { q: "Are metal soda cans recyclable?", options: ["Yes, Blue Bin", "No, Green Bin"], correct: 0, clue: "Hint: Metals are non-organic and very valuable for recycling." },
+            { q: "What is the best way to dispose of dry leaves?", options: ["Composting", "Throw in Blue Bin"], correct: 0, clue: "Hint: Leaves are natural 'Wet' waste that helps enrich soil." },
+            { q: "Should glass bottles be washed before recycling?", options: ["Yes", "No"], correct: 0, clue: "Hint: Cleaning prevent smells and keeps the recycling process efficient!" },
+            { q: "Cardboard boxes belong in which category?", options: ["Wet Waste", "Dry Waste"], correct: 1, clue: "Hint: Cardboard is made of paper fibers." },
+            { q: "Is a used tea bag Wet or Dry waste?", options: ["Wet", "Dry"], correct: 0, clue: "Hint: Tea leaves are organic and biodegradable." },
+            { q: "Can we recycle plastic chocolate wrappers?", options: ["Always", "Mostly No (Multi-layered)"], correct: 1, clue: "Hint: Shiny wrappers mix plastic and foil, making them hard to separate." },
+            { q: "Where should you put a broken ceramic plate?", options: ["Blue Bin", "Green Bin"], correct: 0, clue: "Hint: Ceramics do not decompose like food waste." },
+            { q: "What color bin is used for Organic waste in India?", options: ["Blue", "Green"], correct: 1, clue: "Hint: Think of the color of grass and trees!" },
+            { q: "Is aluminum foil recyclable?", options: ["Yes", "No"], correct: 0, clue: "Hint: Aluminum is a metal, so it belongs in the dry bin." },
+            { q: "Eggshells belong in which bin?", options: ["Green Bin", "Blue Bin"], correct: 0, clue: "Hint: Eggshells are biological and good for garden soil." },
+            { q: "What happens to wet waste in a compost pit?", options: ["It turns into soil", "It stays there forever"], correct: 0, clue: "Hint: Microbes eat organic waste and turn it into food for plants." }
         ];
 
         let currentQ = 0;
         let score = 0;
-        let history = [];
 
         function loadQuestion() {
             const q = questions[currentQ];
-            document.getElementById('q-num').innerText = currentIdx + 1; // Simplified for logic
+            
+            document.getElementById('q-num').innerText = currentQ + 1; 
             document.getElementById('question-text').innerText = q.q;
             document.getElementById('clue-box').style.display = 'none';
             
@@ -78,14 +156,12 @@
             const q = questions[currentQ];
             if (choice === q.correct) {
                 score++;
-                history.push({ q: q.q, correct: true });
                 nextQuestion();
             } else {
-                // Show the clue instead of a pop-up
                 const clueBox = document.getElementById('clue-box');
                 clueBox.innerText = q.clue;
                 clueBox.style.display = 'block';
-                // Note: We don't advance the question yet, let them choose again!
+                // Note: The user stays on this question until they get it right!
             }
         }
 
@@ -102,10 +178,11 @@
             document.getElementById('quiz-zone').style.display = 'none';
             const resDiv = document.getElementById('results');
             resDiv.style.display = 'flex';
-            document.getElementById('final-stats').innerText = `Your Score: ${score}/15`;
+            document.getElementById('final-stats').innerText = `${score}/15`;
         }
 
-        loadQuestion();
+        // Start the quiz once everything is loaded
+        window.onload = loadQuestion;
     </script>
 </body>
 </html>
