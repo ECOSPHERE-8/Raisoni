@@ -30,7 +30,6 @@
             margin-bottom: 20px;
         }
 
-        /* 3x3 Grid Layout */
         .matrix {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -43,20 +42,34 @@
         .box {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
-            aspect-ratio: 1; 
+            aspect-ratio: 0.85; /* Adjusted height to fit the text label below the model */
             cursor: pointer;
             transition: 0.3s;
             border: 4px solid transparent;
-            overflow: hidden; /* Keeps 3D model inside the box */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            overflow: hidden;
         }
 
         .box:hover { transform: scale(1.05); background: white; }
         
-        /* State Highlights */
         .box.selected { border-color: #3b82f6; }
         .box.hazard.selected { border-color: #ef4444; }
 
-        /* Final Report Overlay */
+        /* Label styling for the item names */
+        .item-label {
+            color: #333;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         #results-overlay {
             display: none;
             position: fixed;
@@ -92,11 +105,10 @@
         <div id="report-list"></div>
         <button class="btn-action" onclick="location.reload()">Restart Scanner</button>
         <br>
-        <a href="dashboard.html" style="color: white; text-decoration: none;">← Back to Dashboard</a>
+        <a href="dashboard.html" style="color: white; text-decoration: none; margin-top: 15px; display: inline-block;">← Back to Dashboard</a>
     </div>
 
     <script>
-        // Updated with your 3D model placeholders
         const items = [
             { id: 0, name: "Solar Panel", model: "https://path-to-your-model/solar.glb", isHazard: false },
             { id: 1, name: "Car Exhaust", model: "https://path-to-your-model/exhaust.glb", isHazard: true, fact: "Exhaust releases CO2 and pollutants, harming our atmosphere." },
@@ -120,10 +132,11 @@
                 box.className = 'box';
                 box.id = `box-${item.id}`;
                 
-                // Embed 3D model viewer into the box
+                // Added the label div at the bottom of the box
                 box.innerHTML = `
                     <model-viewer src="${item.model}" auto-rotate rotation-per-second="30deg" 
-                    style="width: 100%; height: 100%; pointer-events: none;"></model-viewer>
+                    style="width: 100%; height: 80%; pointer-events: none;"></model-viewer>
+                    <div class="item-label">${item.name}</div>
                 `;
 
                 box.onclick = () => handleChoice(item);
@@ -161,7 +174,7 @@
                     const status = foundHazards.includes(item) ? "✅ Found" : "❌ Missed";
                     reportHTML += `
                         <div class="report-card">
-                            <strong>${item.name}</strong> <span style="float:right">${status}</span><br><br>
+                            <strong>${item.name}</strong> <span style="float:right; font-weight:bold;">${status}</span><br><br>
                             ${item.fact}
                         </div>`;
                 });
