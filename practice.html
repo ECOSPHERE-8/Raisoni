@@ -1,226 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Eco Sphere | Practice</title>
-<style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f0fdf4;
-    display: flex;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Sphere | Practice Quiz</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #064e3b; color: white; text-align: center; margin: 0; padding: 20px; }
+        .quiz-container { max-width: 600px; margin: auto; background: rgba(255,255,255,0.1); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
+        .question-box { margin-bottom: 25px; }
+        .options-grid { display: grid; gap: 10px; }
+        .option-btn { padding: 15px; border: none; border-radius: 10px; cursor: pointer; background: white; color: #333; font-weight: bold; transition: 0.3s; }
+        .option-btn:hover { background: #d1fae5; }
+        
+        /* Clue Box */
+        #clue-box { display: none; margin-top: 15px; padding: 15px; background: #b45309; border-radius: 10px; font-style: italic; }
 
-/* Progress Sidebar */
-#progressBox {
-    width: 250px;
-    background: #1b4332;
-    color: white;
-    padding: 20px;
-    height: 100vh;
-    position: fixed;
-    right: 0;
-    top: 0;
-}
-
-#progressBox h3 {
-    margin-top: 0;
-}
-
-.progress-bar-bg {
-    background: #40916c;
-    height: 12px;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-top: 10px;
-}
-
-#bar {
-    height: 100%;
-    width: 0%;
-    background: #b7e4c7;
-}
-
-/* Main Content */
-.container {
-    margin-right: 260px;
-    padding: 20px;
-    width: 100%;
-}
-
-.question-card {
-    background: white;
-    padding: 20px;
-    margin: 20px 0;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-.option {
-    display: block;
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 8px;
-    border: none;
-    background: #d8f3dc;
-    cursor: pointer;
-}
-
-.option:hover {
-    background: #b7e4c7;
-}
-
-.result {
-    margin-top: 10px;
-    font-weight: bold;
-}
-</style>
+        /* End Screen */
+        #results { display: none; flex-direction: column; align-items: center; }
+        .review-card { background: white; color: #333; width: 100%; margin-bottom: 10px; padding: 15px; border-radius: 10px; text-align: left; }
+    </style>
 </head>
-
 <body>
 
-<!-- Progress Sidebar -->
-<div id="progressBox">
-    <h3>Your Progress 🌱</h3>
-    <p>Completed: <span id="done">0</span> / 15</p>
-    <p>Remaining: <span id="left">15</span></p>
-    <div class="progress-bar-bg">
-        <div id="bar"></div>
+    <div class="quiz-container">
+        <h1>Eco Practice Quiz</h1>
+        <div id="quiz-zone">
+            <p>Question <span id="q-num">1</span> of 15</p>
+            <div class="question-box">
+                <h2 id="question-text">Loading...</h2>
+            </div>
+            <div id="options" class="options-grid"></div>
+            <div id="clue-box"></div>
+        </div>
+
+        <div id="results">
+            <h2>Quiz Complete!</h2>
+            <div id="final-stats" style="font-size: 24px; margin: 20px 0;"></div>
+            <div id="review-list"></div>
+            <button class="option-btn" onclick="location.reload()" style="width: 200px; margin-top: 20px;">Try Again</button>
+            <br>
+            <a href="dashboard.html" style="color: #b7e4c7; text-decoration: none; margin-top: 10px; display: inline-block;">Back to Dashboard</a>
+        </div>
     </div>
-</div>
 
-<!-- Questions Container -->
-<div class="container" id="questions"></div>
+    <script>
+        const questions = [
+            { q: "Which bin should a plastic milk bottle go into?", options: ["Blue Bin", "Green Bin"], correct: 0, clue: "Hint: Plastic is a dry, recyclable material." },
+            { q: "Is a banana peel considered wet or dry waste?", options: ["Wet", "Dry"], correct: 0, clue: "Hint: If it comes from nature and can rot, it's organic!" },
+            { q: "What should you do with an old newspaper?", options: ["Burn it", "Recycle in Blue Bin"], correct: 1, clue: "Hint: Paper is made from trees and can be used again." },
+            // ... Add your other 12 questions here following this same format
+            { q: "Where does an apple core belong?", options: ["Blue Bin", "Green Bin"], correct: 1, clue: "Hint: Fruit waste can be turned into compost." }
+        ];
 
-<script>
-const TOTAL_QUESTIONS = 15;
+        let currentQ = 0;
+        let score = 0;
+        let history = [];
 
-const caseStudies = [
-{
-q: "You have a banana peel after eating fruit. What should you do?",
-o: ["Throw in green bin", "Throw in blue bin", "Throw on road", "Burn it"],
-a: 0
-},
-{
-q: "You see tap water flowing continuously in school. What should you do?",
-o: ["Ignore it", "Close the tap", "Play with water", "Tell friends to waste water"],
-a: 1
-},
-{
-q: "Plastic bags are being burned near your house. What is correct action?",
-o: ["Stand and watch", "Burn more plastic", "Stop and inform elders", "Ignore"],
-a: 2
-},
-{
-q: "You finished your notebook pages. What should you do?",
-o: ["Throw it away", "Recycle paper", "Burn it", "Waste more paper"],
-a: 1
-},
-{
-q: "You see birds thirsty in summer. What should you do?",
-o: ["Ignore them", "Keep water bowl", "Throw stones", "Scare them"],
-a: 1
-},
-{
-q: "Your friend throws wrapper on road. What should you suggest?",
-o: ["Do same", "Ignore", "Ask to use dustbin", "Laugh"],
-a: 2
-},
-{
-q: "Lights and fans are on in empty classroom. What should you do?",
-o: ["Leave them on", "Switch them off", "Break switch", "Ignore"],
-a: 1
-},
-{
-q: "You see trees being cut unnecessarily. What should you do?",
-o: ["Support cutting", "Plant more trees", "Ignore", "Damage plants"],
-a: 1
-},
-{
-q: "Food is left on plate in canteen. What is best action?",
-o: ["Waste it", "Throw it", "Take only needed food", "Play with food"],
-a: 2
-},
-{
-q: "You see someone harming animals for fun. What should you do?",
-o: ["Join them", "Ignore", "Stop and inform elders", "Record and laugh"],
-a: 2
-},
-{
-q: "Using public transport instead of private vehicles helps in?",
-o: ["More pollution", "Saving fuel & reducing pollution", "Traffic jam", "Noise"],
-a: 1
-},
-{
-q: "You see leaking pipe in park. Best action?",
-o: ["Ignore", "Inform authority", "Play in water", "Break pipe more"],
-a: 1
-},
-{
-q: "Old newspapers at home should be?",
-o: ["Burned", "Recycled", "Thrown anywhere", "Wasted"],
-a: 1
-},
-{
-q: "You planted a sapling. What should you do next?",
-o: ["Forget it", "Water and care daily", "Pull leaves", "Cut it"],
-a: 1
-},
-{
-q: "Using cloth bags instead of plastic helps in?",
-o: ["More plastic waste", "Reducing pollution", "Increasing garbage", "No effect"],
-a: 1
-}
-];
+        function loadQuestion() {
+            const q = questions[currentQ];
+            document.getElementById('q-num').innerText = currentIdx + 1; // Simplified for logic
+            document.getElementById('question-text').innerText = q.q;
+            document.getElementById('clue-box').style.display = 'none';
+            
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(index);
+                optionsDiv.appendChild(btn);
+            });
+        }
 
-let completed = parseInt(localStorage.getItem("practiceDone")) || 0;
+        function checkAnswer(choice) {
+            const q = questions[currentQ];
+            if (choice === q.correct) {
+                score++;
+                history.push({ q: q.q, correct: true });
+                nextQuestion();
+            } else {
+                // Show the clue instead of a pop-up
+                const clueBox = document.getElementById('clue-box');
+                clueBox.innerText = q.clue;
+                clueBox.style.display = 'block';
+                // Note: We don't advance the question yet, let them choose again!
+            }
+        }
 
-function updateProgress() {
-    let done = parseInt(localStorage.getItem("practiceDone")) || 0;
-    let left = TOTAL_QUESTIONS - done;
-    document.getElementById("done").innerText = done;
-    document.getElementById("left").innerText = left;
-    document.getElementById("bar").style.width = (done / TOTAL_QUESTIONS) * 100 + "%";
-}
+        function nextQuestion() {
+            currentQ++;
+            if (currentQ < questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
 
-function checkAnswer(index, selected, correct, btn){
-    const result = btn.parentElement.querySelector(".result");
-    if(selected === correct){
-        result.innerText = "Correct 🌍";
-        result.style.color = "green";
-    } else {
-        result.innerText = "Think again!";
-        result.style.color = "red";
-    }
+        function showResults() {
+            document.getElementById('quiz-zone').style.display = 'none';
+            const resDiv = document.getElementById('results');
+            resDiv.style.display = 'flex';
+            document.getElementById('final-stats').innerText = `Your Score: ${score}/15`;
+        }
 
-    let done = parseInt(localStorage.getItem("practiceDone")) || 0;
-    if(!btn.parentElement.classList.contains("attempted")){
-        done++;
-        localStorage.setItem("practiceDone", Math.min(done, TOTAL_QUESTIONS));
-        btn.parentElement.classList.add("attempted");
-        updateProgress();
-    }
-}
-
-function loadQuestions(){
-    const container = document.getElementById("questions");
-    caseStudies.forEach((cs, i) => {
-        let card = document.createElement("div");
-        card.className = "question-card";
-        card.innerHTML = `
-            <h3>Q${i+1}. ${cs.q}</h3>
-            ${cs.o.map((opt, j) =>
-                `<button class="option" onclick="checkAnswer(${i}, ${j}, ${cs.a}, this)">${opt}</button>`
-            ).join("")}
-            <div class="result"></div>
-        `;
-        container.appendChild(card);
-    });
-}
-
-loadQuestions();
-updateProgress();
-</script>
-
+        loadQuestion();
+    </script>
 </body>
 </html>
