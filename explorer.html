@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eco Sphere | 3D Eco-Detective</title>
+    <title>Eco Sphere | Eco-Scanner 3D</title>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -12,148 +12,164 @@
             font-family: 'Segoe UI', sans-serif; 
             background: #064e3b; 
             color: white; 
-            height: 100vh; 
-            overflow: hidden; 
+            min-height: 100vh; 
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
-        /* Top HUD (Heads-Up Display) */
-        .game-header {
-            position: absolute;
-            top: 20px;
-            width: 100%;
-            text-align: center;
-            z-index: 10;
-            pointer-events: none;
-        }
-
-        .stat-pill {
-            background: rgba(0,0,0,0.8);
-            padding: 12px 30px;
-            border-radius: 50px;
-            border: 2px solid #10b981;
-            display: inline-block;
-            font-size: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        }
-
-        /* The 3D Viewing Area */
-        model-viewer {
-            width: 100vw;
-            height: 100vh;
-            background: radial-gradient(#1a3917, #064e3b);
-        }
-
-        /* Interactive "Hazard" Spots */
-        .click-spot {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            border: 3px solid white;
-            background: #f59e0b; /* Bright Orange */
-            cursor: pointer;
-            box-shadow: 0 0 20px #f59e0b;
-            transition: 0.3s;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .click-spot:hover {
-            background: #ffffff;
-            transform: scale(1.3);
-        }
-
-        /* Bottom Instruction Bar */
-        .instruction-bar {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
+        .stat-overlay {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            padding: 15px 40px;
-            border-radius: 15px;
+            padding: 15px 30px;
+            border-radius: 50px;
             border: 1px solid rgba(255,255,255,0.2);
-            font-size: 16px;
-            text-align: center;
-            width: 80%;
-            max-width: 500px;
+            font-size: 18px;
+            margin-bottom: 20px;
         }
 
-        .btn-back {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            padding: 12px 25px;
-            background: white;
-            color: #064e3b;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: bold;
-            z-index: 20;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        /* 3x3 Grid Layout */
+        .matrix {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            width: 95%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+
+        .box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            aspect-ratio: 1; 
+            cursor: pointer;
+            transition: 0.3s;
+            border: 4px solid transparent;
+            overflow: hidden; /* Keeps 3D model inside the box */
+        }
+
+        .box:hover { transform: scale(1.05); background: white; }
+        
+        /* State Highlights */
+        .box.selected { border-color: #3b82f6; }
+        .box.hazard.selected { border-color: #ef4444; }
+
+        /* Final Report Overlay */
+        #results-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .report-card {
+            background: white; color: #333; width: 100%; max-width: 600px;
+            padding: 20px; border-radius: 15px; margin-bottom: 15px; text-align: left;
+        }
+
+        .btn-action {
+            padding: 12px 30px; border: none; border-radius: 10px;
+            cursor: pointer; background: white; color: #064e3b; font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <a href="dashboard.html" class="btn-back">← Back to Dashboard</a>
-
-    <div class="game-header">
-        <div class="stat-pill">🔍 Hazards Identified: <span id="count">0</span> / 4</div>
-    </div>
-
-    <model-viewer id="world" 
-        src="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Lantern/glTF-Binary/Lantern.glb" 
-        camera-controls 
-        auto-rotate 
-        auto-rotate-delay="1000"
-        shadow-intensity="2"
-        exposure="1"
-        interaction-prompt="auto">
-
-        <button slot="hotspot-plastic" class="click-spot" data-position="0.1m 0.3m 0.1m" onclick="identify('Plastic Pollution', 'Did you know? Plastic takes 450 years to break down. We must recycle it!')"></button>
-        <button slot="hotspot-energy" class="click-spot" data-position="-0.1m 0.15m 0.1m" onclick="identify('Energy Waste', 'Leaving lights on wastes power. Switch to LEDs to save energy!')"></button>
-        <button slot="hotspot-chemical" class="click-spot" data-position="0m 0.45m -0.1m" onclick="identify('Chemical Leaks', 'Hazardous waste can poison our groundwater. Proper disposal is key.')"></button>
-        <button slot="hotspot-carbon" class="click-spot" data-position="0.15m 0.1m -0.2m" onclick="identify('Carbon Emissions', 'Trees absorb CO2. Planting more trees is our best defense against climate change!')"></button>
-
-    </model-viewer>
-
+    <div class="stat-overlay">Hazards: <span id="found">0</span>/4 | Clicks: <span id="chances">0</span>/5</div>
     
+    <div class="matrix" id="game-grid"></div>
 
-    <div class="instruction-bar">
-        🖱️ <strong>Eco-Detective:</strong> Drag your mouse to spin the world. <br>Find and click the orange spots to clean the environment!
+    <div id="results-overlay">
+        <h1 id="final-status-text" style="font-size: 32px; margin-bottom: 10px;">Mission Ended</h1>
+        <p id="final-stats" style="color: #d1fae5; margin-bottom: 30px;"></p>
+        <div id="report-list"></div>
+        <button class="btn-action" onclick="location.reload()">Restart Scanner</button>
+        <br>
+        <a href="dashboard.html" style="color: white; text-decoration: none;">← Back to Dashboard</a>
     </div>
 
     <script>
+        // Updated with your 3D model placeholders
+        const items = [
+            { id: 0, name: "Solar Panel", model: "https://path-to-your-model/solar.glb", isHazard: false },
+            { id: 1, name: "Car Exhaust", model: "https://path-to-your-model/exhaust.glb", isHazard: true, fact: "Exhaust releases CO2 and pollutants, harming our atmosphere." },
+            { id: 2, name: "Oak Tree", model: "https://path-to-your-model/tree.glb", isHazard: false },
+            { id: 3, name: "Factory", model: "https://path-to-your-model/factory.glb", isHazard: true, fact: "Factories often release toxic waste into our air and water systems." },
+            { id: 4, name: "Eco Bag", model: "https://path-to-your-model/bag.glb", isHazard: false },
+            { id: 5, name: "Plastic Bottle", model: "https://path-to-your-model/bottle.glb", isHazard: true, fact: "Plastic takes centuries to decompose and harms wildlife." },
+            { id: 6, name: "Recycle Bin", model: "https://path-to-your-model/bin.glb", isHazard: false },
+            { id: 7, name: "Coal Mine", model: "https://path-to-your-model/coal.glb", isHazard: true, fact: "Mining destroys land and burning coal is a top source of CO2." },
+            { id: 8, name: "Wind Turbine", model: "https://path-to-your-model/turbine.glb", isHazard: false }
+        ];
+
         let foundCount = 0;
-        const totalItems = 4;
+        let chancesUsed = 0;
+        let foundHazards = [];
 
-        function identify(name, fact) {
-            // Increment count
-            foundCount++;
-            document.getElementById('count').innerText = foundCount;
-            
-            // Hide the clicked hotspot button
-            event.target.style.display = 'none';
+        function initGame() {
+            const grid = document.getElementById('game-grid');
+            items.forEach(item => {
+                const box = document.createElement('div');
+                box.className = 'box';
+                box.id = `box-${item.id}`;
+                
+                // Embed 3D model viewer into the box
+                box.innerHTML = `
+                    <model-viewer src="${item.model}" auto-rotate rotation-per-second="30deg" 
+                    style="width: 100%; height: 100%; pointer-events: none;"></model-viewer>
+                `;
 
-            // Show educational alert
-            alert("🌟 " + name + " Identified!\n\n" + fact);
-
-            // Check if game is over
-            if(foundCount === totalItems) {
-                setTimeout(() => {
-                    alert("🏆 CONGRATULATIONS DETECTIVE!\nYou have identified all environmental hazards. The ecosystem is now protected!");
-                    window.location.href = "dashboard.html";
-                }, 500);
-            }
+                box.onclick = () => handleChoice(item);
+                grid.appendChild(box);
+            });
         }
+
+        function handleChoice(item) {
+            const box = document.getElementById(`box-${item.id}`);
+            if(box.classList.contains('selected')) return;
+
+            chancesUsed++;
+            document.getElementById('chances').innerText = chancesUsed;
+            box.classList.add('selected');
+
+            if(item.isHazard) {
+                foundCount++;
+                document.getElementById('found').innerText = foundCount;
+                box.classList.add('hazard');
+                foundHazards.push(item);
+            }
+
+            if(foundCount === 4) endGame(true);
+            else if(chancesUsed === 5) endGame(false);
+        }
+
+        function endGame(isWin) {
+            setTimeout(() => {
+                document.getElementById('results-overlay').style.display = 'flex';
+                document.getElementById('final-status-text').innerText = isWin ? "SUCCESS 🟢" : "FAILED 🔴";
+                document.getElementById('final-stats').innerText = `You identified ${foundCount} / 4 hazards.`;
+
+                let reportHTML = "";
+                items.filter(i => i.isHazard).forEach(item => {
+                    const status = foundHazards.includes(item) ? "✅ Found" : "❌ Missed";
+                    reportHTML += `
+                        <div class="report-card">
+                            <strong>${item.name}</strong> <span style="float:right">${status}</span><br><br>
+                            ${item.fact}
+                        </div>`;
+                });
+                document.getElementById('report-list').innerHTML = reportHTML;
+            }, 500);
+        }
+
+        window.onload = initGame;
     </script>
 </body>
 </html>
