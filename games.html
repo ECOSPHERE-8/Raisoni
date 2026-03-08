@@ -14,6 +14,8 @@
         .game-btn { padding: 15px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.2s; }
         .blue { background: #2563eb; color: white; }
         .green { background: #16a34a; color: white; }
+        
+        /* Final Review Screen Overlay */
         #over { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); flex-direction: column; align-items: center; overflow-y: auto; z-index: 10; padding: 40px 20px; }
         .review-card { background: white; color: #333; width: 100%; max-width: 500px; padding: 15px; border-radius: 10px; margin-bottom: 10px; text-align: left; border-left: 8px solid #ef4444; }
         .review-card.correct { border-left-color: #10b981; }
@@ -50,33 +52,29 @@
         <h1 id="final-status">Game Complete!</h1>
         <div id="final-score-display" class="final-score-text"></div>
         <div id="review-list"></div>
-        <button class="game-btn" style="background: white; color: black; margin: 20px 0; padding: 10px 40px;" onclick="location.reload()">Try Again</button>
+        <button class="game-btn" style="background: white; color: black; margin: 20px 0; padding: 10px 40px;" onclick="location.reload()">Play Again</button>
         <br>
         <a href="dashboard.html" style="color: #b7e4c7; text-decoration: none;">Return to Dashboard</a>
     </div>
 
     <script>
+        // List of 11 items (Sequential Logic)
         const items = [
-            // Original 3
             { name: "Waterbottle", type: "dry", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Waterbottle.glb", info: "Plastic takes centuries to break down. Recycling it keeps our oceans clean!" },
             { name: "Pineapple", type: "wet", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Pineapple.glb", info: "Fruit waste is a natural fertilizer that helps plants grow." },
             { name: "LightDesk", type: "dry", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/LightDesk.glb", info: "Furniture materials like wood and metal should be reused." },
-
-            // Your Uploads
             { name: "Bannana", type: "wet", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Bannana.glb", info: "Organic peels are 100% biodegradable and great for compost." },
             { name: "Smashed Glass", type: "dry", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Smashed_Glass.glb", info: "Glass can be recycled endlessly without losing quality." },
             { name: "Shoes", type: "dry", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Shoes.glb", info: "Footwear often contains rubber and synthetic fabrics for recycling." },
             { name: "Cardboard Box", type: "dry", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cardboard_Box.glb", info: "Recycled cardboard reduces the need to cut down more trees." },
             { name: "Cola Can", type: "dry", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cola_Can.glb", info: "Aluminum recycling saves 95% of the energy needed to make new cans!" },
             { name: "Apple", type: "wet", m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Apple.glb", info: "Apple cores decompose naturally and belong in the wet waste." },
-
-            // Additional 2 Items
             { name: "Safety Helmet", type: "dry", m: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb", info: "Industrial plastic waste is a dry recyclable material." },
             { name: "Avocado", type: "wet", m: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF-Binary/Avocado.glb", info: "Seeds and fruit skins are biological organic matter." }
         ];
 
         let score = 0;
-        let timeLeft = 60; 
+        let timeLeft = 60; // 1-minute timer
         let currentIdx = 0;
         let gameHistory = []; 
 
@@ -90,6 +88,7 @@
             const isCorrect = (choice === items[currentIdx].type);
             if(isCorrect) score += 10;
             
+            // Record result for the final educational review
             gameHistory.push({ item: items[currentIdx], userCorrect: isCorrect });
 
             currentIdx++;
@@ -105,6 +104,10 @@
 
         function endGame() {
             clearInterval(timerId);
+            
+            // SAVE logic for the Dashboard
+            localStorage.setItem("ecoWarriorScore", score);
+            
             document.getElementById('over').style.display = 'flex';
             document.getElementById('final-score-display').innerText = "Final Score: " + score;
             
