@@ -28,9 +28,10 @@
             border: 1px solid rgba(255,255,255,0.2);
             font-size: 18px;
             margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
-        /* 3x3 Matrix Grid */
+        /* 3x3 Grid Layout */
         .matrix {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -58,7 +59,7 @@
 
         .box:hover { transform: scale(1.03); background: white; }
         
-        /* State Indicators */
+        /* State Highlights */
         .box.selected { border-color: #3b82f6; }
         .box.hazard.selected { border-color: #ef4444; }
 
@@ -71,7 +72,7 @@
             text-transform: uppercase;
         }
 
-        /* Final Results Overlay */
+        /* Results Screen Overlay */
         #results-overlay {
             display: none;
             position: fixed;
@@ -99,7 +100,7 @@
 </head>
 <body>
 
-    <div class="stat-overlay">Hazards: <span id="found">0</span>/4 | Clicks: <span id="chances">0</span>/5</div>
+    <div class="stat-overlay">Hazards Found: <span id="found">0</span>/4 | Clicks: <span id="chances">0</span>/5</div>
     
     <div class="matrix" id="game-grid"></div>
 
@@ -113,16 +114,16 @@
     </div>
 
     <script>
-        // Your Custom GitHub 3D Models
+        // Updated with your new Chemical Barrel and Tires models
         const items = [
             { id: 0, name: "Solar Battery", model: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Solarbattery.glb", isHazard: false },
-            { id: 1, name: "Car Exhaust", model: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxInterleaved/glTF-Binary/BoxInterleaved.glb", isHazard: true, fact: "Car exhaust releases pollutants that cause smog and trap heat in our atmosphere." },
+            { id: 1, name: "Toxic Barrel", model: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/chemical-barrel.glb", isHazard: true, fact: "Toxic chemicals can leak into soil and groundwater, causing long-term damage to ecosystems." },
             { id: 2, name: "Big Tree", model: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/BigTree.glb", isHazard: false },
-            { id: 3, name: "Factory", model: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Factory.glb", isHazard: true, fact: "Industrial factories are major sources of greenhouse gases and chemical waste." },
+            { id: 3, name: "Factory", model: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Factory.glb", isHazard: true, fact: "Industrial emissions contribute heavily to air pollution and the global greenhouse effect." },
             { id: 4, name: "Eco Bag", model: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Bag.glb", isHazard: false },
-            { id: 5, name: "Water Bottle", model: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Waterbottle.glb", isHazard: true, fact: "Plastic bottles contribute to ocean pollution and take 450+ years to decompose." },
+            { id: 5, name: "Water Bottle", model: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Waterbottle.glb", isHazard: true, fact: "Plastic waste is a major threat to marine life and takes hundreds of years to decompose." },
             { id: 6, name: "Recycle Bin", model: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Recycle%20bin.glb", isHazard: false },
-            { id: 7, name: "Coal Mine", model: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Lantern/glTF-Binary/Lantern.glb", isHazard: true, fact: "Coal mining destroys natural habitats and burning it is the #1 cause of CO2 emissions." },
+            { id: 7, name: "Old Tires", model: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Tires.glb", isHazard: true, fact: "Discarded tires are difficult to recycle, take up space in landfills, and can release toxic smoke if burned." },
             { id: 8, name: "Windmill", model: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Windmill.glb", isHazard: false }
         ];
 
@@ -137,7 +138,7 @@
                 box.className = 'box';
                 box.id = `box-${item.id}`;
                 
-                // Set up the 3D viewer for each grid cell
+                // Embed the 3D viewer and the name label
                 box.innerHTML = `
                     <model-viewer src="${item.model}" auto-rotate rotation-per-second="40deg" 
                     style="width: 100%; height: 80%; pointer-events: none;"></model-viewer>
@@ -164,7 +165,7 @@
                 foundHazards.push(item);
             }
 
-            // Game end conditions
+            // Check for game end
             if(foundCount === 4) endGame(true);
             else if(chancesUsed === 5) endGame(false);
         }
@@ -176,9 +177,8 @@
                 status.innerText = isWin ? "MISSION SUCCESS 🟢" : "MISSION FAILED 🔴";
                 status.style.color = isWin ? "#10b981" : "#ef4444";
                 
-                document.getElementById('final-stats').innerText = `You identified ${foundCount} out of 4 hazardous items in ${chancesUsed} clicks.`;
+                document.getElementById('final-stats').innerText = `You scanned ${foundCount} out of 4 hazards correctly.`;
 
-                // Display the "Why" report
                 let reportHTML = "";
                 items.filter(i => i.isHazard).forEach(item => {
                     const resultLabel = foundHazards.includes(item) ? "✅ CORRECT" : "❌ MISSED";
