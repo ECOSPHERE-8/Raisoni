@@ -6,9 +6,8 @@
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; overflow: hidden; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #87CEEB; overflow: hidden; }
 
-        /* UI Overlays */
         #ui-top {
             position: fixed;
             top: 20px;
@@ -19,35 +18,18 @@
             pointer-events: none;
         }
         .stat-pill {
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.7);
             padding: 12px 25px;
             border-radius: 50px;
             color: white;
-            font-size: 20px;
+            font-size: 22px;
             border: 2px solid #10b981;
-        }
-
-        /* Information Popup */
-        #info-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            text-align: center;
-            display: none;
-            z-index: 1000;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-            max-width: 400px;
         }
 
         #start-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(6, 78, 59, 0.95);
+            background: #064e3b;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -57,13 +39,14 @@
         }
         .play-btn {
             background: #10b981;
-            color: white;
-            padding: 15px 40px;
+            padding: 15px 50px;
             border: none;
             border-radius: 50px;
-            font-size: 22px;
+            font-size: 24px;
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 25px;
+            color: white;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -71,8 +54,8 @@
 
     <div id="start-screen">
         <h1>Eco Catcher</h1>
-        <p style="margin-top: 10px;">Move your mouse/trackpad to move the bucket!</p>
-        <button class="play-btn" onclick="startGame()">Start Mission</button>
+        <p>Catch the items using your Bucket!</p>
+        <button class="play-btn" onclick="startGame()">START MISSION</button>
     </div>
 
     <div id="ui-top">
@@ -80,30 +63,27 @@
         <div class="stat-pill">Earth Health: <span id="health">100</span>%</div>
     </div>
 
-    <div id="info-popup">
-        <h2 id="pop-title" style="color: #ef4444;">Hazard Caught!</h2>
-        <p id="pop-text" style="margin: 15px 0; font-size: 18px; color: #333;"></p>
-        <p style="font-size: 12px; color: #666;">Resuming in 3 seconds...</p>
-    </div>
-
-    <a-scene embedded vr-mode-ui="enabled: false">
-        <a-assets>
+    <a-scene vr-mode-ui="enabled: false">
+        
+        <a-assets timeout="10000">
+            <a-asset-item id="model-bucket" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Bucket.glb"></a-asset-item>
             <a-asset-item id="model-tree" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/BigTree.glb"></a-asset-item>
             <a-asset-item id="model-solar" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Solarbattery.glb"></a-asset-item>
             <a-asset-item id="model-hazard" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/chemical-barrel.glb"></a-asset-item>
+            <a-asset-item id="model-tire" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Tires.glb"></a-asset-item>
+            <a-asset-item id="model-bag" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Bag.glb"></a-asset-item>
         </a-assets>
 
-        <a-entity id="bucket" position="0 0.5 -5">
-            <a-cylinder radius="0.8" height="1.2" color="#3b82f6" opacity="0.8"></a-cylinder>
-            <a-text value="CATCHER" align="center" position="0 0.8 0" scale="1.5 1.5 1.5" color="white"></a-text>
+        <a-entity id="bucket" position="0 0.5 -5" gltf-model="#model-bucket" scale="1.5 1.5 1.5">
+            <a-text value="CATCHER" align="center" position="0 1.2 0" color="#10b981" scale="1.5 1.5 1.5"></a-text>
         </a-entity>
 
-        <a-sphere id="earth" position="4 2 -7" radius="1.2" color="#22c55e"
-                  animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear"></a-sphere>
-
         <a-sky color="#87CEEB"></a-sky>
-        <a-light type="directional" position="1 1 1" intensity="1"></a-light>
-        <a-light type="ambient" intensity="0.5"></a-light>
+        <a-plane position="0 0 -10" rotation="-90 0 0" width="100" height="100" color="#2d5a27"></a-plane>
+        
+        <a-light type="ambient" intensity="0.8"></a-light>
+        <a-light type="directional" position="1 5 1" intensity="1"></a-light>
+
         <a-camera position="0 1.6 0" look-controls-enabled="false" wasd-controls-enabled="false"></a-camera>
     </a-scene>
 
@@ -113,83 +93,81 @@
         let active = false;
         const scene = document.querySelector('a-scene');
         const bucket = document.querySelector('#bucket');
-        const earth = document.querySelector('#earth');
 
-        // Laptop/Mouse movement
+        const items = [
+            { name: "Tree", model: "#model-tree", hazard: false },
+            { name: "Solar", model: "#model-solar", hazard: false },
+            { name: "Waste", model: "#model-hazard", hazard: true },
+            { name: "Tire", model: "#model-tire", hazard: true },
+            { name: "Eco Bag", model: "#model-bag", hazard: false }
+        ];
+
+        // Movement Logic
         window.addEventListener('mousemove', (e) => {
             if(!active) return;
-            let x = (e.clientX / window.innerWidth) * 12 - 6;
+            let x = (e.clientX / window.innerWidth) * 16 - 8;
             bucket.setAttribute('position', {x: x, y: 0.5, z: -5});
         });
 
         function startGame() {
             document.getElementById('start-screen').style.display = 'none';
             active = true;
-            spawnTimer();
+            // Spawn items every 1.2 seconds for a "raining" effect
+            setInterval(spawn, 1200);
         }
 
-        function spawnTimer() {
+        function spawn() {
             if(!active) return;
-            spawnItem();
-            setTimeout(spawnTimer, 2500);
-        }
+            const data = items[Math.floor(Math.random() * items.length)];
+            const group = document.createElement('a-entity');
+            const x = Math.random() * 12 - 6;
+            group.setAttribute('position', `${x} 12 -5`);
 
-        function spawnItem() {
-            const isHazard = Math.random() > 0.4;
-            const item = document.createElement('a-entity');
-            const xPos = Math.random() * 10 - 5;
-            
-            // Assign your correct models
-            item.setAttribute('gltf-model', isHazard ? '#model-hazard' : (Math.random() > 0.5 ? '#model-tree' : '#model-solar'));
-            item.setAttribute('position', `${xPos} 8 -5`);
-            item.setAttribute('scale', '0.6 0.6 0.6');
-            scene.appendChild(item);
+            // 3D Model Entity
+            const m = document.createElement('a-entity');
+            m.setAttribute('gltf-model', data.model);
+            m.setAttribute('scale', '0.7 0.7 0.7');
+            group.appendChild(m);
 
-            let yPos = 8;
-            const interval = setInterval(() => {
+            // Floating Name Label
+            const t = document.createElement('a-text');
+            t.setAttribute('value', data.name);
+            t.setAttribute('align', 'center');
+            t.setAttribute('position', '0 -1.2 0');
+            t.setAttribute('color', data.hazard ? '#ff0000' : '#ffffff');
+            t.setAttribute('scale', '2 2 2');
+            group.appendChild(t);
+
+            scene.appendChild(group);
+
+            let y = 12;
+            const fallSpeed = 0.05 + (Math.random() * 0.03);
+
+            const timer = setInterval(() => {
                 if(!active) return;
-                yPos -= 0.05;
-                item.setAttribute('position', `${xPos} ${yPos} -5`);
-
-                // Collision Check
+                y -= fallSpeed;
+                group.setAttribute('position', `${x} ${y} -5`);
+                
                 let bx = bucket.getAttribute('position').x;
-                if(yPos < 1.3 && yPos > 0.5 && Math.abs(xPos - bx) < 1) {
-                    processCatch(isHazard);
-                    clearInterval(interval);
-                    item.parentNode.removeChild(item);
+                // Collision Detection Logic
+                if(y < 1.5 && y > 0.4 && Math.abs(x - bx) < 1.2) {
+                    if(data.hazard) {
+                        health = Math.max(0, health - 10);
+                    } else {
+                        score += 10;
+                    }
+                    document.getElementById('score').innerText = score;
+                    document.getElementById('health').innerText = health + "%";
+                    
+                    clearInterval(timer);
+                    if(group.parentNode) group.parentNode.removeChild(group);
                 }
 
-                if(yPos < -1) {
-                    clearInterval(interval);
-                    if(item.parentNode) item.parentNode.removeChild(item);
+                if(y < -2) { 
+                    clearInterval(timer); 
+                    if(group.parentNode) group.parentNode.removeChild(group); 
                 }
             }, 20);
-        }
-
-        function processCatch(isHazard) {
-            if(isHazard) {
-                active = false;
-                health -= 20;
-                earth.setAttribute('color', '#7f1d1d');
-                
-                const pop = document.getElementById('info-popup');
-                document.getElementById('pop-text').innerText = "You caught Toxic Waste! This pollutes our water and makes the Earth sick.";
-                pop.style.display = 'block';
-
-                setTimeout(() => {
-                    pop.style.display = 'none';
-                    active = true;
-                    if(health <= 0) {
-                        alert("The Earth needs a break! Try again to heal it.");
-                        location.reload();
-                    }
-                }, 3000);
-            } else {
-                score += 10;
-                earth.setAttribute('color', '#22c55e');
-            }
-            document.getElementById('score').innerText = score;
-            document.getElementById('health').innerText = health;
         }
     </script>
 </body>
