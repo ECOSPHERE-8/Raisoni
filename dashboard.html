@@ -18,84 +18,146 @@
             padding: 40px;
         }
 
-        h1 { margin-bottom: 40px; font-size: 2.5rem; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+        .header { text-align: center; margin-bottom: 50px; }
+        h1 { font-size: 2.8rem; color: #10b981; text-shadow: 2px 2px 10px rgba(0,0,0,0.4); }
 
-        .game-container {
+        /* Container for all buttons */
+        .menu-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
             width: 100%;
-            max-width: 1000px;
+            max-width: 900px;
         }
 
-        .game-card {
+        /* Standard Button Styling */
+        .main-btn {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
+            padding: 40px 20px;
             border-radius: 20px;
-            padding: 30px;
             text-align: center;
             text-decoration: none;
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            transition: 0.3s;
+            cursor: pointer;
         }
 
-        .game-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.2);
+        .main-btn:hover {
+            background: rgba(16, 185, 129, 0.2);
             border-color: #10b981;
+            transform: translateY(-5px);
         }
 
-        .card-icon {
-            font-size: 50px;
-            margin-bottom: 15px;
+        .icon { font-size: 45px; margin-bottom: 15px; display: block; }
+
+        /* Hidden Game Section */
+        #game-selection-area {
+            display: none; /* Starts hidden */
+            margin-top: 30px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 30px;
+            width: 100%;
+            max-width: 950px;
+            border: 2px dashed rgba(255,255,255,0.2);
         }
 
-        h3 { font-size: 1.5rem; margin-bottom: 10px; color: #10b981; }
-        p { font-size: 0.95rem; color: #d1fae5; line-height: 1.4; }
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
 
-        .new-badge {
+        .game-choice {
+            background: white;
+            color: #064e3b;
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .game-choice:hover { background: #d1fae5; transform: scale(1.05); }
+
+        .back-btn {
             background: #ef4444;
             color: white;
-            font-size: 10px;
-            padding: 2px 8px;
+            border: none;
+            padding: 10px 20px;
             border-radius: 10px;
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-weight: bold;
+            margin-bottom: 20px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <h1>Eco Sphere Game Dashboard</h1>
-
-    <div class="game-container">
-        
-        <a href="explorer.html" class="game-card">
-            <div class="card-icon">🔍</div>
-            <h3>Eco-Scanner 3D</h3>
-            <p>Scan the 3D matrix and find the hidden environmental hazards.</p>
-        </a>
-
-        <a href="catcher.html" class="game-card" style="position: relative;">
-            <div class="new-badge">NEW</div>
-            <div class="card-icon">🪣</div>
-            <h3>Eco-Catcher AR</h3>
-            <p>Catch the good items to heal the Earth! Perfect for classroom demos.</p>
-        </a>
-
-        <a href="about.html" class="game-card">
-            <div class="card-icon">🌿</div>
-            <h3>Our Mission</h3>
-            <p>Learn more about Eco Sphere and get in touch with our team.</p>
-        </a>
-
+    <div class="header">
+        <h1>ECO SPHERE</h1>
+        <p>Protecting the planet through technology</p>
     </div>
+
+    <div class="menu-container" id="main-menu">
+        <a href="learn.html" class="main-btn">
+            <span class="icon">📚</span>
+            <h3>Learning</h3>
+        </a>
+
+        <a href="practice.html" class="main-btn">
+            <span class="icon">🧠</span>
+            <h3>Practice</h3>
+        </a>
+
+        <div class="main-btn" onclick="showGames()">
+            <span class="icon">🎮</span>
+            <h3>Games</h3>
+        </div>
+
+        <a href="about.html" class="main-btn">
+            <span class="icon">ℹ️</span>
+            <h3>About Us</h3>
+        </a>
+
+        <a href="index.html" class="main-btn" style="border-color: #ef4444;">
+            <span class="icon">🚪</span>
+            <h3>Logout</h3>
+        </a>
+    </div>
+
+    <div id="game-selection-area">
+        <button class="back-btn" onclick="hideGames()">← Back to Dashboard</button>
+        <h2 style="margin-bottom: 20px; text-align: center;">Choose a Challenge:</h2>
+        
+        <div class="game-grid">
+            <a href="explorer.html" class="game-choice">
+                <center><span style="font-size: 30px;">🔍</span><br>Eco-Scanner 3D</center>
+            </a>
+
+            <a href="catcher.html" class="game-choice">
+                <center><span style="font-size: 30px;">🪣</span><br>Eco-Catcher (AR)</center>
+            </a>
+
+            <a href="#" class="game-choice" style="opacity: 0.6; cursor: not-allowed;">
+                <center><span style="font-size: 30px;">🔜</span><br>Coming Soon...</center>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Logic to swap the views
+        function showGames() {
+            document.getElementById('main-menu').style.display = 'none';
+            document.getElementById('game-selection-area').style.display = 'block';
+        }
+
+        function hideGames() {
+            document.getElementById('main-menu').style.display = 'grid';
+            document.getElementById('game-selection-area').style.display = 'none';
+        }
+    </script>
 
 </body>
 </html>
