@@ -22,7 +22,7 @@
             padding: 12px 25px;
             border-radius: 50px;
             color: white;
-            font-size: 22px;
+            font-size: 20px;
             border: 2px solid #10b981;
         }
 
@@ -54,13 +54,13 @@
 
     <div id="start-screen">
         <h1>Eco Catcher</h1>
-        <p>Catch the items using your Bucket!</p>
+        <p>Catch the items falling from the sky!</p>
         <button class="play-btn" onclick="startGame()">START MISSION</button>
     </div>
 
     <div id="ui-top">
         <div class="stat-pill">Score: <span id="score">0</span></div>
-        <div class="stat-pill">Earth Health: <span id="health">100</span>%</div>
+        <div class="stat-pill">Health: <span id="health">100%</span></div>
     </div>
 
     <a-scene vr-mode-ui="enabled: false">
@@ -74,8 +74,7 @@
             <a-asset-item id="model-bag" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Bag.glb"></a-asset-item>
         </a-assets>
 
-        <a-entity id="bucket" position="0 0.5 -5" gltf-model="#model-bucket" scale="1.5 1.5 1.5">
-            <a-text value="CATCHER" align="center" position="0 1.2 0" color="#10b981" scale="1.5 1.5 1.5"></a-text>
+        <a-entity id="bucket" position="0 0.2 -7" gltf-model="#model-bucket" scale="0.5 0.5 0.5" rotation="0 180 0">
         </a-entity>
 
         <a-sky color="#87CEEB"></a-sky>
@@ -84,7 +83,7 @@
         <a-light type="ambient" intensity="0.8"></a-light>
         <a-light type="directional" position="1 5 1" intensity="1"></a-light>
 
-        <a-camera position="0 1.6 0" look-controls-enabled="false" wasd-controls-enabled="false"></a-camera>
+        <a-camera position="0 2 0" look-controls-enabled="false" wasd-controls-enabled="false"></a-camera>
     </a-scene>
 
     <script>
@@ -97,43 +96,43 @@
         const items = [
             { name: "Tree", model: "#model-tree", hazard: false },
             { name: "Solar", model: "#model-solar", hazard: false },
-            { name: "Waste", model: "#model-hazard", hazard: true },
+            { name: "Hazard", model: "#model-hazard", hazard: true },
             { name: "Tire", model: "#model-tire", hazard: true },
             { name: "Eco Bag", model: "#model-bag", hazard: false }
         ];
 
-        // Movement Logic
+        // Mouse/Trackpad movement control
         window.addEventListener('mousemove', (e) => {
             if(!active) return;
-            let x = (e.clientX / window.innerWidth) * 16 - 8;
-            bucket.setAttribute('position', {x: x, y: 0.5, z: -5});
+            // Map mouse to a safe movement range so bucket doesn't fly off screen
+            let x = (e.clientX / window.innerWidth) * 12 - 6;
+            bucket.setAttribute('position', {x: x, y: 0.2, z: -7});
         });
 
         function startGame() {
             document.getElementById('start-screen').style.display = 'none';
             active = true;
-            // Spawn items every 1.2 seconds for a "raining" effect
-            setInterval(spawn, 1200);
+            setInterval(spawn, 1000); // Items rain every 1 second
         }
 
         function spawn() {
             if(!active) return;
             const data = items[Math.floor(Math.random() * items.length)];
             const group = document.createElement('a-entity');
-            const x = Math.random() * 12 - 6;
-            group.setAttribute('position', `${x} 12 -5`);
+            
+            // Spawn items in front of the bucket's Z-lane
+            const x = Math.random() * 8 - 4;
+            group.setAttribute('position', `${x} 12 -7`);
 
-            // 3D Model Entity
             const m = document.createElement('a-entity');
             m.setAttribute('gltf-model', data.model);
-            m.setAttribute('scale', '0.7 0.7 0.7');
+            m.setAttribute('scale', '0.6 0.6 0.6');
             group.appendChild(m);
 
-            // Floating Name Label
             const t = document.createElement('a-text');
             t.setAttribute('value', data.name);
             t.setAttribute('align', 'center');
-            t.setAttribute('position', '0 -1.2 0');
+            t.setAttribute('position', '0 -1.5 0');
             t.setAttribute('color', data.hazard ? '#ff0000' : '#ffffff');
             t.setAttribute('scale', '2 2 2');
             group.appendChild(t);
@@ -141,16 +140,17 @@
             scene.appendChild(group);
 
             let y = 12;
-            const fallSpeed = 0.05 + (Math.random() * 0.03);
+            const fallSpeed = 0.06;
 
             const timer = setInterval(() => {
                 if(!active) return;
                 y -= fallSpeed;
-                group.setAttribute('position', `${x} ${y} -5`);
+                group.setAttribute('position', `${x} ${y} -7`);
                 
                 let bx = bucket.getAttribute('position').x;
-                // Collision Detection Logic
-                if(y < 1.5 && y > 0.4 && Math.abs(x - bx) < 1.2) {
+                
+                // Collision check (Adjusted for new bucket position)
+                if(y < 1.5 && y > 0.3 && Math.abs(x - bx) < 1.2) {
                     if(data.hazard) {
                         health = Math.max(0, health - 10);
                     } else {
