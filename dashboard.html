@@ -9,95 +9,124 @@
         
         body {
             font-family: 'Segoe UI', sans-serif;
-            background: #064e3b;
-            color: white;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center; /* Vertically centers the content */
             padding: 40px;
+            
+            /* Background */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
+                              url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Parallax effect */
+            color: white;
         }
 
         .header { text-align: center; margin-bottom: 50px; }
-        h1 { font-size: 2.8rem; color: #10b981; text-shadow: 2px 2px 10px rgba(0,0,0,0.4); }
+        h1 { 
+            font-size: 3.5rem; 
+            color: #10b981; 
+            text-shadow: 4px 4px 15px rgba(0,0,0,0.6); 
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        .header-sub { font-size: 1.2rem; color: #d1fae5; text-shadow: 1px 1px 4px rgba(0,0,0,0.5); }
 
-        /* Container for all buttons */
+        /* Main Dashboard (Step 1) */
         .menu-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
             width: 100%;
-            max-width: 900px;
+            max-width: 950px;
         }
 
-        /* Standard Button Styling */
+        /* Glassmorphism Buttons */
         .main-btn {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 40px 20px;
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1); /* Transparent glass */
+            backdrop-filter: blur(15px); /* Strong blur behind button */
+            padding: 50px 20px;
+            border-radius: 25px;
             text-align: center;
             text-decoration: none;
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: 0.3s;
+            transition: all 0.3s ease;
             cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .main-btn:hover {
             background: rgba(16, 185, 129, 0.2);
             border-color: #10b981;
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
-        .icon { font-size: 45px; margin-bottom: 15px; display: block; }
+        .icon { font-size: 55px; margin-bottom: 15px; display: block; }
+        h3 { font-size: 1.6rem; color: #d1fae5; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
 
-        /* Hidden Game Section */
+        /* Game Selection Area (Step 2) */
         #game-selection-area {
-            display: none; /* Starts hidden */
+            display: none;
             margin-top: 30px;
-            padding: 30px;
-            background: rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.05); /* Lighter glass for sub-menu */
+            backdrop-filter: blur(25px);
             border-radius: 30px;
             width: 100%;
             max-width: 950px;
-            border: 2px dashed rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
         }
 
         .game-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            gap: 25px;
         }
 
         .game-choice {
-            background: white;
-            color: #064e3b;
-            padding: 20px;
-            border-radius: 15px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 2px solid #10b981;
+            color: #d1fae5;
+            padding: 30px;
+            border-radius: 20px;
             text-decoration: none;
             font-weight: bold;
+            font-size: 1.2rem;
             transition: 0.2s;
+            text-align: center;
         }
 
-        .game-choice:hover { background: #d1fae5; transform: scale(1.05); }
+        .game-choice:hover { background: #10b981; color: #064e3b; transform: scale(1.03); }
 
         .back-btn {
             background: #ef4444;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            padding: 12px 25px;
+            border-radius: 50px;
+            margin-bottom: 30px;
             cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
         }
+        .back-btn:hover { background: #dc2626; transform: translateX(-5px); }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h1>ECO SPHERE</h1>
-        <p>Protecting the planet through technology</p>
+        <p class="header-sub">Connecting Technology with Nature for a Greener Tomorrow</p>
     </div>
 
     <div class="menu-container" id="main-menu">
@@ -121,7 +150,7 @@
             <h3>About Us</h3>
         </a>
 
-        <a href="index.html" class="main-btn" style="border-color: #ef4444;">
+        <a href="index.html" class="main-btn" style="border-color: #ef4444; color: #ef4444;">
             <span class="icon">🚪</span>
             <h3>Logout</h3>
         </a>
@@ -129,25 +158,24 @@
 
     <div id="game-selection-area">
         <button class="back-btn" onclick="hideGames()">← Back to Dashboard</button>
-        <h2 style="margin-bottom: 20px; text-align: center;">Choose a Challenge:</h2>
+        <h2 style="margin-bottom: 25px; text-align: center; color: white;">Eco-Detective HQ: Choose Your Challenge</h2>
         
         <div class="game-grid">
             <a href="explorer.html" class="game-choice">
-                <center><span style="font-size: 30px;">🔍</span><br>Eco-Scanner 3D</center>
+                <span style="font-size: 35px; display: block; margin-bottom: 10px;">🔍</span>Eco-Scanner 3D
             </a>
 
             <a href="catcher.html" class="game-choice">
-                <center><span style="font-size: 30px;">🪣</span><br>Eco-Catcher (AR)</center>
+                <span style="font-size: 35px; display: block; margin-bottom: 10px;">🪣</span>Eco-Catcher (AR)
             </a>
 
-            <a href="#" class="game-choice" style="opacity: 0.6; cursor: not-allowed;">
-                <center><span style="font-size: 30px;">🔜</span><br>Coming Soon...</center>
+            <a href="#" class="game-choice" style="opacity: 0.4; cursor: not-allowed; border-color: rgba(255,255,255,0.3);">
+                <span style="font-size: 35px; display: block; margin-bottom: 10px;">🔒</span>More Games Soon
             </a>
         </div>
     </div>
 
     <script>
-        // Logic to swap the views
         function showGames() {
             document.getElementById('main-menu').style.display = 'none';
             document.getElementById('game-selection-area').style.display = 'block';
