@@ -57,12 +57,12 @@
 <body>
 
     <div id="ui-msg">
-        <div class="pill">Park Cleanup: Click all 8 Polluting Items!</div>
+        <div class="pill">Cleanup Mission: Click all 8 Polluting Items!</div>
     </div>
 
     <div id="success-screen">
         <h1 style="font-size: 4rem; color: #10b981;">MISSION COMPLETE!</h1>
-        <p style="font-size: 1.8rem; margin: 20px 0;">The park is safe for the animals and plants again!</p>
+        <p style="font-size: 1.8rem; margin: 20px 0;">The park is clean and safe!</p>
         <button onclick="location.reload()" class="btn">Clean Again</button>
         <a href="dashboard.html" class="btn" style="background: #3b82f6; margin-left: 10px;">Back to Home</a>
     </div>
@@ -84,36 +84,39 @@
         </a-assets>
 
         <a-sky color="#87CEEB"></a-sky>
-        <a-plane position="0 0 -10" rotation="-90 0 0" width="100" height="100" color="#2d5a27"></a-plane>
+        <a-plane position="0 0 -15" rotation="-90 0 0" width="100" height="100" color="#2d5a27"></a-plane>
         
-        <a-entity gltf-model="#m-tree" position="-10 0 -15" scale="1.2 1.2 1.2"></a-entity>
-        <a-entity gltf-model="#m-cow" position="5 0 -13" rotation="0 -30 0" scale="2 2 2"></a-entity>
-        <a-entity gltf-model="#m-apple" position="-4 0.5 -8" scale="2 2 2"></a-entity>
-        <a-entity gltf-model="#m-pineapple" position="8 0.2 -10" scale="2 2 2"></a-entity>
-
-        <a-entity class="cleanable" gltf-model="#m-factory" position="0 0 -20" scale="0.05 0.05 0.05" onclick="cleanItem(this)"></a-entity>
+        <a-entity gltf-model="#m-tree" position="-12 0 -25" scale="0.8 0.8 0.8"></a-entity>
         
-        <a-entity class="cleanable" gltf-model="#m-deadtree" position="-7 0 -10" scale="0.5 0.5 0.5" onclick="cleanItem(this)"></a-entity>
-        <a-entity class="cleanable" gltf-model="#m-deadtree" position="6 0 -7" scale="0.4 0.4 0.4" onclick="cleanItem(this)"></a-entity>
+        <a-entity gltf-model="#m-cow" position="8 0 -20" rotation="0 -30 0" scale="1.2 1.2 1.2"></a-entity>
+        
+        <a-entity gltf-model="#m-apple" position="-5 0.2 -15" scale="0.05 0.05 0.05"></a-entity>
+        <a-entity gltf-model="#m-pineapple" position="6 0.2 -18" scale="0.08 0.08 0.08"></a-entity>
 
-        <a-entity class="cleanable" gltf-model="#m-germ" position="0 2 -8" scale="0.1 0.1 0.1" onclick="cleanItem(this)"></a-entity>
 
-        <a-entity class="cleanable" gltf-model="#m-hazard" position="-3 0 -6" scale="0.4 0.4 0.4" onclick="cleanItem(this)"></a-entity>
-        <a-entity class="cleanable" gltf-model="#m-tire" position="3 0 -5" scale="0.6 0.6 0.6" onclick="cleanItem(this)"></a-entity>
-        <a-entity class="cleanable" gltf-model="#m-can" position="1 0 -4" scale="1.2 1.2 1.2" onclick="cleanItem(this)"></a-entity>
-        <a-entity class="cleanable" gltf-model="#m-box" position="-5 0 -12" scale="1 1 1" onclick="cleanItem(this)"></a-entity>
+        <a-entity class="cleanable" gltf-model="#m-factory" position="0 0 -35" scale="0.03 0.03 0.03" onclick="cleanItem(this)"></a-entity>
+        
+        <a-entity class="cleanable" gltf-model="#m-deadtree" position="-8 0 -18" scale="0.3 0.3 0.3" onclick="cleanItem(this)"></a-entity>
+        <a-entity class="cleanable" gltf-model="#m-deadtree" position="9 0 -15" scale="0.25 0.25 0.25" onclick="cleanItem(this)"></a-entity>
+
+        <a-entity class="cleanable" gltf-model="#m-germ" position="0 4 -15" scale="0.05 0.05 0.05" onclick="cleanItem(this)"></a-entity>
+
+        <a-entity class="cleanable" gltf-model="#m-hazard" position="-3 0 -12" scale="0.3 0.3 0.3" onclick="cleanItem(this)"></a-entity>
+        <a-entity class="cleanable" gltf-model="#m-tire" position="3 0 -10" scale="0.4 0.4 0.4" onclick="cleanItem(this)"></a-entity>
+        <a-entity class="cleanable" gltf-model="#m-can" position="1 0 -8" scale="0.5 0.5 0.5" onclick="cleanItem(this)"></a-entity>
+        <a-entity class="cleanable" gltf-model="#m-box" position="-6 0 -22" scale="0.6 0.6 0.6" onclick="cleanItem(this)"></a-entity>
 
         <a-light type="ambient" intensity="0.9"></a-light>
         <a-light type="directional" position="1 10 1" intensity="1"></a-light>
-        <a-camera position="0 3 6" look-controls></a-camera>
+        
+        <a-camera position="0 6 15" look-controls></a-camera>
     </a-scene>
 
     <script>
         let counter = 8;
 
         function cleanItem(el) {
-            // Animated exit
-            el.setAttribute('animation', 'property: scale; to: 0 0 0; dur: 500; easing: easeInElastic');
+            el.setAttribute('animation', 'property: scale; to: 0 0 0; dur: 400; easing: easeInBack');
             
             setTimeout(() => {
                 if(el.parentNode) {
@@ -123,7 +126,7 @@
                         document.getElementById('success-screen').style.display = 'flex';
                     }
                 }
-            }, 500);
+            }, 400);
         }
     </script>
 </body>
