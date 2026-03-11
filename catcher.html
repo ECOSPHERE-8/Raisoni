@@ -2,7 +2,7 @@
 <html>
 <head>
 
-<title>Eco Sphere - Virtual Cleanup</title>
+<title>Eco Sphere – Clean the Park</title>
 
 <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
 
@@ -18,9 +18,10 @@ position:absolute;
 top:10px;
 left:10px;
 background:white;
-padding:10px;
-border-radius:8px;
+padding:12px;
+border-radius:10px;
 font-weight:bold;
+font-size:18px;
 }
 
 </style>
@@ -51,50 +52,76 @@ src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/chemical-barrel.
 
 </a-assets>
 
-<!-- Sky -->
+<!-- SKY -->
+
 <a-sky color="#87CEEB"></a-sky>
 
-<!-- Ground -->
+<!-- LIGHTING -->
+
+<a-light type="ambient" intensity="0.7"></a-light>
+<a-light type="directional" position="10 20 10" intensity="0.8"></a-light>
+
+<!-- GROUND -->
+
 <a-plane
 rotation="-90 0 0"
-width="30"
-height="30"
-color="#6ab04c">
+width="50"
+height="50"
+color="#74c365">
 </a-plane>
 
-<!-- Trees -->
+<!-- TREES (12 trees placed around) -->
 
-<a-entity
-gltf-model="#tree"
-position="-6 0 -6"
-scale="1.5 1.5 1.5">
-</a-entity>
+<a-entity gltf-model="#tree" position="-10 0 -8" scale="2 2 2"></a-entity>
+<a-entity gltf-model="#tree" position="10 0 -8" scale="2 2 2"></a-entity>
+<a-entity gltf-model="#tree" position="-12 0 0" scale="2 2 2"></a-entity>
+<a-entity gltf-model="#tree" position="12 0 0" scale="2 2 2"></a-entity>
+<a-entity gltf-model="#tree" position="-10 0 8" scale="2 2 2"></a-entity>
+<a-entity gltf-model="#tree" position="10 0 8" scale="2 2 2"></a-entity>
 
-<a-entity
-gltf-model="#tree"
-position="6 0 -5"
-scale="1.5 1.5 1.5">
-</a-entity>
+<a-entity gltf-model="#tree" position="-5 0 -12" scale="2 2 2"></a-entity>
+<a-entity gltf-model="#tree" position="5 0 -12" scale="2 2 2"></a-entity>
+<a-entity gltf-model="#tree" position="-5 0 12" scale="2 2 2"></a-entity>
+<a-entity gltf-model="#tree" position="5 0 12" scale="2 2 2"></a-entity>
 
-<a-entity
-gltf-model="#tree"
-position="-5 0 5"
-scale="1.5 1.5 1.5">
-</a-entity>
+<a-entity gltf-model="#tree" position="-15 0 -5" scale="2 2 2"></a-entity>
+<a-entity gltf-model="#tree" position="15 0 5" scale="2 2 2"></a-entity>
 
-<!-- Hazardous Items -->
+<!-- FLOWERS -->
+
+<a-sphere color="#ff69b4" radius="0.2" position="2 0.2 -3"></a-sphere>
+<a-sphere color="#ff69b4" radius="0.2" position="-2 0.2 -4"></a-sphere>
+<a-sphere color="#ff69b4" radius="0.2" position="3 0.2 2"></a-sphere>
+<a-sphere color="#ff69b4" radius="0.2" position="-3 0.2 3"></a-sphere>
+
+<!-- STONES -->
+
+<a-sphere color="#777" radius="0.5" position="4 0.3 -2"></a-sphere>
+<a-sphere color="#888" radius="0.4" position="-4 0.3 -1"></a-sphere>
+
+<!-- BUTTERFLIES -->
+
+<a-sphere color="yellow" radius="0.2" position="0 3 -2"
+animation="property: position; dir: alternate; dur: 3000; loop: true; to: 2 4 -2">
+</a-sphere>
+
+<a-sphere color="orange" radius="0.2" position="-2 3 2"
+animation="property: position; dir: alternate; dur: 2500; loop: true; to: 1 4 2">
+</a-sphere>
+
+<!-- HAZARDOUS ITEMS -->
 
 <a-entity
 gltf-model="#bottle"
 position="0 0 -2"
-scale="0.7 0.7 0.7"
+scale="0.6 0.6 0.6"
 class="trash"
 cursor-listener>
 </a-entity>
 
 <a-entity
 gltf-model="#tire"
-position="-2 0 1"
+position="-2 0 -1"
 scale="0.8 0.8 0.8"
 class="trash"
 cursor-listener>
@@ -102,15 +129,15 @@ cursor-listener>
 
 <a-entity
 gltf-model="#barrel"
-position="2 0 1"
+position="2 0 -1"
 scale="0.8 0.8 0.8"
 class="trash"
 cursor-listener>
 </a-entity>
 
-<!-- Camera -->
+<!-- CAMERA -->
 
-<a-camera position="0 6 10">
+<a-camera position="0 3 8">
 <a-cursor></a-cursor>
 </a-camera>
 
@@ -135,7 +162,7 @@ document.getElementById("count").innerText = cleaned;
 if(cleaned === 3){
 
 setTimeout(()=>{
-alert("Great Job! You cleaned the park 🌳");
+alert("Amazing! You cleaned the park 🌳");
 },500);
 
 }
