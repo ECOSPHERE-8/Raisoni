@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Eco Sphere – Clean the Park</title>
+<title>EcoSphere Virtual Cleanup</title>
 
 <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-<script src="https://unpkg.com/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
 
 <style>
-
 body{
 margin:0;
 font-family:Arial;
+overflow:hidden;
 }
 
 #ui{
@@ -18,93 +17,114 @@ position:absolute;
 top:20px;
 left:20px;
 background:white;
-padding:10px;
+padding:15px;
 border-radius:10px;
 font-size:18px;
-font-weight:bold;
 }
 
+#win{
+display:none;
+position:absolute;
+top:40%;
+left:50%;
+transform:translate(-50%,-50%);
+background:green;
+color:white;
+padding:25px;
+font-size:28px;
+border-radius:12px;
+}
 </style>
+
 </head>
 
 <body>
 
 <div id="ui">
-Clean the Park: <span id="count">0</span>/3
+♻️ Clean the Park<br>
+Remove 3 hazardous items
 </div>
 
-<a-scene cursor="rayOrigin: mouse">
+<div id="win">
+🌿 Park Cleaned! Great Job!
+</div>
 
-<!-- AUTOMATIC PARK ENVIRONMENT -->
+<a-scene cursor="rayOrigin:mouse">
 
-<a-entity environment="
-preset: forest;
-groundColor: #7BC8A4;
-skyType: gradient;
-skyColor: #87CEEB;
-lighting: point;
-dressing: trees;
-dressingAmount: 20;
-"></a-entity>
+<a-assets>
+<img id="park" src="park.jpg">
+</a-assets>
 
-<!-- HAZARDOUS ITEMS -->
+<!-- Sky with park image -->
+<a-sky src="#park" rotation="0 -90 0"></a-sky>
 
-<a-cylinder
-position="-2 0.5 -4"
+<!-- Ground -->
+<a-plane rotation="-90 0 0"
+width="40"
+height="40"
+color="#7CFC00">
+</a-plane>
+
+<!-- Trees -->
+
+<a-cylinder position="-6 1 -6" radius="0.3" height="2" color="brown"></a-cylinder>
+<a-sphere position="-6 2.5 -6" radius="1.5" color="green"></a-sphere>
+
+<a-cylinder position="6 1 -5" radius="0.3" height="2" color="brown"></a-cylinder>
+<a-sphere position="6 2.5 -5" radius="1.5" color="green"></a-sphere>
+
+<a-cylinder position="3 1 -8" radius="0.3" height="2" color="brown"></a-cylinder>
+<a-sphere position="3 2.5 -8" radius="1.5" color="green"></a-sphere>
+
+<!-- Hazardous items -->
+
+<a-cylinder id="barrel"
+class="trash"
+position="-2 0.5 -2"
 radius="0.5"
 height="1"
-color="red"
-class="trash">
-</a-cylinder>
+color="red"></a-cylinder>
 
-<a-torus
-position="0 0.3 -4"
-radius="0.6"
+<a-torus id="tire"
+class="trash"
+position="2 0.3 -3"
+radius="0.8"
 radius-tubular="0.2"
-color="black"
-class="trash">
-</a-torus>
+color="black"></a-torus>
 
-<a-box
-position="2 0.5 -4"
-depth="1"
-height="1"
-width="1"
-color="orange"
-class="trash">
-</a-box>
+<a-box id="can"
+class="trash"
+position="0 0.5 -4"
+depth="0.8"
+height="0.8"
+width="0.8"
+color="yellow"></a-box>
 
-<!-- CAMERA -->
-
-<a-camera position="0 2 4"></a-camera>
+<a-entity camera position="0 1.6 5"></a-entity>
 
 </a-scene>
 
 <script>
 
-let cleaned = 0;
+let cleaned = 0
 
-document.querySelectorAll(".trash").forEach(item => {
+document.querySelectorAll(".trash").forEach(item=>{
 
-item.addEventListener("click", () => {
+item.addEventListener("click",()=>{
 
-item.setAttribute("visible", false);
+item.setAttribute("visible",false)
 
-cleaned++;
+cleaned++
 
-document.getElementById("count").innerText = cleaned;
+if(cleaned==3){
 
-if(cleaned === 3){
-
-setTimeout(()=>{
-alert("Great Job! You cleaned the park 🌳");
-},500);
+document.getElementById("win").style.display="block"
 
 }
 
-});
+})
 
-});
+})
 
 </script>
 
