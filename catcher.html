@@ -1,104 +1,138 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Eco Sphere | Park Rescue</title>
-    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; overflow: hidden; background-color: #87CEEB; }
 
-        #ui-msg {
-            position: fixed; top: 25px; width: 100%; text-align: center; z-index: 100;
-            pointer-events: none;
-        }
-        .pill {
-            background: rgba(0, 0, 0, 0.85); padding: 15px 40px; border-radius: 50px;
-            color: white; font-size: 20px; border: 2px solid #10b981;
-            display: inline-block; box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-        }
+<title>Eco Sphere - Virtual Cleanup</title>
 
-        #success-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(6, 78, 59, 0.98); display: none;
-            flex-direction: column; align-items: center; justify-content: center;
-            z-index: 2000; color: white; text-align: center;
-        }
-        .btn {
-            background: #10b981; padding: 15px 45px; border: none; border-radius: 50px;
-            font-size: 20px; cursor: pointer; margin-top: 25px; color: white;
-            font-weight: bold; text-decoration: none; display: inline-block;
-        }
-    </style>
+<script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
+
+<style>
+
+body{
+margin:0;
+overflow:hidden;
+font-family:Arial;
+}
+
+#ui{
+position:absolute;
+top:10px;
+left:10px;
+background:white;
+padding:12px;
+border-radius:10px;
+font-size:18px;
+font-weight:bold;
+}
+
+</style>
 </head>
+
 <body>
 
-    <div id="ui-msg">
-        <div class="pill">Save the Park! Click the 3 Bad Items to Clean.</div>
-    </div>
+<div id="ui">
+Park Cleanup: <span id="count">0</span>/3
+</div>
 
-    <div id="success-screen">
-        <h1 style="font-size: 4rem; color: #10b981;">MISSION COMPLETE!</h1>
-        <p style="font-size: 1.8rem; margin: 20px 0;">You made the Eco-Park beautiful and safe!</p>
-        <button onclick="location.reload()" class="btn">Reset Demo</button>
-        <a href="dashboard.html" class="btn" style="background: #3b82f6; margin-left: 10px;">Back to Home</a>
-    </div>
+<a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
 
-    <a-scene cursor="fuse: false; rayOrigin: mouse">
-        <a-assets timeout="10000">
-            <a-asset-item id="m-tree" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/BigTree.glb"></a-asset-item>
-            <a-asset-item id="m-sapling" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Bag.glb"></a-asset-item>
-            
-            <a-asset-item id="m-hazard" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/chemical-barrel.glb"></a-asset-item>
-            <a-asset-item id="m-tire" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Tires.glb"></a-asset-item>
-        </a-assets>
+<a-assets>
 
-        <a-sky color="#87CEEB"></a-sky>
-        <a-plane position="0 0 -15" rotation="-90 0 0" width="100" height="100" color="#2d5a27"></a-plane>
-        
-        <a-entity position="-10 0 -20">
-            <a-entity gltf-model="#m-tree" scale="1.2 1.2 1.2"></a-entity>
-            <a-entity gltf-model="#m-sapling" position="2 0.5 3" scale="0.8 0.8 0.8"></a-entity>
-        </a-entity>
+<a-asset-item id="tree"
+src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/BigTree.glb"></a-asset-item>
 
-        <a-entity position="8 0 -22">
-            <a-entity gltf-model="#m-tree" scale="1 1 1"></a-entity>
-            <a-entity gltf-model="#m-sapling" position="-3 0.5 4" scale="0.8 0.8 0.8"></a-entity>
-        </a-entity>
-        
-        <a-entity position="0 0 -28">
-            <a-entity gltf-model="#m-tree" scale="1.4 1.4 1.4"></a-entity>
-            <a-entity gltf-model="#m-sapling" position="0 0.5 6" scale="0.8 0.8 0.8"></a-entity>
-        </a-entity>
+<a-asset-item id="bottle"
+src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cola_Can.glb"></a-asset-item>
 
-        <a-entity class="cleanable" gltf-model="#m-tire" position="-1.5 0 -15" scale="0.6 0.6 0.6" onclick="cleanupItem(this)"></a-entity>
-        
-        <a-entity class="cleanable" gltf-model="#m-hazard" position="6 0 -17" scale="0.4 0.4 0.4" onclick="cleanupItem(this)"></a-entity>
-        
-        <a-entity class="cleanable" gltf-model="#m-hazard" position="-6.5 0 -19" scale="0.4 0.4 0.4" onclick="cleanupItem(this)"></a-entity>
+<a-asset-item id="tire"
+src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Tires.glb"></a-asset-item>
 
-        <a-light type="ambient" intensity="0.9"></a-light>
-        <a-light type="directional" position="1 10 1" intensity="1"></a-light>
-        
-        <a-camera position="0 7 15" look-controls></a-camera>
-    </a-scene>
+<a-asset-item id="barrel"
+src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/chemical-barrel.glb"></a-asset-item>
 
-    <script>
-        let counter = 3; // EXACTLY 3 Bad Items
+</a-assets>
 
-        function cleanupItem(el) {
-            el.setAttribute('animation', 'property: scale; to: 0 0 0; dur: 400; easing: easeInBack');
-            
-            setTimeout(() => {
-                if(el.parentNode) {
-                    el.parentNode.removeChild(el);
-                    counter--;
-                    if (counter === 0) {
-                        document.getElementById('success-screen').style.display = 'flex';
-                    }
-                }
-            }, 400);
-        }
-    </script>
+<a-marker preset="hiro">
+
+<!-- Ground -->
+<a-plane 
+rotation="-90 0 0"
+width="5"
+height="5"
+color="#7CFC00">
+</a-plane>
+
+<!-- Trees -->
+<a-entity 
+gltf-model="#tree"
+position="-1.5 0 -1"
+scale="0.4 0.4 0.4">
+</a-entity>
+
+<a-entity 
+gltf-model="#tree"
+position="1.5 0 -1"
+scale="0.4 0.4 0.4">
+</a-entity>
+
+<!-- Trash Items -->
+
+<a-entity 
+gltf-model="#bottle"
+position="0 0 1"
+scale="0.4 0.4 0.4"
+class="trash"
+cursor-listener>
+</a-entity>
+
+<a-entity 
+gltf-model="#tire"
+position="-1 0 0.5"
+scale="0.5 0.5 0.5"
+class="trash"
+cursor-listener>
+</a-entity>
+
+<a-entity 
+gltf-model="#barrel"
+position="1 0 0.5"
+scale="0.5 0.5 0.5"
+class="trash"
+cursor-listener>
+</a-entity>
+
+</a-marker>
+
+<a-entity camera></a-entity>
+
+</a-scene>
+
+<script>
+
+let cleaned = 0;
+
+AFRAME.registerComponent('cursor-listener', {
+init: function () {
+
+this.el.addEventListener('click', () => {
+
+this.el.setAttribute("visible", false);
+
+cleaned++;
+
+document.getElementById("count").innerText = cleaned;
+
+if(cleaned === 3){
+alert("Great Job! The park is clean 🌳");
+}
+
+});
+
+}
+});
+
+</script>
+
 </body>
 </html>
