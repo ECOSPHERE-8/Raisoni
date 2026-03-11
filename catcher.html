@@ -9,113 +9,84 @@
         body { font-family: 'Segoe UI', sans-serif; overflow: hidden; background-color: #87CEEB; }
 
         #ui-msg {
-            position: fixed;
-            top: 25px;
-            width: 100%;
-            text-align: center;
-            z-index: 100;
+            position: fixed; top: 25px; width: 100%; text-align: center; z-index: 100;
             pointer-events: none;
         }
         .pill {
-            background: rgba(0, 0, 0, 0.85);
-            padding: 15px 40px;
-            border-radius: 50px;
-            color: white;
-            font-size: 22px;
-            border: 2px solid #10b981;
-            display: inline-block;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            background: rgba(0, 0, 0, 0.85); padding: 15px 40px; border-radius: 50px;
+            color: white; font-size: 20px; border: 2px solid #10b981;
+            display: inline-block; box-shadow: 0 8px 25px rgba(0,0,0,0.4);
         }
 
         #success-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(6, 78, 59, 0.98);
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            color: white;
-            text-align: center;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(6, 78, 59, 0.98); display: none;
+            flex-direction: column; align-items: center; justify-content: center;
+            z-index: 2000; color: white; text-align: center;
         }
         .btn {
-            background: #10b981;
-            padding: 15px 45px;
-            border: none;
-            border-radius: 50px;
-            font-size: 20px;
-            cursor: pointer;
-            margin-top: 25px;
-            color: white;
-            font-weight: bold;
-            text-decoration: none;
-            display: inline-block;
+            background: #10b981; padding: 15px 45px; border: none; border-radius: 50px;
+            font-size: 20px; cursor: pointer; margin-top: 25px; color: white;
+            font-weight: bold; text-decoration: none; display: inline-block;
         }
     </style>
 </head>
 <body>
 
     <div id="ui-msg">
-        <div class="pill">Cleanup Mission: Click all 8 Polluting Items!</div>
+        <div class="pill">Save the Park! Click the 3 Bad Items to Clean.</div>
     </div>
 
     <div id="success-screen">
         <h1 style="font-size: 4rem; color: #10b981;">MISSION COMPLETE!</h1>
-        <p style="font-size: 1.8rem; margin: 20px 0;">The park is clean and safe!</p>
-        <button onclick="location.reload()" class="btn">Clean Again</button>
+        <p style="font-size: 1.8rem; margin: 20px 0;">You made the Eco-Park beautiful and safe!</p>
+        <button onclick="location.reload()" class="btn">Reset Demo</button>
         <a href="dashboard.html" class="btn" style="background: #3b82f6; margin-left: 10px;">Back to Home</a>
     </div>
 
     <a-scene cursor="fuse: false; rayOrigin: mouse">
-        <a-assets timeout="15000">
+        <a-assets timeout="10000">
             <a-asset-item id="m-tree" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/BigTree.glb"></a-asset-item>
-            <a-asset-item id="m-cow" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cow.glb"></a-asset-item>
-            <a-asset-item id="m-apple" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Apple.glb"></a-asset-item>
-            <a-asset-item id="m-pineapple" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Pineapple.glb"></a-asset-item>
+            <a-asset-item id="m-sapling" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Bag.glb"></a-asset-item>
             
             <a-asset-item id="m-hazard" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/chemical-barrel.glb"></a-asset-item>
             <a-asset-item id="m-tire" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Tires.glb"></a-asset-item>
-            <a-asset-item id="m-can" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cola_Can.glb"></a-asset-item>
-            <a-asset-item id="m-box" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cardboard_Box.glb"></a-asset-item>
-            <a-asset-item id="m-deadtree" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Dead%20Trees.glb"></a-asset-item>
-            <a-asset-item id="m-factory" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Factory.glb"></a-asset-item>
-            <a-asset-item id="m-germ" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Human%20Immunodeficiency%20Virus....glb"></a-asset-item>
         </a-assets>
 
         <a-sky color="#87CEEB"></a-sky>
         <a-plane position="0 0 -15" rotation="-90 0 0" width="100" height="100" color="#2d5a27"></a-plane>
         
-        <a-entity gltf-model="#m-tree" position="-12 0 -25" scale="0.8 0.8 0.8"></a-entity>
+        <a-entity position="-10 0 -20">
+            <a-entity gltf-model="#m-tree" scale="1.2 1.2 1.2"></a-entity>
+            <a-entity gltf-model="#m-sapling" position="2 0.5 3" scale="0.8 0.8 0.8"></a-entity>
+        </a-entity>
+
+        <a-entity position="8 0 -22">
+            <a-entity gltf-model="#m-tree" scale="1 1 1"></a-entity>
+            <a-entity gltf-model="#m-sapling" position="-3 0.5 4" scale="0.8 0.8 0.8"></a-entity>
+        </a-entity>
         
-        <a-entity gltf-model="#m-cow" position="8 0 -20" rotation="0 -30 0" scale="1.2 1.2 1.2"></a-entity>
+        <a-entity position="0 0 -28">
+            <a-entity gltf-model="#m-tree" scale="1.4 1.4 1.4"></a-entity>
+            <a-entity gltf-model="#m-sapling" position="0 0.5 6" scale="0.8 0.8 0.8"></a-entity>
+        </a-entity>
+
+        <a-entity class="cleanable" gltf-model="#m-tire" position="-1.5 0 -15" scale="0.6 0.6 0.6" onclick="cleanupItem(this)"></a-entity>
         
-        <a-entity gltf-model="#m-apple" position="-5 0.2 -15" scale="0.05 0.05 0.05"></a-entity>
-        <a-entity gltf-model="#m-pineapple" position="6 0.2 -18" scale="0.08 0.08 0.08"></a-entity>
-
-
-        <a-entity class="cleanable" gltf-model="#m-factory" position="0 0 -35" scale="0.03 0.03 0.03" onclick="cleanItem(this)"></a-entity>
+        <a-entity class="cleanable" gltf-model="#m-hazard" position="6 0 -17" scale="0.4 0.4 0.4" onclick="cleanupItem(this)"></a-entity>
         
-        <a-entity class="cleanable" gltf-model="#m-deadtree" position="-8 0 -18" scale="0.3 0.3 0.3" onclick="cleanItem(this)"></a-entity>
-        <a-entity class="cleanable" gltf-model="#m-deadtree" position="9 0 -15" scale="0.25 0.25 0.25" onclick="cleanItem(this)"></a-entity>
-
-        <a-entity class="cleanable" gltf-model="#m-germ" position="0 4 -15" scale="0.05 0.05 0.05" onclick="cleanItem(this)"></a-entity>
-
-        <a-entity class="cleanable" gltf-model="#m-hazard" position="-3 0 -12" scale="0.3 0.3 0.3" onclick="cleanItem(this)"></a-entity>
-        <a-entity class="cleanable" gltf-model="#m-tire" position="3 0 -10" scale="0.4 0.4 0.4" onclick="cleanItem(this)"></a-entity>
-        <a-entity class="cleanable" gltf-model="#m-can" position="1 0 -8" scale="0.5 0.5 0.5" onclick="cleanItem(this)"></a-entity>
-        <a-entity class="cleanable" gltf-model="#m-box" position="-6 0 -22" scale="0.6 0.6 0.6" onclick="cleanItem(this)"></a-entity>
+        <a-entity class="cleanable" gltf-model="#m-hazard" position="-6.5 0 -19" scale="0.4 0.4 0.4" onclick="cleanupItem(this)"></a-entity>
 
         <a-light type="ambient" intensity="0.9"></a-light>
         <a-light type="directional" position="1 10 1" intensity="1"></a-light>
         
-        <a-camera position="0 6 15" look-controls></a-camera>
+        <a-camera position="0 7 15" look-controls></a-camera>
     </a-scene>
 
     <script>
-        let counter = 8;
+        let counter = 3; // EXACTLY 3 Bad Items
 
-        function cleanItem(el) {
+        function cleanupItem(el) {
             el.setAttribute('animation', 'property: scale; to: 0 0 0; dur: 400; easing: easeInBack');
             
             setTimeout(() => {
