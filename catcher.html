@@ -2,35 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Eco Sphere | Eco Catcher</title>
+    <title>Eco Sphere | Park Rescue</title>
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: #87CEEB; overflow: hidden; }
+        body { font-family: 'Segoe UI', sans-serif; overflow: hidden; background-color: #87CEEB; }
 
-        #ui-top {
+        #ui-msg {
             position: fixed;
-            top: 20px;
+            top: 25px;
             width: 100%;
-            display: flex;
-            justify-content: space-around;
+            text-align: center;
             z-index: 100;
+            pointer-events: none;
         }
-        .stat-pill {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 12px 25px;
+        .pill {
+            background: rgba(0, 0, 0, 0.85);
+            padding: 15px 40px;
             border-radius: 50px;
             color: white;
-            font-size: 20px;
+            font-size: 22px;
             border: 2px solid #10b981;
+            display: inline-block;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
         }
 
-        /* Overlay for Start and Game Over */
-        .overlay {
+        #success-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(6, 78, 59, 0.95);
-            display: flex;
+            background: rgba(6, 78, 59, 0.98);
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -38,141 +39,91 @@
             color: white;
             text-align: center;
         }
-
-        .play-btn {
+        .btn {
             background: #10b981;
-            padding: 15px 50px;
+            padding: 15px 45px;
             border: none;
             border-radius: 50px;
-            font-size: 24px;
+            font-size: 20px;
             cursor: pointer;
             margin-top: 25px;
             color: white;
             font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
 
-    <div id="start-screen" class="overlay">
-        <h1>Eco Catcher</h1>
-        <p>Save the Earth! Catch only the good items.</p>
-        <button class="play-btn" onclick="startGame()">START MISSION</button>
+    <div id="ui-msg">
+        <div class="pill">Park Cleanup: Click all 8 Polluting Items!</div>
     </div>
 
-    <div id="game-over-screen" class="overlay" style="display: none;">
-        <h1 style="color: #ef4444;">MISSION FAILED</h1>
-        <p id="final-stats" style="margin-top: 15px; font-size: 1.4rem;"></p>
-        <p style="margin-top: 10px; max-width: 400px;">The Earth is too polluted! We must be more careful with toxic waste.</p>
-        <button class="play-btn" onclick="location.reload()">TRY AGAIN</button>
-        <br>
-        <a href="dashboard.html" style="color: white; margin-top: 15px;">Back to Dashboard</a>
+    <div id="success-screen">
+        <h1 style="font-size: 4rem; color: #10b981;">MISSION COMPLETE!</h1>
+        <p style="font-size: 1.8rem; margin: 20px 0;">The park is safe for the animals and plants again!</p>
+        <button onclick="location.reload()" class="btn">Clean Again</button>
+        <a href="dashboard.html" class="btn" style="background: #3b82f6; margin-left: 10px;">Back to Home</a>
     </div>
 
-    <div id="ui-top">
-        <div class="stat-pill">Score: <span id="score">0</span></div>
-        <div class="stat-pill">Health: <span id="health">100%</span></div>
-    </div>
-
-    <a-scene vr-mode-ui="enabled: false">
-        <a-assets timeout="10000">
-            <a-asset-item id="model-bucket" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Bucket.glb"></a-asset-item>
-            <a-asset-item id="model-tree" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/BigTree.glb"></a-asset-item>
-            <a-asset-item id="model-solar" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Solarbattery.glb"></a-asset-item>
-            <a-asset-item id="model-hazard" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/chemical-barrel.glb"></a-asset-item>
-            <a-asset-item id="model-tire" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Tires.glb"></a-asset-item>
+    <a-scene cursor="fuse: false; rayOrigin: mouse">
+        <a-assets timeout="15000">
+            <a-asset-item id="m-tree" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/BigTree.glb"></a-asset-item>
+            <a-asset-item id="m-cow" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cow.glb"></a-asset-item>
+            <a-asset-item id="m-apple" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Apple.glb"></a-asset-item>
+            <a-asset-item id="m-pineapple" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Pineapple.glb"></a-asset-item>
+            
+            <a-asset-item id="m-hazard" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/chemical-barrel.glb"></a-asset-item>
+            <a-asset-item id="m-tire" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Tires.glb"></a-asset-item>
+            <a-asset-item id="m-can" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cola_Can.glb"></a-asset-item>
+            <a-asset-item id="m-box" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cardboard_Box.glb"></a-asset-item>
+            <a-asset-item id="m-deadtree" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Dead%20Trees.glb"></a-asset-item>
+            <a-asset-item id="m-factory" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Factory.glb"></a-asset-item>
+            <a-asset-item id="m-germ" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Human%20Immunodeficiency%20Virus....glb"></a-asset-item>
         </a-assets>
-
-        <a-entity id="bucket" position="0 0.5 -8" gltf-model="#model-bucket" scale="0.4 0.4 0.4" rotation="0 180 0"></a-entity>
 
         <a-sky color="#87CEEB"></a-sky>
         <a-plane position="0 0 -10" rotation="-90 0 0" width="100" height="100" color="#2d5a27"></a-plane>
-        <a-light type="ambient" intensity="0.8"></a-light>
-        <a-light type="directional" position="1 5 1" intensity="1"></a-light>
-        <a-camera position="0 2 0" look-controls-enabled="false" wasd-controls-enabled="false"></a-camera>
+        
+        <a-entity gltf-model="#m-tree" position="-10 0 -15" scale="1.2 1.2 1.2"></a-entity>
+        <a-entity gltf-model="#m-cow" position="5 0 -13" rotation="0 -30 0" scale="2 2 2"></a-entity>
+        <a-entity gltf-model="#m-apple" position="-4 0.5 -8" scale="2 2 2"></a-entity>
+        <a-entity gltf-model="#m-pineapple" position="8 0.2 -10" scale="2 2 2"></a-entity>
+
+        <a-entity class="cleanable" gltf-model="#m-factory" position="0 0 -20" scale="0.05 0.05 0.05" onclick="cleanItem(this)"></a-entity>
+        
+        <a-entity class="cleanable" gltf-model="#m-deadtree" position="-7 0 -10" scale="0.5 0.5 0.5" onclick="cleanItem(this)"></a-entity>
+        <a-entity class="cleanable" gltf-model="#m-deadtree" position="6 0 -7" scale="0.4 0.4 0.4" onclick="cleanItem(this)"></a-entity>
+
+        <a-entity class="cleanable" gltf-model="#m-germ" position="0 2 -8" scale="0.1 0.1 0.1" onclick="cleanItem(this)"></a-entity>
+
+        <a-entity class="cleanable" gltf-model="#m-hazard" position="-3 0 -6" scale="0.4 0.4 0.4" onclick="cleanItem(this)"></a-entity>
+        <a-entity class="cleanable" gltf-model="#m-tire" position="3 0 -5" scale="0.6 0.6 0.6" onclick="cleanItem(this)"></a-entity>
+        <a-entity class="cleanable" gltf-model="#m-can" position="1 0 -4" scale="1.2 1.2 1.2" onclick="cleanItem(this)"></a-entity>
+        <a-entity class="cleanable" gltf-model="#m-box" position="-5 0 -12" scale="1 1 1" onclick="cleanItem(this)"></a-entity>
+
+        <a-light type="ambient" intensity="0.9"></a-light>
+        <a-light type="directional" position="1 10 1" intensity="1"></a-light>
+        <a-camera position="0 3 6" look-controls></a-camera>
     </a-scene>
 
     <script>
-        let score = 0;
-        let health = 100;
-        let active = false;
-        let spawnInterval;
-        const scene = document.querySelector('a-scene');
-        const bucket = document.querySelector('#bucket');
+        let counter = 8;
 
-        const items = [
-            { name: "Tree", model: "#model-tree", hazard: false, scale: "0.5 0.5 0.5" },
-            { name: "Solar", model: "#model-solar", hazard: false, scale: "0.5 0.5 0.5" },
-            { name: "Hazard", model: "#model-hazard", hazard: true, scale: "0.3 0.3 0.3" },
-            { name: "Tire", model: "#model-tire", hazard: true, scale: "0.5 0.5 0.5" }
-        ];
-
-        window.addEventListener('mousemove', (e) => {
-            if(!active) return;
-            let x = (e.clientX / window.innerWidth) * 14 - 7;
-            bucket.setAttribute('position', {x: x, y: 0.5, z: -8});
-        });
-
-        function startGame() {
-            document.getElementById('start-screen').style.display = 'none';
-            active = true;
-            spawnInterval = setInterval(spawn, 1200);
-        }
-
-        function spawn() {
-            if(!active) return;
-            const data = items[Math.floor(Math.random() * items.length)];
-            const group = document.createElement('a-entity');
-            const x = Math.random() * 10 - 5;
-            group.setAttribute('position', `${x} 12 -8`);
-
-            const m = document.createElement('a-entity');
-            m.setAttribute('gltf-model', data.model);
-            m.setAttribute('scale', data.scale); // Using specific scales to prevent stretching
-            group.appendChild(m);
-
-            const t = document.createElement('a-text');
-            t.setAttribute('value', data.name);
-            t.setAttribute('align', 'center');
-            t.setAttribute('position', '0 -1.5 0');
-            t.setAttribute('color', data.hazard ? '#ff0000' : '#ffffff');
-            t.setAttribute('scale', '2 2 2');
-            group.appendChild(t);
-
-            scene.appendChild(group);
-
-            let y = 12;
-            const timer = setInterval(() => {
-                if(!active) {
-                    clearInterval(timer);
-                    if(group.parentNode) group.parentNode.removeChild(group);
-                    return;
-                }
-                y -= 0.07;
-                group.setAttribute('position', `${x} ${y} -8`);
-                
-                let bx = bucket.getAttribute('position').x;
-                if(y < 1.6 && y > 0.4 && Math.abs(x - bx) < 1.3) {
-                    if(data.hazard) {
-                        health = Math.max(0, health - 20);
-                        if(health <= 0) gameOver();
-                    } else {
-                        score += 10;
+        function cleanItem(el) {
+            // Animated exit
+            el.setAttribute('animation', 'property: scale; to: 0 0 0; dur: 500; easing: easeInElastic');
+            
+            setTimeout(() => {
+                if(el.parentNode) {
+                    el.parentNode.removeChild(el);
+                    counter--;
+                    if (counter === 0) {
+                        document.getElementById('success-screen').style.display = 'flex';
                     }
-                    document.getElementById('score').innerText = score;
-                    document.getElementById('health').innerText = health + "%";
-                    clearInterval(timer);
-                    group.parentNode.removeChild(group);
                 }
-                if(y < -2) { clearInterval(timer); group.parentNode.removeChild(group); }
-            }, 20);
-        }
-
-        function gameOver() {
-            active = false;
-            clearInterval(spawnInterval);
-            document.getElementById('game-over-screen').style.display = 'flex';
-            document.getElementById('final-stats').innerText = `Final Score: ${score}`;
+            }, 500);
         }
     </script>
 </body>
