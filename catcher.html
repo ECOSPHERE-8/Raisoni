@@ -5,13 +5,11 @@
 <title>Eco Sphere - Virtual Cleanup</title>
 
 <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
 
 <style>
 
 body{
 margin:0;
-overflow:hidden;
 font-family:Arial;
 }
 
@@ -20,22 +18,22 @@ position:absolute;
 top:10px;
 left:10px;
 background:white;
-padding:12px;
-border-radius:10px;
-font-size:18px;
+padding:10px;
+border-radius:8px;
 font-weight:bold;
 }
 
 </style>
+
 </head>
 
 <body>
 
 <div id="ui">
-Park Cleanup: <span id="count">0</span>/3
+Clean the Park: <span id="count">0</span>/3
 </div>
 
-<a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+<a-scene>
 
 <a-assets>
 
@@ -53,58 +51,68 @@ src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/chemical-barrel.
 
 </a-assets>
 
-<a-marker preset="hiro">
+<!-- Sky -->
+<a-sky color="#87CEEB"></a-sky>
 
 <!-- Ground -->
-<a-plane 
+<a-plane
 rotation="-90 0 0"
-width="5"
-height="5"
-color="#7CFC00">
+width="30"
+height="30"
+color="#6ab04c">
 </a-plane>
 
 <!-- Trees -->
-<a-entity 
+
+<a-entity
 gltf-model="#tree"
-position="-1.5 0 -1"
-scale="0.4 0.4 0.4">
+position="-6 0 -6"
+scale="1.5 1.5 1.5">
 </a-entity>
 
-<a-entity 
+<a-entity
 gltf-model="#tree"
-position="1.5 0 -1"
-scale="0.4 0.4 0.4">
+position="6 0 -5"
+scale="1.5 1.5 1.5">
 </a-entity>
 
-<!-- Trash Items -->
+<a-entity
+gltf-model="#tree"
+position="-5 0 5"
+scale="1.5 1.5 1.5">
+</a-entity>
 
-<a-entity 
+<!-- Hazardous Items -->
+
+<a-entity
 gltf-model="#bottle"
-position="0 0 1"
-scale="0.4 0.4 0.4"
+position="0 0 -2"
+scale="0.7 0.7 0.7"
 class="trash"
 cursor-listener>
 </a-entity>
 
-<a-entity 
+<a-entity
 gltf-model="#tire"
-position="-1 0 0.5"
-scale="0.5 0.5 0.5"
+position="-2 0 1"
+scale="0.8 0.8 0.8"
 class="trash"
 cursor-listener>
 </a-entity>
 
-<a-entity 
+<a-entity
 gltf-model="#barrel"
-position="1 0 0.5"
-scale="0.5 0.5 0.5"
+position="2 0 1"
+scale="0.8 0.8 0.8"
 class="trash"
 cursor-listener>
 </a-entity>
 
-</a-marker>
+<!-- Camera -->
 
-<a-entity camera></a-entity>
+<a-camera position="0 6 10">
+<a-cursor></a-cursor>
+</a-camera>
 
 </a-scene>
 
@@ -113,6 +121,7 @@ cursor-listener>
 let cleaned = 0;
 
 AFRAME.registerComponent('cursor-listener', {
+
 init: function () {
 
 this.el.addEventListener('click', () => {
@@ -124,12 +133,17 @@ cleaned++;
 document.getElementById("count").innerText = cleaned;
 
 if(cleaned === 3){
-alert("Great Job! The park is clean 🌳");
+
+setTimeout(()=>{
+alert("Great Job! You cleaned the park 🌳");
+},500);
+
 }
 
 });
 
 }
+
 });
 
 </script>
