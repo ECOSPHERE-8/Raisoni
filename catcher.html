@@ -3,67 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eco Sphere | 3D Touch</title>
+    <title>Eco Sphere | Eco-Sorter</title>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
     <style>
-        body { background: #e8f5e9; font-family: sans-serif; margin: 0; padding: 20px; text-align: center; }
+        body { background: #f1f8e9; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 10px; text-align: center; }
+        .header { background: #2e7d32; color: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
         
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; max-width: 500px; margin: 20px auto; }
+        .game-area { display: flex; justify-content: space-around; max-width: 800px; margin: 0 auto; gap: 20px; }
+        .column { display: flex; flex-direction: column; gap: 15px; flex: 1; }
 
-        .card {
-            background: white; border: 3px solid #10b981; border-radius: 20px;
-            height: 200px; overflow: hidden; position: relative;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        /* Left Side: Interactive 3D Models */
+        .item-card { 
+            background: white; border: 3px solid #10b981; border-radius: 15px; 
+            height: 120px; cursor: grab; position: relative;
         }
+        model-viewer { width: 100%; height: 100%; pointer-events: none; } /* Disable internal rotate to allow dragging */
 
-        /* Styling the 3D viewer to fit the box perfectly */
-        model-viewer {
-            width: 100%; height: 100%;
-            --poster-color: transparent;
+        /* Right Side: Disposal Boxes */
+        .bin { 
+            background: #e0e0e0; border: 3px dashed #9e9e9e; border-radius: 15px; 
+            height: 120px; display: flex; align-items: center; justify-content: center;
+            font-weight: bold; padding: 10px; font-size: 14px; transition: 0.3s;
         }
+        .bin.over { background: #c8e6c9; border-color: #4caf50; transform: scale(1.05); }
+        .bin.correct { background: #4caf50; color: white; border-style: solid; }
 
-        .label {
-            position: absolute; bottom: 0; width: 100%;
-            background: rgba(16, 185, 129, 0.8); color: white;
-            font-weight: bold; padding: 5px 0; font-size: 14px;
-        }
+        #win-msg { display: none; margin-top: 20px; color: #2e7d32; font-weight: bold; font-size: 24px; }
     </style>
 </head>
 <body>
 
-    <h2 style="color: #2e7d32;">Touch & Rotate the Objects!</h2>
+    <div class="header">
+        <h1>ECO-SORTER</h1>
+        <p>Drag the item to the correct disposal box!</p>
+    </div>
 
-    <div class="grid">
-        <div class="card">
-            <model-viewer src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/BigTree.glb" 
-                auto-rotate camera-controls touch-action="pan-y">
-            </model-viewer>
-            <div class="label">Tree</div>
+    <div class="game-area">
+        <div class="column" id="items">
+            <div class="item-card" draggable="true" id="tree" data-target="nature">
+                <model-viewer src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/BigTree.glb"></model-viewer>
+            </div>
+            <div class="item-card" draggable="true" id="can" data-target="blue">
+                <model-viewer src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cola_Can.glb"></model-viewer>
+            </div>
+            <div class="item-card" draggable="true" id="tire" data-target="center">
+                <model-viewer src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Tires.glb"></model-viewer>
+            </div>
+            <div class="item-card" draggable="true" id="barrel" data-target="hazard">
+                <model-viewer src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/chemical-barrel.glb"></model-viewer>
+            </div>
         </div>
 
-        <div class="card">
-            <model-viewer src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Tires.glb" 
-                auto-rotate camera-controls touch-action="pan-y">
-            </model-viewer>
-            <div class="label">Hazard: Tire</div>
-        </div>
-
-        <div class="card">
-            <model-viewer src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/chemical-barrel.glb" 
-                auto-rotate camera-controls touch-action="pan-y">
-            </model-viewer>
-            <div class="label">Hazard: Barrel</div>
-        </div>
-
-        <div class="card">
-            <model-viewer src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cola_Can.glb" 
-                auto-rotate camera-controls touch-action="pan-y">
-            </model-viewer>
-            <div class="label">Trash: Bottle</div>
+        <div class="column">
+            <div class="bin" id="hazard">⚠️ HAZARDOUS WASTE<br>(Special Collection)</div>
+            <div class="bin" id="nature">🌳 NATURE ZONE<br>(Leave in Park)</div>
+            <div class="bin" id="blue">♻️ BLUE BIN<br>(Recycle Can)</div>
+            <div class="bin" id="center">🏗️ RECYCLING CENTER<br>(Bulky Tires)</div>
         </div>
     </div>
 
-    <p style="color: #666;">Drag your finger to rotate. Pinch to zoom!</p>
+    <div id="win-msg">Mission Accomplished! You are an Eco-Hero! 🌟</div>
 
+    <script>
+        let draggedItem = null;
+        let matched = 0;
+
+        document.querySelectorAll('.item-card').forEach(item => {
+            item.addEventListener('dragstart', function() {
+                draggedItem = this;
+                this.style.opacity = '0.5';
+            });
+            item.addEventListener('dragend', function() {
+                this.style.opacity = '1';
+            });
+        });
+
+        document.querySelectorAll('.bin').forEach(bin => {
+            bin.addEventListener('dragover', e => e.preventDefault());
+            bin.addEventListener('dragenter', function() { this.classList.add('over'); });
+            bin.addEventListener('dragleave', function() { this.classList.remove('over'); });
+
+            bin.addEventListener('drop', function() {
+                this.classList.remove('over');
+                const targetId = draggedItem.getAttribute('data-target');
+                
+                if (this.id === targetId) {
+                    this.classList.add('correct');
+                    this.innerHTML = "✅ CORRECT!";
+                    draggedItem.style.visibility = 'hidden';
+                    matched++;
+                    if(matched === 4) document.getElementById('win-msg').style.display = 'block';
+                } else {
+                    alert("Try again! That's not the right place for this item.");
+                }
+            });
+        });
+    </script>
 </body>
 </html>
