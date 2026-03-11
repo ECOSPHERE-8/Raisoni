@@ -15,7 +15,6 @@
             display: flex;
             justify-content: space-around;
             z-index: 100;
-            pointer-events: none;
         }
         .stat-pill {
             background: rgba(0, 0, 0, 0.7);
@@ -26,17 +25,20 @@
             border: 2px solid #10b981;
         }
 
-        #start-screen {
+        /* Overlay for Start and Game Over */
+        .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: #064e3b;
+            background: rgba(6, 78, 59, 0.95);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 2000;
             color: white;
+            text-align: center;
         }
+
         .play-btn {
             background: #10b981;
             padding: 15px 50px;
@@ -52,10 +54,19 @@
 </head>
 <body>
 
-    <div id="start-screen">
+    <div id="start-screen" class="overlay">
         <h1>Eco Catcher</h1>
-        <p>Catch the items falling from the sky!</p>
+        <p>Save the Earth! Catch only the good items.</p>
         <button class="play-btn" onclick="startGame()">START MISSION</button>
+    </div>
+
+    <div id="game-over-screen" class="overlay" style="display: none;">
+        <h1 style="color: #ef4444;">MISSION FAILED</h1>
+        <p id="final-stats" style="margin-top: 15px; font-size: 1.4rem;"></p>
+        <p style="margin-top: 10px; max-width: 400px;">The Earth is too polluted! We must be more careful with toxic waste.</p>
+        <button class="play-btn" onclick="location.reload()">TRY AGAIN</button>
+        <br>
+        <a href="dashboard.html" style="color: white; margin-top: 15px;">Back to Dashboard</a>
     </div>
 
     <div id="ui-top">
@@ -64,25 +75,20 @@
     </div>
 
     <a-scene vr-mode-ui="enabled: false">
-        
         <a-assets timeout="10000">
             <a-asset-item id="model-bucket" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Bucket.glb"></a-asset-item>
             <a-asset-item id="model-tree" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/BigTree.glb"></a-asset-item>
             <a-asset-item id="model-solar" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Solarbattery.glb"></a-asset-item>
             <a-asset-item id="model-hazard" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/chemical-barrel.glb"></a-asset-item>
             <a-asset-item id="model-tire" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Tires.glb"></a-asset-item>
-            <a-asset-item id="model-bag" src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Bag.glb"></a-asset-item>
         </a-assets>
 
-        <a-entity id="bucket" position="0 0.2 -7" gltf-model="#model-bucket" scale="0.5 0.5 0.5" rotation="0 180 0">
-        </a-entity>
+        <a-entity id="bucket" position="0 0.5 -8" gltf-model="#model-bucket" scale="0.4 0.4 0.4" rotation="0 180 0"></a-entity>
 
         <a-sky color="#87CEEB"></a-sky>
         <a-plane position="0 0 -10" rotation="-90 0 0" width="100" height="100" color="#2d5a27"></a-plane>
-        
         <a-light type="ambient" intensity="0.8"></a-light>
         <a-light type="directional" position="1 5 1" intensity="1"></a-light>
-
         <a-camera position="0 2 0" look-controls-enabled="false" wasd-controls-enabled="false"></a-camera>
     </a-scene>
 
@@ -90,43 +96,39 @@
         let score = 0;
         let health = 100;
         let active = false;
+        let spawnInterval;
         const scene = document.querySelector('a-scene');
         const bucket = document.querySelector('#bucket');
 
         const items = [
-            { name: "Tree", model: "#model-tree", hazard: false },
-            { name: "Solar", model: "#model-solar", hazard: false },
-            { name: "Hazard", model: "#model-hazard", hazard: true },
-            { name: "Tire", model: "#model-tire", hazard: true },
-            { name: "Eco Bag", model: "#model-bag", hazard: false }
+            { name: "Tree", model: "#model-tree", hazard: false, scale: "0.5 0.5 0.5" },
+            { name: "Solar", model: "#model-solar", hazard: false, scale: "0.5 0.5 0.5" },
+            { name: "Hazard", model: "#model-hazard", hazard: true, scale: "0.3 0.3 0.3" },
+            { name: "Tire", model: "#model-tire", hazard: true, scale: "0.5 0.5 0.5" }
         ];
 
-        // Mouse/Trackpad movement control
         window.addEventListener('mousemove', (e) => {
             if(!active) return;
-            // Map mouse to a safe movement range so bucket doesn't fly off screen
-            let x = (e.clientX / window.innerWidth) * 12 - 6;
-            bucket.setAttribute('position', {x: x, y: 0.2, z: -7});
+            let x = (e.clientX / window.innerWidth) * 14 - 7;
+            bucket.setAttribute('position', {x: x, y: 0.5, z: -8});
         });
 
         function startGame() {
             document.getElementById('start-screen').style.display = 'none';
             active = true;
-            setInterval(spawn, 1000); // Items rain every 1 second
+            spawnInterval = setInterval(spawn, 1200);
         }
 
         function spawn() {
             if(!active) return;
             const data = items[Math.floor(Math.random() * items.length)];
             const group = document.createElement('a-entity');
-            
-            // Spawn items in front of the bucket's Z-lane
-            const x = Math.random() * 8 - 4;
-            group.setAttribute('position', `${x} 12 -7`);
+            const x = Math.random() * 10 - 5;
+            group.setAttribute('position', `${x} 12 -8`);
 
             const m = document.createElement('a-entity');
             m.setAttribute('gltf-model', data.model);
-            m.setAttribute('scale', '0.6 0.6 0.6');
+            m.setAttribute('scale', data.scale); // Using specific scales to prevent stretching
             group.appendChild(m);
 
             const t = document.createElement('a-text');
@@ -140,34 +142,37 @@
             scene.appendChild(group);
 
             let y = 12;
-            const fallSpeed = 0.06;
-
             const timer = setInterval(() => {
-                if(!active) return;
-                y -= fallSpeed;
-                group.setAttribute('position', `${x} ${y} -7`);
+                if(!active) {
+                    clearInterval(timer);
+                    if(group.parentNode) group.parentNode.removeChild(group);
+                    return;
+                }
+                y -= 0.07;
+                group.setAttribute('position', `${x} ${y} -8`);
                 
                 let bx = bucket.getAttribute('position').x;
-                
-                // Collision check (Adjusted for new bucket position)
-                if(y < 1.5 && y > 0.3 && Math.abs(x - bx) < 1.2) {
+                if(y < 1.6 && y > 0.4 && Math.abs(x - bx) < 1.3) {
                     if(data.hazard) {
-                        health = Math.max(0, health - 10);
+                        health = Math.max(0, health - 20);
+                        if(health <= 0) gameOver();
                     } else {
                         score += 10;
                     }
                     document.getElementById('score').innerText = score;
                     document.getElementById('health').innerText = health + "%";
-                    
                     clearInterval(timer);
-                    if(group.parentNode) group.parentNode.removeChild(group);
+                    group.parentNode.removeChild(group);
                 }
-
-                if(y < -2) { 
-                    clearInterval(timer); 
-                    if(group.parentNode) group.parentNode.removeChild(group); 
-                }
+                if(y < -2) { clearInterval(timer); group.parentNode.removeChild(group); }
             }, 20);
+        }
+
+        function gameOver() {
+            active = false;
+            clearInterval(spawnInterval);
+            document.getElementById('game-over-screen').style.display = 'flex';
+            document.getElementById('final-stats').innerText = `Final Score: ${score}`;
         }
     </script>
 </body>
