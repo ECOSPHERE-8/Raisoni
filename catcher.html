@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <title>Eco Sphere – Clean the Park</title>
 
 <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+<script src="https://unpkg.com/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
 
 <style>
 
@@ -15,17 +15,16 @@ font-family:Arial;
 
 #ui{
 position:absolute;
-top:10px;
-left:10px;
+top:20px;
+left:20px;
 background:white;
-padding:12px;
+padding:10px;
 border-radius:10px;
-font-weight:bold;
 font-size:18px;
+font-weight:bold;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -34,112 +33,50 @@ font-size:18px;
 Clean the Park: <span id="count">0</span>/3
 </div>
 
-<a-scene>
+<a-scene cursor="rayOrigin: mouse">
 
-<a-assets>
+<!-- AUTOMATIC PARK ENVIRONMENT -->
 
-<a-asset-item id="tree"
-src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/BigTree.glb"></a-asset-item>
-
-<a-asset-item id="bottle"
-src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cola_Can.glb"></a-asset-item>
-
-<a-asset-item id="tire"
-src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Tires.glb"></a-asset-item>
-
-<a-asset-item id="barrel"
-src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/chemical-barrel.glb"></a-asset-item>
-
-</a-assets>
-
-<!-- SKY -->
-
-<a-sky color="#87CEEB"></a-sky>
-
-<!-- LIGHTING -->
-
-<a-light type="ambient" intensity="0.7"></a-light>
-<a-light type="directional" position="10 20 10" intensity="0.8"></a-light>
-
-<!-- GROUND -->
-
-<a-plane
-rotation="-90 0 0"
-width="50"
-height="50"
-color="#74c365">
-</a-plane>
-
-<!-- TREES (12 trees placed around) -->
-
-<a-entity gltf-model="#tree" position="-10 0 -8" scale="2 2 2"></a-entity>
-<a-entity gltf-model="#tree" position="10 0 -8" scale="2 2 2"></a-entity>
-<a-entity gltf-model="#tree" position="-12 0 0" scale="2 2 2"></a-entity>
-<a-entity gltf-model="#tree" position="12 0 0" scale="2 2 2"></a-entity>
-<a-entity gltf-model="#tree" position="-10 0 8" scale="2 2 2"></a-entity>
-<a-entity gltf-model="#tree" position="10 0 8" scale="2 2 2"></a-entity>
-
-<a-entity gltf-model="#tree" position="-5 0 -12" scale="2 2 2"></a-entity>
-<a-entity gltf-model="#tree" position="5 0 -12" scale="2 2 2"></a-entity>
-<a-entity gltf-model="#tree" position="-5 0 12" scale="2 2 2"></a-entity>
-<a-entity gltf-model="#tree" position="5 0 12" scale="2 2 2"></a-entity>
-
-<a-entity gltf-model="#tree" position="-15 0 -5" scale="2 2 2"></a-entity>
-<a-entity gltf-model="#tree" position="15 0 5" scale="2 2 2"></a-entity>
-
-<!-- FLOWERS -->
-
-<a-sphere color="#ff69b4" radius="0.2" position="2 0.2 -3"></a-sphere>
-<a-sphere color="#ff69b4" radius="0.2" position="-2 0.2 -4"></a-sphere>
-<a-sphere color="#ff69b4" radius="0.2" position="3 0.2 2"></a-sphere>
-<a-sphere color="#ff69b4" radius="0.2" position="-3 0.2 3"></a-sphere>
-
-<!-- STONES -->
-
-<a-sphere color="#777" radius="0.5" position="4 0.3 -2"></a-sphere>
-<a-sphere color="#888" radius="0.4" position="-4 0.3 -1"></a-sphere>
-
-<!-- BUTTERFLIES -->
-
-<a-sphere color="yellow" radius="0.2" position="0 3 -2"
-animation="property: position; dir: alternate; dur: 3000; loop: true; to: 2 4 -2">
-</a-sphere>
-
-<a-sphere color="orange" radius="0.2" position="-2 3 2"
-animation="property: position; dir: alternate; dur: 2500; loop: true; to: 1 4 2">
-</a-sphere>
+<a-entity environment="
+preset: forest;
+groundColor: #7BC8A4;
+skyType: gradient;
+skyColor: #87CEEB;
+lighting: point;
+dressing: trees;
+dressingAmount: 20;
+"></a-entity>
 
 <!-- HAZARDOUS ITEMS -->
 
-<a-entity
-gltf-model="#bottle"
-position="0 0 -2"
-scale="0.6 0.6 0.6"
-class="trash"
-cursor-listener>
-</a-entity>
+<a-cylinder
+position="-2 0.5 -4"
+radius="0.5"
+height="1"
+color="red"
+class="trash">
+</a-cylinder>
 
-<a-entity
-gltf-model="#tire"
-position="-2 0 -1"
-scale="0.8 0.8 0.8"
-class="trash"
-cursor-listener>
-</a-entity>
+<a-torus
+position="0 0.3 -4"
+radius="0.6"
+radius-tubular="0.2"
+color="black"
+class="trash">
+</a-torus>
 
-<a-entity
-gltf-model="#barrel"
-position="2 0 -1"
-scale="0.8 0.8 0.8"
-class="trash"
-cursor-listener>
-</a-entity>
+<a-box
+position="2 0.5 -4"
+depth="1"
+height="1"
+width="1"
+color="orange"
+class="trash">
+</a-box>
 
 <!-- CAMERA -->
 
-<a-camera position="0 3 8">
-<a-cursor></a-cursor>
-</a-camera>
+<a-camera position="0 2 4"></a-camera>
 
 </a-scene>
 
@@ -147,13 +84,11 @@ cursor-listener>
 
 let cleaned = 0;
 
-AFRAME.registerComponent('cursor-listener', {
+document.querySelectorAll(".trash").forEach(item => {
 
-init: function () {
+item.addEventListener("click", () => {
 
-this.el.addEventListener('click', () => {
-
-this.el.setAttribute("visible", false);
+item.setAttribute("visible", false);
 
 cleaned++;
 
@@ -162,14 +97,12 @@ document.getElementById("count").innerText = cleaned;
 if(cleaned === 3){
 
 setTimeout(()=>{
-alert("Amazing! You cleaned the park 🌳");
+alert("Great Job! You cleaned the park 🌳");
 },500);
 
 }
 
 });
-
-}
 
 });
 
