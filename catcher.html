@@ -2,89 +2,68 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Eco Sphere | Match & Clean</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Sphere | 3D Touch</title>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
     <style>
-        body { background: #f0fdf4; font-family: 'Segoe UI', sans-serif; text-align: center; margin: 0; }
-        #header { background: #166534; color: white; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        body { background: #e8f5e9; font-family: sans-serif; margin: 0; padding: 20px; text-align: center; }
         
-        #game-container { 
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; 
-            padding: 20px; max-width: 400px; margin: 40px auto;
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; max-width: 500px; margin: 20px auto; }
+
+        .card {
+            background: white; border: 3px solid #10b981; border-radius: 20px;
+            height: 200px; overflow: hidden; position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        .eco-card {
-            background: #ffffff; border: 4px solid #10b981; border-radius: 20px;
-            height: 150px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: 0.3s; position: relative; overflow: hidden;
+        /* Styling the 3D viewer to fit the box perfectly */
+        model-viewer {
+            width: 100%; height: 100%;
+            --poster-color: transparent;
         }
 
-        /* Using your specific model names as labels to ensure they match your GitHub */
-        .eco-card img { width: 80%; height: auto; display: none; }
-        .eco-card.revealed img { display: block; }
-        .eco-card.revealed { background: #f0fdf4; }
-        
-        #win-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(22, 101, 52, 0.95); display: none;
-            flex-direction: column; align-items: center; justify-content: center; color: white;
+        .label {
+            position: absolute; bottom: 0; width: 100%;
+            background: rgba(16, 185, 129, 0.8); color: white;
+            font-weight: bold; padding: 5px 0; font-size: 14px;
         }
     </style>
 </head>
 <body>
 
-    <div id="header">
-        <h1>ECO MATCH</h1>
-        <p>Score: <span id="score">0</span> | Found: <span id="found">0</span>/4</p>
+    <h2 style="color: #2e7d32;">Touch & Rotate the Objects!</h2>
+
+    <div class="grid">
+        <div class="card">
+            <model-viewer src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/BigTree.glb" 
+                auto-rotate camera-controls touch-action="pan-y">
+            </model-viewer>
+            <div class="label">Tree</div>
+        </div>
+
+        <div class="card">
+            <model-viewer src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Tires.glb" 
+                auto-rotate camera-controls touch-action="pan-y">
+            </model-viewer>
+            <div class="label">Hazard: Tire</div>
+        </div>
+
+        <div class="card">
+            <model-viewer src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/chemical-barrel.glb" 
+                auto-rotate camera-controls touch-action="pan-y">
+            </model-viewer>
+            <div class="label">Hazard: Barrel</div>
+        </div>
+
+        <div class="card">
+            <model-viewer src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cola_Can.glb" 
+                auto-rotate camera-controls touch-action="pan-y">
+            </model-viewer>
+            <div class="label">Trash: Bottle</div>
+        </div>
     </div>
 
-    <div id="game-container">
-        <div class="eco-card" onclick="reveal(this, 50)">
-            <span class="label">?</span>
-            <img src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/BigTree.glb"> </div>
+    <p style="color: #666;">Drag your finger to rotate. Pinch to zoom!</p>
 
-        <div class="eco-card" onclick="reveal(this, 100)">
-            <span class="label">?</span>
-            <img src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Tires.glb"> </div>
-
-        <div class="eco-card" onclick="reveal(this, 100)">
-            <span class="label">?</span>
-            <img src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/chemical-barrel.glb"> </div>
-
-        <div class="eco-card" onclick="reveal(this, 100)">
-            <span class="label">?</span>
-            <img src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cola_Can.glb"> </div>
-    </div>
-
-    <div id="win-overlay">
-        <h2>WELL DONE!</h2>
-        <p>You helped identify and clean the environment!</p>
-        <button onclick="location.reload()" style="padding: 15px 40px; border-radius: 50px; border: none; background: white; color: #166534; font-weight: bold; cursor: pointer;">Play Again</button>
-        <br>
-        <a href="dashboard.html" style="color: white; text-decoration: underline;">Back to Dashboard</a>
-    </div>
-
-    <script>
-        let score = 0;
-        let found = 0;
-
-        function reveal(card, points) {
-            if (card.classList.contains('revealed')) return;
-
-            card.classList.add('revealed');
-            card.querySelector('.label').style.display = 'none';
-            
-            score += points;
-            found += 1;
-            
-            document.getElementById('score').innerText = score;
-            document.getElementById('found').innerText = found;
-
-            if (found === 4) {
-                setTimeout(() => {
-                    document.getElementById('win-overlay').style.display = 'flex';
-                }, 500);
-            }
-        }
-    </script>
 </body>
 </html>
