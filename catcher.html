@@ -3,98 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eco Sphere | Eco-Sorter</title>
+    <title>Eco Sphere | Riddle Sorter</title>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
     <style>
         body { background: #f1f8e9; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 10px; text-align: center; }
-        .header { background: #2e7d32; color: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+        .header { background: #1b5e20; color: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
         
-        .game-area { display: flex; justify-content: space-around; max-width: 800px; margin: 0 auto; gap: 20px; }
+        .game-area { display: flex; justify-content: space-around; max-width: 900px; margin: 0 auto; gap: 20px; }
         .column { display: flex; flex-direction: column; gap: 15px; flex: 1; }
 
-        /* Left Side: Interactive 3D Models */
+        /* Left Side: Your 3D GitHub Models */
         .item-card { 
             background: white; border: 3px solid #10b981; border-radius: 15px; 
-            height: 120px; cursor: grab; position: relative;
+            height: 130px; cursor: grab; position: relative;
         }
-        model-viewer { width: 100%; height: 100%; pointer-events: none; } /* Disable internal rotate to allow dragging */
+        model-viewer { width: 100%; height: 100%; pointer-events: none; }
 
-        /* Right Side: Disposal Boxes */
-        .bin { 
-            background: #e0e0e0; border: 3px dashed #9e9e9e; border-radius: 15px; 
-            height: 120px; display: flex; align-items: center; justify-content: center;
-            font-weight: bold; padding: 10px; font-size: 14px; transition: 0.3s;
+        /* Right Side: Riddle Boxes */
+        .riddle-box { 
+            background: #ffffff; border: 3px dashed #1b5e20; border-radius: 15px; 
+            min-height: 130px; display: flex; flex-direction: column; align-items: center; 
+            justify-content: center; padding: 10px; font-size: 13px; transition: 0.3s;
+            color: #333; line-height: 1.4;
         }
-        .bin.over { background: #c8e6c9; border-color: #4caf50; transform: scale(1.05); }
-        .bin.correct { background: #4caf50; color: white; border-style: solid; }
+        .riddle-box b { color: #1b5e20; display: block; margin-bottom: 5px; font-size: 15px; }
+        .riddle-box.over { background: #c8e6c9; transform: scale(1.02); }
+        .riddle-box.correct { background: #2e7d32; color: white; border-style: solid; border-color: #fff; }
+        .riddle-box.correct b { color: #fff; }
 
-        #win-msg { display: none; margin-top: 20px; color: #2e7d32; font-weight: bold; font-size: 24px; }
+        #win-msg { display: none; margin-top: 25px; color: #1b5e20; font-size: 28px; font-weight: bold; animation: pop 0.5s; }
+        @keyframes pop { 0% { transform: scale(0.5); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>ECO-SORTER</h1>
-        <p>Drag the item to the correct disposal box!</p>
+        <h1>ECO-RIDDLE CHALLENGE</h1>
+        <p>Solve the riddle on the right to find the home for the items on the left!</p>
     </div>
 
     <div class="game-area">
         <div class="column" id="items">
-            <div class="item-card" draggable="true" id="tree" data-target="nature">
+            <div class="item-card" draggable="true" id="tree" data-target="box-tree">
                 <model-viewer src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/BigTree.glb"></model-viewer>
             </div>
-            <div class="item-card" draggable="true" id="can" data-target="blue">
-                <model-viewer src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cola_Can.glb"></model-viewer>
-            </div>
-            <div class="item-card" draggable="true" id="tire" data-target="center">
+            <div class="item-card" draggable="true" id="tire" data-target="box-tire">
                 <model-viewer src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Tires.glb"></model-viewer>
             </div>
-            <div class="item-card" draggable="true" id="barrel" data-target="hazard">
+            <div class="item-card" draggable="true" id="barrel" data-target="box-barrel">
                 <model-viewer src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/chemical-barrel.glb"></model-viewer>
+            </div>
+            <div class="item-card" draggable="true" id="can" data-target="box-can">
+                <model-viewer src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Cola_Can.glb"></model-viewer>
             </div>
         </div>
 
         <div class="column">
-            <div class="bin" id="hazard">⚠️ HAZARDOUS WASTE<br>(Special Collection)</div>
-            <div class="bin" id="nature">🌳 NATURE ZONE<br>(Leave in Park)</div>
-            <div class="bin" id="blue">♻️ BLUE BIN<br>(Recycle Can)</div>
-            <div class="bin" id="center">🏗️ RECYCLING CENTER<br>(Bulky Tires)</div>
+            <div class="riddle-box" id="box-tire">
+                <b>I am made of rubber...</b>
+                "If you burn me, I release toxic black smoke into the sky. If you throw me in the park, I take 100 years to disappear. I should go to a <u>Recycling Center</u> to be shredded into new roads!"
+            </div>
+            <div class="riddle-box" id="box-tree">
+                <b>I am a tall, living giant...</b>
+                "If you cut me down, birds lose their homes and the air gets dirty. I don't belong in a bin! I belong in the <u>Nature Zone</u> to keep the park breathing."
+            </div>
+            <div class="riddle-box" id="box-can">
+                <b>I am made of shiny metal...</b>
+                "If I'm tossed in the grass, animals might get hurt by my sharp edges. Don't waste me! Put me in the <u>Blue Bin</u> so I can be melted down and made into a new can."
+            </div>
+            <div class="riddle-box" id="box-barrel">
+                <b>I hold oily liquids...</b>
+                "If I leak, I poison the soil and the water where fish live. I am very dangerous! I must be handled by <u>Special Hazardous Waste</u> teams only."
+            </div>
         </div>
     </div>
 
-    <div id="win-msg">Mission Accomplished! You are an Eco-Hero! 🌟</div>
+    <div id="win-msg">🌟 MISSION ACCOMPLISHED! YOU ARE AN ECO-HERO! 🌟</div>
 
     <script>
         let draggedItem = null;
         let matched = 0;
 
         document.querySelectorAll('.item-card').forEach(item => {
-            item.addEventListener('dragstart', function() {
+            item.addEventListener('dragstart', function(e) {
                 draggedItem = this;
-                this.style.opacity = '0.5';
+                setTimeout(() => this.style.opacity = '0.3', 0);
             });
             item.addEventListener('dragend', function() {
                 this.style.opacity = '1';
             });
         });
 
-        document.querySelectorAll('.bin').forEach(bin => {
-            bin.addEventListener('dragover', e => e.preventDefault());
-            bin.addEventListener('dragenter', function() { this.classList.add('over'); });
-            bin.addEventListener('dragleave', function() { this.classList.remove('over'); });
+        document.querySelectorAll('.riddle-box').forEach(box => {
+            box.addEventListener('dragover', e => e.preventDefault());
+            box.addEventListener('dragenter', function() { this.classList.add('over'); });
+            box.addEventListener('dragleave', function() { this.classList.remove('over'); });
 
-            bin.addEventListener('drop', function() {
+            box.addEventListener('drop', function() {
                 this.classList.remove('over');
                 const targetId = draggedItem.getAttribute('data-target');
                 
+                // If correctly matched
                 if (this.id === targetId) {
                     this.classList.add('correct');
-                    this.innerHTML = "✅ CORRECT!";
+                    this.innerHTML = "<b>✅ RIDDLE SOLVED!</b> You've saved the environment from this threat.";
                     draggedItem.style.visibility = 'hidden';
                     matched++;
                     if(matched === 4) document.getElementById('win-msg').style.display = 'block';
                 } else {
-                    alert("Try again! That's not the right place for this item.");
+                    // Logic to prevent dropping into incorrect box
+                    alert("Think again! Read the riddle carefully—that's not where this goes!");
                 }
             });
         });
