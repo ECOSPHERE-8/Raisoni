@@ -6,13 +6,13 @@
     <title>Eco Sphere | Riddle Sorter</title>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
     <style>
-        body { background: #f1f8e9; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 10px; text-align: center; }
+        body { background: #f1f8e9; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 10px; text-align: center; overflow-x: hidden; }
         .header { background: #1b5e20; color: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
         
         .game-area { display: flex; justify-content: space-around; max-width: 900px; margin: 0 auto; gap: 20px; }
         .column { display: flex; flex-direction: column; gap: 15px; flex: 1; }
 
-        /* Left Side: Your 3D GitHub Models */
+        /* Left Side: 3D Models */
         .item-card { 
             background: white; border: 3px solid #10b981; border-radius: 15px; 
             height: 130px; cursor: grab; position: relative;
@@ -24,22 +24,44 @@
             background: #ffffff; border: 3px dashed #1b5e20; border-radius: 15px; 
             min-height: 130px; display: flex; flex-direction: column; align-items: center; 
             justify-content: center; padding: 10px; font-size: 13px; transition: 0.3s;
-            color: #333; line-height: 1.4;
+            color: #333; line-height: 1.4; position: relative;
         }
         .riddle-box b { color: #1b5e20; display: block; margin-bottom: 5px; font-size: 15px; }
         .riddle-box.over { background: #c8e6c9; transform: scale(1.02); }
         .riddle-box.correct { background: #2e7d32; color: white; border-style: solid; border-color: #fff; }
-        .riddle-box.correct b { color: #fff; }
 
-        #win-msg { display: none; margin-top: 25px; color: #1b5e20; font-size: 28px; font-weight: bold; animation: pop 0.5s; }
-        @keyframes pop { 0% { transform: scale(0.5); } 100% { transform: scale(1); } }
+        /* Star Animation Style */
+        .star {
+            position: absolute; font-size: 40px; color: #ffeb3b;
+            pointer-events: none; opacity: 0; z-index: 10;
+        }
+        .pop-star { animation: starPop 0.8s ease-out forwards; }
+        @keyframes starPop {
+            0% { transform: scale(0) rotate(0); opacity: 1; top: 50%; }
+            50% { transform: scale(1.5) rotate(180deg); opacity: 1; top: -20%; }
+            100% { transform: scale(0) rotate(360deg); opacity: 0; top: -50%; }
+        }
+
+        /* Success Overlay */
+        #win-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(27, 94, 32, 0.98); display: none;
+            flex-direction: column; align-items: center; justify-content: center;
+            color: white; z-index: 2000; animation: fadeIn 0.5s;
+        }
+        .nav-btn {
+            background: #ffffff; color: #1b5e20; padding: 15px 40px; border: none;
+            border-radius: 50px; font-size: 18px; font-weight: bold;
+            cursor: pointer; margin: 10px; text-decoration: none; display: inline-block;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h1>ECO-RIDDLE CHALLENGE</h1>
-        <p>Solve the riddle on the right to find the home for the items on the left!</p>
+        <p>Solve the riddle to earn your environmental stars!</p>
     </div>
 
     <div class="game-area">
@@ -60,38 +82,47 @@
 
         <div class="column">
             <div class="riddle-box" id="box-tire">
+                <div class="star">⭐</div>
                 <b>I am made of rubber...</b>
-                "If you burn me, I release toxic black smoke into the sky. If you throw me in the park, I take 100 years to disappear. I should go to a <u>Recycling Center</u> to be shredded into new roads!"
+                "If I am burned, I release toxic black smoke. I should go to a Recycling Center to be made into new roads!"
             </div>
             <div class="riddle-box" id="box-tree">
-                <b>I am a tall, living giant...</b>
-                "If you cut me down, birds lose their homes and the air gets dirty. I don't belong in a bin! I belong in the <u>Nature Zone</u> to keep the park breathing."
+                <div class="star">⭐</div>
+                <b>I am a living giant...</b>
+                "Birds live in my branches and I clean the air. I stay in the Nature Zone to help the park breathe!"
             </div>
             <div class="riddle-box" id="box-can">
-                <b>I am made of shiny metal...</b>
-                "If I'm tossed in the grass, animals might get hurt by my sharp edges. Don't waste me! Put me in the <u>Blue Bin</u> so I can be melted down and made into a new can."
+                <div class="star">⭐</div>
+                <b>I am made of metal...</b>
+                "If you throw me away, I might hurt someone. Put me in the Blue Bin so I can be recycled into a new can!"
             </div>
             <div class="riddle-box" id="box-barrel">
+                <div class="star">⭐</div>
                 <b>I hold oily liquids...</b>
-                "If I leak, I poison the soil and the water where fish live. I am very dangerous! I must be handled by <u>Special Hazardous Waste</u> teams only."
+                "I am very dangerous to soil and water! Only the Special Hazardous Waste team should take me away."
             </div>
         </div>
     </div>
 
-    <div id="win-msg">🌟 MISSION ACCOMPLISHED! YOU ARE AN ECO-HERO! 🌟</div>
+    <div id="win-overlay">
+        <h1 style="font-size: 3rem;">SUPER ECO-HERO! 🌟</h1>
+        <p style="font-size: 1.5rem; margin-bottom: 30px;">You solved all the riddles!</p>
+        <div>
+            <button onclick="location.reload()" class="nav-btn">Play Again</button>
+            <a href="games_page.html" class="nav-btn" style="background: #3b82f6; color: white;">Back to Games</a>
+        </div>
+    </div>
 
     <script>
         let draggedItem = null;
         let matched = 0;
 
         document.querySelectorAll('.item-card').forEach(item => {
-            item.addEventListener('dragstart', function(e) {
+            item.addEventListener('dragstart', function() {
                 draggedItem = this;
                 setTimeout(() => this.style.opacity = '0.3', 0);
             });
-            item.addEventListener('dragend', function() {
-                this.style.opacity = '1';
-            });
+            item.addEventListener('dragend', function() { this.style.opacity = '1'; });
         });
 
         document.querySelectorAll('.riddle-box').forEach(box => {
@@ -103,16 +134,21 @@
                 this.classList.remove('over');
                 const targetId = draggedItem.getAttribute('data-target');
                 
-                // If correctly matched
                 if (this.id === targetId) {
+                    // Correct Match
                     this.classList.add('correct');
-                    this.innerHTML = "<b>✅ RIDDLE SOLVED!</b> You've saved the environment from this threat.";
+                    this.querySelector('.star').classList.add('pop-star'); // Trigger Star
+                    this.innerHTML += "<br><b>✅ SOLVED!</b>";
                     draggedItem.style.visibility = 'hidden';
                     matched++;
-                    if(matched === 4) document.getElementById('win-msg').style.display = 'block';
+                    
+                    if(matched === 4) {
+                        setTimeout(() => {
+                            document.getElementById('win-overlay').style.display = 'flex';
+                        }, 1000);
+                    }
                 } else {
-                    // Logic to prevent dropping into incorrect box
-                    alert("Think again! Read the riddle carefully—that's not where this goes!");
+                    alert("Read the riddle again! That's not the right home for this item.");
                 }
             });
         });
