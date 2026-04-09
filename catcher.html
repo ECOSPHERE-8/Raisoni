@@ -9,17 +9,18 @@
         body { background: #f1f8e9; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 10px; text-align: center; overflow-x: hidden; }
         .header { background: #1b5e20; color: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
         
+        /* Personal greeting style */
+        #user-banner { font-size: 14px; color: #d1fae5; margin-top: 5px; font-weight: bold; }
+
         .game-area { display: flex; justify-content: space-around; max-width: 900px; margin: 0 auto; gap: 20px; }
         .column { display: flex; flex-direction: column; gap: 15px; flex: 1; }
 
-        /* Left Side: 3D Models */
         .item-card { 
             background: white; border: 3px solid #10b981; border-radius: 15px; 
             height: 130px; cursor: grab; position: relative;
         }
         model-viewer { width: 100%; height: 100%; pointer-events: none; }
 
-        /* Right Side: Riddle Boxes */
         .riddle-box { 
             background: #ffffff; border: 3px dashed #1b5e20; border-radius: 15px; 
             min-height: 130px; display: flex; flex-direction: column; align-items: center; 
@@ -30,7 +31,6 @@
         .riddle-box.over { background: #c8e6c9; transform: scale(1.02); }
         .riddle-box.correct { background: #2e7d32; color: white; border-style: solid; border-color: #fff; }
 
-        /* Star Animation Style */
         .star {
             position: absolute; font-size: 40px; color: #ffeb3b;
             pointer-events: none; opacity: 0; z-index: 10;
@@ -42,7 +42,6 @@
             100% { transform: scale(0) rotate(360deg); opacity: 0; top: -50%; }
         }
 
-        /* Success Overlay */
         #win-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(27, 94, 32, 0.98); display: none;
@@ -61,7 +60,7 @@
 
     <div class="header">
         <h1>ECO-RIDDLE CHALLENGE</h1>
-        <p>Solve the riddle to earn your environmental stars!</p>
+        <p id="user-banner">Good luck, Eco-Explorer! Solve the riddles to earn stars.</p>
     </div>
 
     <div class="game-area">
@@ -105,17 +104,26 @@
     </div>
 
     <div id="win-overlay">
-        <h1 style="font-size: 3rem;">SUPER ECO-HERO! 🌟</h1>
+        <h1 style="font-size: 3rem;" id="win-title">SUPER ECO-HERO! 🌟</h1>
         <p style="font-size: 1.5rem; margin-bottom: 30px;">You solved all the riddles!</p>
         <div>
             <button onclick="location.reload()" class="nav-btn">Play Again</button>
-            <a href="games_page.html" class="nav-btn" style="background: #3b82f6; color: white;">Back to Games</a>
+            <a href="dashboard.html" class="nav-btn" style="background: #3b82f6; color: white;">Back to Dashboard</a>
         </div>
     </div>
 
     <script>
         let draggedItem = null;
         let matched = 0;
+
+        // Personalization logic
+        window.onload = function() {
+            const name = localStorage.getItem('currentUser');
+            if (name) {
+                document.getElementById('user-banner').innerText = `Good luck, ${name}! Solve the riddles to earn stars.`;
+                document.getElementById('win-title').innerText = `${name}, You're a SUPER ECO-HERO! 🌟`;
+            }
+        };
 
         document.querySelectorAll('.item-card').forEach(item => {
             item.addEventListener('dragstart', function() {
@@ -135,9 +143,8 @@
                 const targetId = draggedItem.getAttribute('data-target');
                 
                 if (this.id === targetId) {
-                    // Correct Match
                     this.classList.add('correct');
-                    this.querySelector('.star').classList.add('pop-star'); // Trigger Star
+                    this.querySelector('.star').classList.add('pop-star');
                     this.innerHTML += "<br><b>✅ SOLVED!</b>";
                     draggedItem.style.visibility = 'hidden';
                     matched++;
