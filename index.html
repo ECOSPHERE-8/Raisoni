@@ -24,17 +24,10 @@
             text-align: center;
             width: 350px;
             backdrop-filter: blur(10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
-        h1 {
-            color: #1b4332;
-            margin: 0;
-            font-size: 32px;
-        }
-        p {
-            color: #2d6a4f;
-            font-style: italic;
-            margin-bottom: 30px;
-        }
+        h1 { color: #1b4332; margin: 0; font-size: 32px; }
+        p.tagline { color: #2d6a4f; font-style: italic; margin-bottom: 30px; }
         input {
             width: 100%;
             padding: 12px;
@@ -53,26 +46,59 @@
             cursor: pointer;
             font-weight: bold;
             font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover { background: #1b4332; }
+        .toggle-text {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+        .toggle-text a {
+            color: #2d6a4f;
+            text-decoration: none;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <div class="login-box">
         <h1>ECO SPHERE</h1>
-        <p>"Where learning meets fun"</p>
-        <input type="text" id="uname" placeholder="Username" required>
-        <input type="password" id="pword" placeholder="Password" required>
-        <button onclick="handleLogin()">Login</button>
+        <p class="tagline">"Where learning meets fun"</p>
+        
+        <div id="form-container">
+            <input type="text" id="uname" placeholder="Username" required>
+            <input type="password" id="pword" placeholder="Password" required>
+            <button onclick="handleLogin()">Login</button>
+            <div class="toggle-text">
+                New user? <a href="#" onclick="toggleForm()">Register here 🌿</a>
+            </div>
+        </div>
     </div>
 
     <script>
+        // Simple toggle for presentation
+        function toggleForm() {
+            const btn = document.querySelector('button');
+            const toggleLink = document.querySelector('.toggle-text');
+            if (btn.innerText === "Login") {
+                btn.innerText = "Register";
+                toggleLink.innerHTML = 'Already have an account? <a href="#" onclick="toggleForm()">Login here 🌿</a>';
+            } else {
+                btn.innerText = "Login";
+                toggleLink.innerHTML = 'New user? <a href="#" onclick="toggleForm()">Register here 🌿</a>';
+            }
+        }
+
         function handleLogin() {
             const u = document.getElementById('uname').value;
             if (u.trim() !== "") {
+                // Save name to browser memory
                 localStorage.setItem('currentUser', u);
+                // Redirect to dashboard
                 window.location.href = "dashboard.html";
             } else {
-                alert("Please enter username 🌿");
+                alert("Please enter a name to start your journey! 🌿");
             }
         }
     </script>
