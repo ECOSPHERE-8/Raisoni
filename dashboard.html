@@ -32,42 +32,41 @@
         .header { margin-top: 30px; text-align: center; z-index: 10; }
         h1 { font-size: 3rem; color: #10b981; text-shadow: 0 0 15px #10b981; }
 
-        /* IMAGE CONTAINER: This makes the image "Move in its own place" */
+        /* IMAGE CONTAINER */
         .earth-display {
             perspective: 1000px;
-            margin: 40px 0;
+            margin: 20px 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 350px;
+            height: 380px; /* Increased height to give room for movement */
         }
 
         .floating-earth {
-            width: 300px; /* Adjust size based on your image */
+            width: 320px; 
             height: auto;
             filter: drop-shadow(0 0 30px rgba(16, 185, 129, 0.6));
             
-            /* COMBINED ANIMATION: Floating Up/Down + Subtle Rotation */
+            /* The movement you requested: Up/Down and subtle tilting */
             animation: floatUpDown 4s ease-in-out infinite, 
                        tiltRotate 10s linear infinite;
         }
 
-        /* Animation 1: Move Up and Down */
+        /* Movement Logic */
         @keyframes floatUpDown {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-30px); }
         }
 
-        /* Animation 2: Subtle 3D Tilt (GIS Style) */
         @keyframes tiltRotate {
-            0% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-15px) rotate(5deg); }
-            50% { transform: translateY(-30px) rotate(0deg); }
-            75% { transform: translateY(-15px) rotate(-5deg); }
-            100% { transform: translateY(0) rotate(0deg); }
+            0% { rotate: 0deg; }
+            25% { rotate: 5deg; }
+            50% { rotate: 0deg; }
+            75% { rotate: -5deg; }
+            100% { rotate: 0deg; }
         }
 
-        /* Glassmorphism Buttons */
+        /* Menu Grid */
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -92,10 +91,11 @@
         .card:hover {
             background: rgba(16, 185, 129, 0.2);
             border-color: #10b981;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+            transform: scale(1.05);
         }
 
         #user-greeting { font-size: 1.2rem; margin-bottom: 20px; color: #d1fae5; }
+        #user-name { color: #10b981; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -106,7 +106,7 @@
     </div>
 
     <div class="earth-display">
-        <img src="split_earth.png" alt="Eco Earth" class="floating-earth">
+        <img src="split_earth.png.png" alt="Eco Earth" class="floating-earth">
     </div>
 
     <div class="menu-grid">
@@ -117,8 +117,8 @@
     </div>
 
     <script>
-        // Personalization
-        const name = localStorage.getItem('currentUser') || 'Eco-Explorer';
+        // Set the name from localStorage
+        const name = localStorage.getItem('currentUser') || 'Prajakta';
         document.getElementById('user-name').innerText = name;
     </script>
 </body>
