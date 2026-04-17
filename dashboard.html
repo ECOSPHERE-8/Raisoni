@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eco Sphere | AR Dashboard</title>
+    <title>Eco Sphere | Dashboard</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             overflow: hidden;
             
-            /* --- THE BACKGROUND IMAGE --- */
-            /* Using a light overlay to ensure your text is still easy to read */
-            background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), 
-                        url('background.jpg'); /* Ensure this file is in your folder */
+            /* --- SUBTLE ENVIRONMENT BACKGROUND --- */
+            /* Using a clean, light nature image from a reliable source */
+            background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), 
+                        url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=2000');
             background-size: cover;
             background-position: center;
         }
 
-        .dashboard-container {
+        .dashboard-wrapper {
             width: 100%;
             height: 100%;
             display: flex;
@@ -31,84 +31,95 @@
             align-items: center;
             justify-content: space-around;
             padding: 40px 20px;
+            position: relative;
+            z-index: 5;
         }
 
         .header h1 {
             font-size: 3.5rem;
             color: #10b981;
-            text-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             letter-spacing: 2px;
         }
 
-        .welcome-msg {
-            color: #333;
+        .welcome-text {
             font-size: 1.2rem;
-            font-weight: 500;
+            color: #333;
+            margin-top: 5px;
         }
 
-        /* --- THE CENTRAL EARTH (UP & DOWN ANIMATION) --- */
-        .earth-circle {
-            width: 320px; /* Adjusted to match your screenshot size */
-            height: 320px;
+        /* --- THE CENTRAL EARTH (UP & DOWN IN PLACE) --- */
+        .earth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .floating-earth {
+            width: 300px;
+            height: 300px;
             border-radius: 50%;
             object-fit: cover;
             border: 6px solid #10b981;
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
-            /* This makes it float at its own place */
-            animation: floatUpAndDown 4s ease-in-out infinite;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            /* Floats strictly up and down */
+            animation: moveUpDown 4s ease-in-out infinite;
         }
 
-        @keyframes floatUpAndDown {
+        @keyframes moveUpDown {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-30px); }
+            50% { transform: translateY(-25px); }
         }
 
-        /* --- BUTTONS --- */
+        /* --- CLEAN NAVIGATION CARDS --- */
         .button-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            gap: 25px;
             width: 100%;
-            max-width: 650px;
+            max-width: 600px;
         }
 
-        .nav-card {
-            background: rgba(255, 255, 255, 0.85); /* Light glass effect */
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(16, 185, 129, 0.3);
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(16, 185, 129, 0.2);
             border-radius: 15px;
             padding: 25px;
             text-decoration: none;
             color: #2d3748;
             text-align: center;
-            font-size: 1.3rem;
-            font-weight: 600;
+            font-size: 1.2rem;
+            font-weight: bold;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
 
-        .nav-card:hover {
+        .card:hover {
             background: #10b981;
             color: white;
             transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
         }
     </style>
 </head>
 <body>
 
-    <div class="dashboard-container">
+    <div class="dashboard-wrapper">
         
-        <div class="header">
+        <div class="header" style="text-align: center;">
             <h1>ECO SPHERE</h1>
-            <p class="welcome-msg">Welcome, <b>Prajakta</b>!</p>
+            <p class="welcome-text">Welcome, <b>Prajakta</b>!</p>
         </div>
 
-        <img src="split_earth.png" alt="Eco Earth" class="earth-circle">
+        <div class="earth-container">
+            <img src="split_earth.png" alt="Eco Earth" class="floating-earth">
+        </div>
 
         <div class="button-grid">
-            <a href="learn.html" class="nav-card">📚 Learn</a>
-            <a href="practice.html" class="nav-card">🧠 Practice</a>
-            <a href="games.html" class="nav-card">🎮 AR Games</a>
-            <a href="about.html" class="nav-card">🌿 About</a>
+            <a href="learn.html" class="card">📚 Learn</a>
+            <a href="practice.html" class="card">🧠 Practice</a>
+            <a href="games.html" class="card">🎮 AR Games</a>
+            <a href="about.html" class="card">🌿 About</a>
         </div>
 
     </div>
