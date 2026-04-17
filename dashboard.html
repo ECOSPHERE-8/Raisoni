@@ -7,93 +7,85 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        /* The body is just a container; we don't put the black color here */
         body {
             font-family: 'Segoe UI', sans-serif;
+            background: #000; /* Solid Black */
             color: white;
             min-height: 100vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* --- THE ACTUAL BASE LAYER --- */
-        .base-black {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #000;
-            z-index: -10;
-        }
-
-        /* --- ANIMATION CONTAINERS --- */
-        .animation-container {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -5; /* Sitting on top of black, but behind buttons */
-            display: flex;
-        }
-
-        /* Pollution Side (Left) */
-        .side-pollution {
-            width: 50%; height: 100%;
-            position: relative;
-            background: linear-gradient(to right, rgba(40,40,40,0.3), transparent);
-        }
-
-        .smoke {
-            position: absolute;
-            bottom: -150px;
-            background: radial-gradient(circle, rgba(120, 120, 120, 0.4) 0%, transparent 70%);
-            border-radius: 50%;
-            filter: blur(30px);
-            animation: riseUp 10s infinite ease-in;
-        }
-
-        @keyframes riseUp {
-            0% { transform: translateY(0) scale(1); opacity: 0; }
-            20% { opacity: 0.6; }
-            100% { transform: translateY(-120vh) scale(3); opacity: 0; }
-        }
-
-        /* Clean Side (Right) */
-        .side-clean {
-            width: 50%; height: 100%;
-            position: relative;
-            background: linear-gradient(to left, rgba(16, 185, 129, 0.15), transparent);
-        }
-
-        .glow {
-            position: absolute;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.5) 0%, transparent 70%);
-            border-radius: 50%;
-            filter: blur(40px);
-            animation: pulse 6s infinite ease-in-out;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.3; }
-            50% { transform: scale(1.8); opacity: 0.7; }
-        }
-
-        /* --- MAIN UI CONTENT --- */
-        .dashboard-content {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 50px;
-        }
-
-        h1 { font-size: 3.5rem; color: #10b981; text-shadow: 0 0 20px rgba(16,185,129,0.8); }
-
-        .earth-wrapper {
-            margin: 40px 0;
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
+        }
+
+        /* --- THE MAIN WRAPPER --- */
+        /* This container holds everything. If this shows, the animations show. */
+        .app-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 40px;
+        }
+
+        /* --- POLLUTION & NATURE OVERLAYS (Integrated) --- */
+        .visual-effects {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; /* Allows clicking buttons through it */
+            z-index: 1; 
+        }
+
+        /* Gray Smoke (Left Side) */
+        .smoke-cloud {
+            position: absolute;
+            bottom: -100px;
+            left: 5%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(150, 150, 150, 0.25) 0%, transparent 70%);
+            filter: blur(40px);
+            animation: rise 8s infinite ease-in;
+        }
+
+        @keyframes rise {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            50% { opacity: 0.6; }
+            100% { transform: translateY(-110vh) scale(2); opacity: 0; }
+        }
+
+        /* Green Vitality (Right Side) */
+        .green-pulse {
+            position: absolute;
+            top: 20%;
+            right: 5%;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.4) 0%, transparent 70%);
+            filter: blur(50px);
+            animation: breathe 6s infinite ease-in-out;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.4); opacity: 0.7; }
+        }
+
+        /* --- UI CONTENT --- */
+        .content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+
+        h1 { font-size: 3.5rem; color: #10b981; text-shadow: 0 0 20px #10b981; }
+
+        .earth-box {
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
         }
 
         .earth-circle {
@@ -101,73 +93,64 @@
             border-radius: 50%;
             object-fit: cover;
             border: 4px solid #10b981;
-            box-shadow: 0 0 40px rgba(16, 185, 129, 0.6);
-            animation: floating 5s ease-in-out infinite;
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.7);
+            animation: float 4s ease-in-out infinite;
         }
 
-        @keyframes floating {
+        @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-25px); }
+            50% { transform: translateY(-20px); }
         }
 
-        .button-grid {
+        .menu {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr 1fr;
             gap: 20px;
-            width: 90%;
+            width: 90vw;
             max-width: 600px;
         }
 
-        .nav-card {
-            background: rgba(255, 255, 255, 0.07);
+        .btn {
+            background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(15px);
             border: 1px solid rgba(16, 185, 129, 0.4);
-            padding: 30px;
-            border-radius: 20px;
-            text-align: center;
+            padding: 25px;
+            border-radius: 15px;
             text-decoration: none;
             color: white;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: 0.3s;
         }
 
-        .nav-card:hover {
-            background: rgba(16, 185, 129, 0.2);
-            border-color: #10b981;
-            transform: scale(1.05);
-        }
+        .btn:hover { background: rgba(16, 185, 129, 0.2); }
     </style>
 </head>
 <body>
 
-    <div class="base-black"></div>
-
-    <div class="animation-container">
-        <div class="side-pollution">
-            <div class="smoke" style="left: 10%; width: 200px; height: 200px; animation-delay: 0s;"></div>
-            <div class="smoke" style="left: 30%; width: 150px; height: 150px; animation-delay: 3s;"></div>
-            <div class="smoke" style="left: 5%; width: 250px; height: 250px; animation-delay: 6s;"></div>
-        </div>
-        <div class="side-clean">
-            <div class="glow" style="top: 20%; right: 10%; width: 200px; height: 200px; animation-delay: 0s;"></div>
-            <div class="glow" style="top: 60%; right: 25%; width: 150px; height: 150px; animation-delay: 2s;"></div>
-            <div class="glow" style="bottom: 10%; right: 5%; width: 300px; height: 300px; animation-delay: 4s;"></div>
-        </div>
-    </div>
-
-    <div class="dashboard-content">
-        <h1>ECO SPHERE</h1>
-        <p style="margin-bottom: 10px; font-size: 1.2rem;">Welcome, <span style="color: #10b981; font-weight: bold;">Prajakta</span>!</p>
-
-        <div class="earth-wrapper">
-            <img src="split_earth.png.png" alt="Earth" class="earth-circle">
+    <div class="app-container">
+        
+        <div class="visual-effects">
+            <div class="smoke-cloud" style="left: 5%; animation-delay: 0s;"></div>
+            <div class="smoke-cloud" style="left: 20%; animation-delay: 4s; width: 200px; height: 200px;"></div>
+            <div class="green-pulse" style="top: 10%; right: 5%; animation-delay: 0s;"></div>
+            <div class="green-pulse" style="bottom: 10%; right: 15%; animation-delay: 3s; width: 250px; height: 250px;"></div>
         </div>
 
-        <div class="button-grid">
-            <a href="learn.html" class="nav-card"><h3>📚 Learn</h3></a>
-            <a href="practice.html" class="nav-card"><h3>🧠 Practice</h3></a>
-            <a href="games.html" class="nav-card"><h3>🎮 AR Games</h3></a>
-            <a href="about.html" class="nav-card"><h3>🌿 About</h3></a>
+        <div class="content">
+            <h1>ECO SPHERE</h1>
+            <p style="margin-bottom: 15px;">Welcome, <span style="color: #10b981; font-weight: bold;">Prajakta</span>!</p>
+
+            <div class="earth-box">
+                <img src="split_earth.png.png" alt="Eco Earth" class="earth-circle">
+            </div>
+
+            <div class="menu">
+                <a href="learn.html" class="btn"><h3>📚 Learn</h3></a>
+                <a href="practice.html" class="btn"><h3>🧠 Practice</h3></a>
+                <a href="games.html" class="btn"><h3>🎮 AR Games</h3></a>
+                <a href="about.html" class="btn"><h3>🌿 About</h3></a>
+            </div>
         </div>
+
     </div>
 
 </body>
