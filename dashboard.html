@@ -9,25 +9,20 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
             height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: white;
-            overflow: hidden; /* Keeps background movements from affecting layout */
+            overflow: hidden;
             
-            /* --- THE LIGHTER BACKGROUND LAYER --- */
-            /* This gradient acts as a translucent 'darkener' to ensure text is visible over a light image */
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-                        url('background.png'); /* Exact filename requested */
+            /* --- LIGHT PROFESSIONAL ENVIRONMENT BACKGROUND --- */
+            background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), 
+                        url('https://images.unsplash.com/photo-1542601906990-b4d3fb773b09?auto=format&fit=crop&q=80&w=2000');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
         }
 
-        /* Centered Content Wrapper (z-index ensures it stays in front) */
-        .content-layer {
+        .dashboard-container {
             position: relative;
             z-index: 10;
             width: 100%;
@@ -42,81 +37,83 @@
         .header h1 {
             font-size: 3.5rem;
             color: #10b981;
-            text-shadow: 0 0 20px rgba(16, 185, 129, 0.8);
+            text-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
             letter-spacing: 2px;
         }
 
-        /* THE FLOATING CENTER EARTH */
-        .main-earth-view {
-            width: 280px;
-            height: 280px;
+        .welcome-msg {
+            color: #333;
+            font-size: 1.2rem;
+            margin-top: 5px;
+        }
+
+        /* --- THE CIRCLE EARTH FLOATING ANIMATION --- */
+        .earth-circle {
+            width: 300px;
+            height: 300px;
             border-radius: 50%;
-            border: 4px solid rgba(16, 185, 129, 0.6);
-            box-shadow: 0 0 50px rgba(16, 185, 129, 0.5);
             object-fit: cover;
-            
-            /* Add subtle animation so it feels like a high-tech hologram */
-            animation: floatUpDown 5s ease-in-out infinite;
+            border: 5px solid #10b981;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            /* Floats up and down at its own place */
+            animation: floatInPlace 4s ease-in-out infinite;
         }
 
-        @keyframes floatUpDown {
+        @keyframes floatInPlace {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+            50% { transform: translateY(-25px); }
         }
 
-        /* GLASSMORPHISM MENU - Stronger blur for clarity */
-        .menu-grid {
+        /* --- CLEAN MODERN BUTTONS --- */
+        .button-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 20px;
             width: 100%;
-            max-width: 600px;
+            max-width: 650px;
         }
 
-        .nav-btn {
-            background: rgba(255, 255, 255, 0.08); /* Faded white base */
-            
-            /* Stronger blur makes background details visible but softened */
-            backdrop-filter: blur(20px); 
-            -webkit-backdrop-filter: blur(20px);
-            
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
+        .nav-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 18px;
             padding: 25px;
             text-decoration: none;
-            color: white;
+            color: #2d3748;
             text-align: center;
-            transition: 0.3s;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
 
-        .nav-btn:hover {
-            background: rgba(16, 185, 129, 0.2);
-            transform: scale(1.05);
-            border-color: #10b981;
+        .nav-card:hover {
+            background: #10b981;
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
         }
 
-        /* Personalization Text */
-        .welcome { font-size: 1.2rem; margin-top: 10px; }
-        .name { color: #10b981; font-weight: bold; }
+        .nav-card h3 { font-size: 1.4rem; }
     </style>
 </head>
 <body>
 
-    <div class="content-layer">
+    <div class="dashboard-container">
         
         <div class="header">
             <h1>ECO SPHERE</h1>
-            <p class="welcome">Welcome, <span class="name">Prajakta</span>!</p>
+            <p class="welcome-msg">Welcome, <b>Prajakta</b>!</p>
         </div>
 
-        <img src="split_earth.png.png" alt="Earth Projection" class="main-earth-view">
+        <img src="split_earth.png.png" alt="Eco Earth" class="earth-circle">
 
-        <div class="menu-grid">
-            <a href="learn.html" class="nav-btn"><h3>📚 Learn</h3></a>
-            <a href="practice.html" class="nav-btn"><h3>🧠 Practice</h3></a>
-            <a href="games.html" class="nav-btn"><h3>🎮 AR Games</h3></a>
-            <a href="about.html" class="nav-btn"><h3>🌿 About</h3></a>
+        <div class="button-grid">
+            <a href="learn.html" class="nav-card"><h3>📚 Learn</h3></a>
+            <a href="practice.html" class="nav-card"><h3>🧠 Practice</h3></a>
+            <a href="games.html" class="nav-card"><h3>🎮 AR Games</h3></a>
+            <a href="about.html" class="nav-card"><h3>🌿 About</h3></a>
         </div>
 
     </div>
