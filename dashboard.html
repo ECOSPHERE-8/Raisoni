@@ -8,23 +8,28 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             color: white;
-            overflow: hidden;
+            overflow: hidden; /* Keeps background movements from affecting layout */
             
-            /* --- INTEGRATED BACKGROUND IMAGE --- */
+            /* --- THE LIGHTER BACKGROUND LAYER --- */
+            /* This gradient acts as a translucent 'darkener' to ensure text is visible over a light image */
             background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-                        url('http://googleusercontent.com/image_collection/image_retrieval/11772822659580785598_0');
+                        url('background.png'); /* Exact filename requested */
             background-size: cover;
             background-position: center;
+            background-attachment: fixed;
         }
 
-        .container {
+        /* Centered Content Wrapper (z-index ensures it stays in front) */
+        .content-layer {
+            position: relative;
+            z-index: 10;
             width: 100%;
             height: 100%;
             display: flex;
@@ -32,7 +37,6 @@
             align-items: center;
             justify-content: space-around;
             padding: 40px 20px;
-            backdrop-filter: blur(3px);
         }
 
         .header h1 {
@@ -42,35 +46,40 @@
             letter-spacing: 2px;
         }
 
-        /* CENTER CIRCULAR EARTH */
-        .earth-circle {
-            width: 300px;
-            height: 300px;
+        /* THE FLOATING CENTER EARTH */
+        .main-earth-view {
+            width: 280px;
+            height: 280px;
             border-radius: 50%;
             border: 4px solid rgba(16, 185, 129, 0.6);
             box-shadow: 0 0 50px rgba(16, 185, 129, 0.5);
             object-fit: cover;
-            animation: floating 5s ease-in-out infinite;
+            
+            /* Add subtle animation so it feels like a high-tech hologram */
+            animation: floatUpDown 5s ease-in-out infinite;
         }
 
-        @keyframes floating {
+        @keyframes floatUpDown {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-20px); }
         }
 
-        /* GLASSMORPHISM BUTTONS */
+        /* GLASSMORPHISM MENU - Stronger blur for clarity */
         .menu-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, 1fr);
             gap: 20px;
             width: 100%;
             max-width: 600px;
         }
 
         .nav-btn {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.08); /* Faded white base */
+            
+            /* Stronger blur makes background details visible but softened */
+            backdrop-filter: blur(20px); 
             -webkit-backdrop-filter: blur(20px);
+            
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             padding: 25px;
@@ -83,25 +92,25 @@
 
         .nav-btn:hover {
             background: rgba(16, 185, 129, 0.2);
-            transform: translateY(-5px);
+            transform: scale(1.05);
             border-color: #10b981;
         }
 
+        /* Personalization Text */
         .welcome { font-size: 1.2rem; margin-top: 10px; }
         .name { color: #10b981; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <div class="content-layer">
         
         <div class="header">
             <h1>ECO SPHERE</h1>
             <p class="welcome">Welcome, <span class="name">Prajakta</span>!</p>
         </div>
 
-        <img src="http://googleusercontent.com/image_collection/image_retrieval/11772822659580785598_0" 
-             alt="3D Earth" class="earth-circle">
+        <img src="split_earth.png.png" alt="Earth Projection" class="main-earth-view">
 
         <div class="menu-grid">
             <a href="learn.html" class="nav-btn"><h3>📚 Learn</h3></a>
