@@ -9,64 +9,125 @@
         
         body {
             font-family: 'Segoe UI', sans-serif;
-            background: #050a08; /* Deep dark green/black */
             color: white;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
+            position: relative;
         }
 
-        /* AR "Scan" Grid Effect */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+        /* --- THE ADVANCED ANIMATED BACKGROUND --- */
+        
+        /* 1. Base Layer: Dark with AR Grid */
+        .ar-background {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #050a08; /* Deep dark green */
+            z-index: -3; /* Place behind everything */
+        }
+        .ar-background::before {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-image: linear-gradient(rgba(16, 185, 129, 0.05) 1px, transparent 1px),
                               linear-gradient(90deg, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
             background-size: 50px 50px;
-            z-index: -1;
         }
 
-        .header { margin-top: 30px; text-align: center; z-index: 10; }
-        h1 { font-size: 3rem; color: #10b981; text-shadow: 0 0 15px #10b981; }
+        /* 2. Left Split: The Animated Polluted Zone (Factory Fumes) */
+        .pollution-zone {
+            position: fixed; top: 0; left: 0; width: 50%; height: 100%;
+            overflow: hidden; z-index: -2;
+            filter: blur(5px);
+        }
+        .fumes {
+            position: absolute; bottom: 0; left: 10%; width: 80%; height: 0%;
+            background: linear-gradient(to top, #333 0%, #000 70%, transparent 100%);
+            opacity: 0.8;
+            border-radius: 50% 50% 0 0;
+            animation: riseAndFade 12s infinite ease-out;
+        }
+        .fumes:nth-child(2) { animation-delay: 3s; left: 25%; }
+        .fumes:nth-child(3) { animation-delay: 6s; left: 45%; }
+        .fumes:nth-child(4) { animation-delay: 9s; left: 60%; }
 
-        /* IMAGE CONTAINER */
+        @keyframes riseAndFade {
+            0% { height: 0%; opacity: 0; }
+            10% { height: 30%; opacity: 0.8; }
+            50% { height: 80%; opacity: 0.6; }
+            100% { height: 120%; opacity: 0; transform: translateY(-50px); }
+        }
+
+        /* 3. Right Split: The Animated Clean Zone (Green Vitality Circles) */
+        .clean-zone {
+            position: fixed; top: 0; right: 0; width: 50%; height: 100%;
+            overflow: hidden; z-index: -2;
+            filter: blur(10px);
+        }
+        .vitality {
+            position: absolute; bottom: 10%; width: 100px; height: 100px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: pulseAndFade 8s infinite ease-in-out;
+        }
+        .vitality:nth-child(1) { bottom: 10%; left: 10%; animation-delay: 0s; }
+        .vitality:nth-child(2) { bottom: 30%; left: 40%; animation-delay: 2s; width: 150px; height: 150px; }
+        .vitality:nth-child(3) { bottom: 60%; left: 20%; animation-delay: 4s; }
+        .vitality:nth-child(4) { bottom: 80%; left: 60%; animation-delay: 6s; width: 120px; height: 120px; }
+
+        @keyframes pulseAndFade {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 0.9; }
+        }
+
+        /* --- THE DASHBOARD CONTENT (FOREGROUND) --- */
+
+        .header { margin-top: 30px; text-align: center; z-index: 10; animation: hologramPulse 5s infinite; }
+        h1 { font-size: 3rem; color: #10b981; text-shadow: 0 0 15px #10b981; letter-spacing: 2px;}
+
+        /* CENTRAL EARTH DISPLAY */
         .earth-display {
-            perspective: 1000px;
             margin: 20px 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 380px; /* Increased height to give room for movement */
+            height: 380px;
+            z-index: 10;
         }
 
-        .floating-earth {
-            width: 320px; 
-            height: auto;
-            filter: drop-shadow(0 0 30px rgba(16, 185, 129, 0.6));
+        /* CIRCULAR EARTH with Animated Floating & Glow */
+        .floating-earth-circle {
+            width: 320px; height: 320px; /* Perfect square base */
+            object-fit: cover; /* Important for circular crop */
             
-            /* The movement you requested: Up/Down and subtle tilting */
+            /* --- THE CIRCLE TRICK --- */
+            border-radius: 50%;
+            
+            /* Enhanced holographic glow */
+            border: 5px solid rgba(16, 185, 129, 0.4);
+            filter: drop-shadow(0 0 30px rgba(16, 185, 129, 0.8));
+            
+            /* Movement: Floating + Shaking/Tilting */
             animation: floatUpDown 4s ease-in-out infinite, 
-                       tiltRotate 10s linear infinite;
+                       holoShake 6s infinite;
         }
 
-        /* Movement Logic */
+        /* Movement Keyframes */
         @keyframes floatUpDown {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-30px); }
         }
-
-        @keyframes tiltRotate {
-            0% { rotate: 0deg; }
-            25% { rotate: 5deg; }
-            50% { rotate: 0deg; }
-            75% { rotate: -5deg; }
-            100% { rotate: 0deg; }
+        @keyframes holoShake {
+            0%, 100% { rotate: 0deg; }
+            33% { rotate: 2deg; }
+            66% { rotate: -2deg; }
+        }
+        @keyframes hologramPulse {
+            0%, 100% { opacity: 0.9; }
+            50% { opacity: 1; text-shadow: 0 0 25px #10b981;}
         }
 
-        /* Menu Grid */
+        /* Menu Grid (Matches original layout) */
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -74,6 +135,7 @@
             width: 90%;
             max-width: 600px;
             padding-bottom: 50px;
+            z-index: 10;
         }
 
         .card {
@@ -92,21 +154,36 @@
             background: rgba(16, 185, 129, 0.2);
             border-color: #10b981;
             transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
         }
 
         #user-greeting { font-size: 1.2rem; margin-bottom: 20px; color: #d1fae5; }
-        #user-name { color: #10b981; font-weight: bold; }
+        #user-name { color: #10b981; font-weight: bold; text-shadow: 0 0 5px #10b981; }
     </style>
 </head>
 <body>
 
+    <div class="ar-background"></div>
+    <div class="pollution-zone">
+        <div class="fumes"></div>
+        <div class="fumes"></div>
+        <div class="fumes"></div>
+        <div class="fumes"></div>
+    </div>
+    <div class="clean-zone">
+        <div class="vitality"></div>
+        <div class="vitality"></div>
+        <div class="vitality"></div>
+        <div class="vitality"></div>
+    </div>
+
     <div class="header">
         <h1>ECO SPHERE</h1>
-        <p id="user-greeting">Welcome, <span id="user-name">Explorer</span>!</p>
+        <p id="user-greeting">Welcome, <span id="user-name">Prajakta</span>!</p>
     </div>
 
     <div class="earth-display">
-        <img src="split_earth.png.png" alt="Eco Earth" class="floating-earth">
+        <img src="split_earth.png.png" alt="Eco Earth Circle" class="floating-earth-circle">
     </div>
 
     <div class="menu-grid">
@@ -117,7 +194,7 @@
     </div>
 
     <script>
-        // Set the name from localStorage
+        // Set Prajakta's name from localStorage
         const name = localStorage.getItem('currentUser') || 'Prajakta';
         document.getElementById('user-name').innerText = name;
     </script>
