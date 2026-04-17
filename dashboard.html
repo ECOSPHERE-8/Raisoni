@@ -3,28 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eco Sphere | Dashboard</title>
+    <title>Eco Sphere | AR Dashboard</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             overflow: hidden;
             
-            /* --- LIGHT PROFESSIONAL ENVIRONMENT BACKGROUND --- */
+            /* --- THE BACKGROUND IMAGE --- */
+            /* Using a light overlay to ensure your text is still easy to read */
             background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), 
-                        url('https://images.unsplash.com/photo-1542601906990-b4d3fb773b09?auto=format&fit=crop&q=80&w=2000');
+                        url('background.jpg'); /* Ensure this file is in your folder */
             background-size: cover;
             background-position: center;
         }
 
         .dashboard-container {
-            position: relative;
-            z-index: 10;
             width: 100%;
             height: 100%;
             display: flex;
@@ -37,34 +36,34 @@
         .header h1 {
             font-size: 3.5rem;
             color: #10b981;
-            text-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+            text-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
             letter-spacing: 2px;
         }
 
         .welcome-msg {
             color: #333;
             font-size: 1.2rem;
-            margin-top: 5px;
+            font-weight: 500;
         }
 
-        /* --- THE CIRCLE EARTH FLOATING ANIMATION --- */
+        /* --- THE CENTRAL EARTH (UP & DOWN ANIMATION) --- */
         .earth-circle {
-            width: 300px;
-            height: 300px;
+            width: 320px; /* Adjusted to match your screenshot size */
+            height: 320px;
             border-radius: 50%;
             object-fit: cover;
-            border: 5px solid #10b981;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-            /* Floats up and down at its own place */
-            animation: floatInPlace 4s ease-in-out infinite;
+            border: 6px solid #10b981;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
+            /* This makes it float at its own place */
+            animation: floatUpAndDown 4s ease-in-out infinite;
         }
 
-        @keyframes floatInPlace {
+        @keyframes floatUpAndDown {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-25px); }
+            50% { transform: translateY(-30px); }
         }
 
-        /* --- CLEAN MODERN BUTTONS --- */
+        /* --- BUTTONS --- */
         .button-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -74,28 +73,24 @@
         }
 
         .nav-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.85); /* Light glass effect */
+            backdrop-filter: blur(8px);
             border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 18px;
+            border-radius: 15px;
             padding: 25px;
             text-decoration: none;
             color: #2d3748;
             text-align: center;
-            font-weight: bold;
+            font-size: 1.3rem;
+            font-weight: 600;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
 
         .nav-card:hover {
             background: #10b981;
             color: white;
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
         }
-
-        .nav-card h3 { font-size: 1.4rem; }
     </style>
 </head>
 <body>
@@ -107,13 +102,13 @@
             <p class="welcome-msg">Welcome, <b>Prajakta</b>!</p>
         </div>
 
-        <img src="split_earth.png.png" alt="Eco Earth" class="earth-circle">
+        <img src="split_earth.png" alt="Eco Earth" class="earth-circle">
 
         <div class="button-grid">
-            <a href="learn.html" class="nav-card"><h3>📚 Learn</h3></a>
-            <a href="practice.html" class="nav-card"><h3>🧠 Practice</h3></a>
-            <a href="games.html" class="nav-card"><h3>🎮 AR Games</h3></a>
-            <a href="about.html" class="nav-card"><h3>🌿 About</h3></a>
+            <a href="learn.html" class="nav-card">📚 Learn</a>
+            <a href="practice.html" class="nav-card">🧠 Practice</a>
+            <a href="games.html" class="nav-card">🎮 AR Games</a>
+            <a href="about.html" class="nav-card">🌿 About</a>
         </div>
 
     </div>
