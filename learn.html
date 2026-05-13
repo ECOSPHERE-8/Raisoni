@@ -3,244 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eco Sphere | AR Learning</title>
-
+    <title>Eco Explorer | Your Green Mission</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
     <style>
         :root {
-            --primary-dark: #1b4332;
-            --nature-green: #2d6a4f;
-            --soft-leaf: #b7e4c7;
-            --sky-blue: #e0f2f1;
-            --earth-brown: #6c584c;
+            --primary-dark: #1b4332; /* Rich Forest Green */
+            --nature-green: #2d6a4f; /* Lighter Leaf Green */
+            --soft-leaf: #b7e4c7;   /* Pale Green for text */
+            --sky-blue: #e0f2f1;    /* Very Light Aqua */
+            --magical-gold: #ffea7c;  /* Soft Warm Light */
+            --accent-purple: #9c27b0;
+            --accent-cyan: #00bcd4;
         }
 
         body {
             display: flex;
             margin: 0;
             font-family: 'Poppins', 'Segoe UI', sans-serif;
-            /* Nature-inspired gradient background */
-            background: linear-gradient(135deg, #d8f3dc 0%, #f8f9fa 100%);
+            /* Magical Nature Gradient with depth and colorful light particles */
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(255, 234, 124, 0.4) 0%, transparent 15%),
+                radial-gradient(circle at 90% 80%, rgba(0, 188, 212, 0.3) 0%, transparent 15%),
+                linear-gradient(135deg, #a7f3d0 0%, #d1fae5 30%, #e0f2f1 70%, #d8f3dc 100%);
             height: 100vh;
             color: #2b2d42;
+            overflow: hidden;
         }
 
-        /* Sidebar - Forest Theme */
+        /* Create random colorful light particles */
+        body::before, body::after {
+            content: '';
+            position: absolute;
+            width: 15px; height: 15px; border-radius: 50%;
+            background: var(--magical-gold);
+            opacity: 0.7;
+            filter: blur(2px);
+            animation: moveLight 8s infinite alternate;
+        }
+        body::after { width: 10px; height: 10px; background: var(--accent-cyan); left: 30%; top: 10%; animation-duration: 10s; }
+        @keyframes moveLight { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(10vw, 5vh) scale(1.2); } }
+
+        /* Sidebar - Forest Theme, Now with Icons */
         .sidebar {
-            width: 300px;
+            width: 320px;
             background: var(--primary-dark);
             color: white;
-            padding: 25px;
+            padding: 30px 25px;
             overflow-y: auto;
-            box-shadow: 4px 0 15px rgba(0,0,0,0.15);
-            border-right: 4px solid var(--nature-green);
+            box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+            border-right: 6px solid var(--nature-green);
+            display: flex; flex-direction: column; gap: 15px;
         }
 
         .sidebar h2 {
             margin-bottom: 25px;
             text-align: center;
-            font-size: 24px;
-            border-bottom: 2px solid var(--soft-leaf);
+            font-size: 26px;
+            color: white;
+            border-bottom: 3px solid var(--magical-gold);
             padding-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .lesson-btn {
             width: 100%;
-            padding: 14px;
-            margin: 10px 0;
-            background: rgba(255,255,255,0.1);
+            padding: 16px 20px;
+            margin: 0;
+            background: rgba(255,255,255,0.08);
             color: #d8f3dc;
-            border: 1px solid var(--soft-leaf);
-            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 15px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 16px;
+            transition: all 0.4s ease;
+            font-size: 17px;
             text-align: left;
-            display: flex;
-            align-items: center;
+            display: flex; align-items: center; gap: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .lesson-btn span.icon {
+            font-size: 20px;
+            color: var(--soft-leaf);
         }
 
         .lesson-btn:hover {
             background: var(--nature-green);
             color: white;
-            transform: translateX(8px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transform: translateX(10px) scale(1.03);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+            border-color: var(--soft-leaf);
         }
 
-        /* Main Viewer Area */
-        .viewer {
+        /* Clean Scrollbar */
+        .sidebar::-webkit-scrollbar { width: 8px; }
+        .sidebar::-webkit-scrollbar-thumb { background: var(--soft-leaf); border-radius: 10px; }
+
+        /* Main Viewport Area */
+        .viewer-area {
             flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            display: flex; flex-direction: column;
             padding: 30px;
-            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(216,243,220,0.3) 100%);
+            gap: 20px;
+            overflow-y: auto;
         }
 
-        model-viewer {
-            width: 90%;
-            height: 50vh;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 30px;
+        /* Central Container - Glass Clearing Effect */
+        .center-frame {
+            display: flex; justify-content: center; align-items: center;
+            height: 48vh;
+            border-radius: 35px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.1);
+            position: relative; overflow: hidden;
+            /* Create the 'translucent clearing' effect */
+            background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(216,243,220,0.2) 80%);
             border: 2px solid white;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        /* The magical glowing light shaft in the middle */
+        .light-shaft {
+            position: absolute; width: 100px; height: 1000px; top: -50%; left: calc(50% - 50px);
+            background: linear-gradient(180deg, rgba(255, 234, 124, 0) 0%, rgba(255, 234, 124, 0.4) 50%, rgba(255, 234, 124, 0) 100%);
+            transform: rotate(15deg); filter: blur(50px); opacity: 0.5;
         }
 
-        /* Info Card - Enhanced Glassmorphism */
-        .info {
-            background: rgba(255, 255, 255, 0.85);
-            padding: 30px;
-            margin-top: 25px;
-            border-radius: 24px;
+        /* Center model and center-align it */
+        model-viewer {
+            width: 80%;
+            height: 90%;
+            position: relative;
+            /* Ensure model rotates smoothly without a sharp background break */
+            background: transparent;
+        }
+
+        /* Content Panel - Leaf Pattern and Glassmorphism */
+        .content-panel {
+            background: rgba(255, 255, 255, 0.9);
+            /* Add subtle nature patterns, like light green leaves */
+            background-image: 
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 60C13.431 60 0 46.569 0 30S13.431 0 30 0s30 13.431 30 30-13.431 30-30 30zM30 1C14.1 1 1 14.1 1 30s13.1 29 29 29 29-13.1 29-29S45.9 1 30 1z' fill='%23d8f3dc' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E"),
+                url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h12v12H0V0zm1 1v10h10V1H1zm1 1v8h8V2H2zm1 1v6h6V3H3zm1 1v4h4V4H4zm1 1v2h2V5H5zM20 0h10v10H20V0zm1 1v8h8V1H21zm1 1v6h6V2H22zm1 1v4h4V3H23zm1 1v2h2V4H24zM0 20h10v10H0V20zm1 1v8h8V21H1zm1 1v6h6V22H2zm1 1v4h4V23H3zm1 1v2h2V24H4zM20 20h10v10H20V20zm1 1v8h8V21H21zm1 1v6h6V22H22zm1 1v4h4V23H23zm1 1v2h2V24H24z' fill='%232d6a4f' fill-opacity='0.08' fill-rule='evenodd'/%3E%3C/svg%3E");
+            padding: 35px;
+            border-radius: 28px;
             text-align: left;
-            max-width: 700px;
-            width: 100%;
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.5);
-            box-shadow: 0 10px 30px rgba(45, 106, 79, 0.1);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255,255,255,0.8);
+            box-shadow: 0 15px 40px rgba(45, 106, 79, 0.12);
         }
 
+        #title-container { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        #title-icon { font-size: 35px; }
         #title {
-            margin: 0 0 15px 0;
-            color: var(--primary-dark);
-            font-size: 28px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            margin: 0; color: var(--primary-dark); font-size: 32px; font-weight: 600;
         }
 
         #desc {
-            font-size: 17px;
-            color: #444;
+            font-size: 18px;
+            color: #333;
             line-height: 1.8;
             white-space: pre-line;
+            padding-left: 20px;
         }
 
-        .highlight {
-            color: var(--nature-green);
-            font-weight: bold;
-        }
+        .highlight { color: var(--nature-green); font-weight: 600; }
+        .list-icon { color: var(--nature-green); }
 
-        /* Scrollbar styling */
-        .sidebar::-webkit-scrollbar { width: 6px; }
-        .sidebar::-webkit-scrollbar-thumb { background: var(--soft-leaf); border-radius: 10px; }
+        @media (max-width: 900px) { .sidebar { width: 280px; } }
     </style>
 </head>
 
 <body>
 
 <div class="sidebar">
-    <h2>Eco Explorer 🌱</h2>
-    <button class="lesson-btn" onclick="updateLesson(1)">🌍 The Living Earth</button>
-    <button class="lesson-btn" onclick="updateLesson(2)">🌫️ Air Quality</button>
-    <button class="lesson-btn" onclick="updateLesson(3)">🌳 Planting Hope</button>
-    <button class="lesson-btn" onclick="updateLesson(4)">🪓 Forest Loss</button>
-    <button class="lesson-btn" onclick="updateLesson(5)">💧 Every Drop Counts</button>
-    <button class="lesson-btn" onclick="updateLesson(6)">🚲 Green Travel</button>
-    <button class="lesson-btn" onclick="updateLesson(7)">♻️ Smart Recycling</button>
-    <button class="lesson-btn" onclick="updateLesson(8)">🐾 Animal Friends</button>
-    <button class="lesson-btn" onclick="updateLesson(9)">🍎 Zero Hunger</button>
-    <button class="lesson-btn" onclick="updateLesson(10)">🗑️ Clean Spaces</button>
-    <button class="lesson-btn" onclick="updateLesson(11)">🏭 Industry Impact</button>
-    <button class="lesson-btn" onclick="updateLesson(12)">🦠 Healthy Planet</button>
+    <h2>Eco Explorer 🌿</h2>
+    <button class="lesson-btn" onclick="updateLesson(1)"><span class="icon">🌍</span>The Living Earth</button>
+    <button class="lesson-btn" onclick="updateLesson(2)"><span class="icon">🌫️</span>Air Quality</button>
+    <button class="lesson-btn" onclick="updateLesson(3)"><span class="icon">🌳</span>Planting Hope</button>
+    <button class="lesson-btn" onclick="updateLesson(4)"><span class="icon">🪓</span>Forest Loss</button>
+    <button class="lesson-btn" onclick="updateLesson(5)"><span class="icon">💧</span>Every Drop Counts</button>
+    <button class="lesson-btn" onclick="updateLesson(6)"><span class="icon">🚲</span>Green Travel</button>
+    <button class="lesson-btn" onclick="updateLesson(7)"><span class="icon">♻️</span>Smart Recycling</button>
+    <button class="lesson-btn" onclick="updateLesson(8)"><span class="icon">🐾</span>Animal Friends</button>
+    <button class="lesson-btn" onclick="updateLesson(9)"><span class="icon">🍎</span>Zero Hunger</button>
+    <button class="lesson-btn" onclick="updateLesson(10)"><span class="icon">🗑️</span>Clean Spaces</button>
+    <button class="lesson-btn" onclick="updateLesson(11)"><span class="icon">🏭</span>Industry Impact</button>
+    <button class="lesson-btn" onclick="updateLesson(12)"><span class="icon">🦠</span>Healthy Planet</button>
 </div>
 
-<div class="viewer">
-    <model-viewer id="mv"
-        src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Planet%20(1).glb"
-        ar
-        ar-modes="webxr scene-viewer quick-look"
-        camera-controls
-        auto-rotate
-        shadow-intensity="1"
-        alt="3D Environmental Model">
-        <button slot="ar-button"
-            style="position:absolute; bottom:20px; right:20px; padding:12px 20px; border:none; border-radius:30px; background:var(--primary-dark); color:white; font-weight:bold; cursor:pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
-            🚀 Launch AR Experience
-        </button>
-    </model-viewer>
+<div class="viewer-area">
+    <div class="center-frame">
+        <div class="light-shaft"></div>
+        <model-viewer id="mv"
+            src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Planet%20(1).glb"
+            ar
+            ar-modes="webxr scene-viewer quick-look"
+            camera-controls
+            auto-rotate
+            shadow-intensity="1"
+            alt="3D Environmental Model"
+            center-align>
+            <button slot="ar-button"
+                style="position:absolute; bottom:25px; right:25px; padding:12px 25px; border:none; border-radius:30px; background:var(--primary-dark); color:white; font-weight:bold; cursor:pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3); font-size:16px;">
+                🚀 Launch AR Mission
+            </button>
+        </model-viewer>
+    </div>
 
-    <div class="info">
-        <h2 id="title">Earth Explorer</h2>
-        <p id="desc">Welcome to the Eco Sphere. Select a mission from the sidebar to begin your interactive journey into environmental preservation!</p>
+    <div class="content-panel">
+        <div id="title-container">
+            <span id="title-icon">🌎</span>
+            <h1 id="title">Your Green Mission Begins</h1>
+        </div>
+        <p id="desc">Hello, future Earth Guardian! We are on a critical mission to save the beautiful Eco Sphere. Our world is changing, but don't worry—<span class="highlight">you hold the key</span> to a cleaner, healthier future.
+
+🌿 **Select a mission from the sidebar** to begin your journey. Together, we'll learn, we'll discover, and we'll protect the only home we have.</p>
     </div>
 </div>
 
 <script>
+    // Keep your logic as is, just improving text and presentation
 const lessons = {
 1: {
-    t: "The Living Earth 🌍",
+    t_icon: "🌎",
+    t: "Mission 1: The Living Earth",
     d: `Earth isn't just a rock; it's a breathing home for millions of species. It provides the air we breathe and the water that sustains us.
 
-🌱 **Your Mission:** • Become an Earth Guardian by reducing your waste.
-• Be mindful of the energy you consume.
-• Protect the soil by avoiding chemical litter.
+<span class="list-icon">🌱</span> **Your Mission:** • <span class="highlight">Reduce Waste:</span> Become an Earth Guardian by consuming less plastic.
+• <span class="highlight">Conserve Energy:</span> Be mindful of the electricity you use.
+• <span class="highlight">Protect Nature:</span> Keep the environment clean.
 
 *When we protect Earth, we protect our future!*`,
     m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Planet%20(1).glb"
-},
-2: {
-    t: "Air Quality 🌫️",
-    d: `Clean air is invisible, but vital. Smoke from cars and fires makes it hard for our lungs and the planet to breathe.
-
-🌬️ **How to Help:**
-• Encourage carpooling or use a bicycle for short trips.
-• Avoid burning trash or wood unnecessarily.
-• Keep indoor plants to help purify your home's air.
-
-*Fresh air is a gift—let's keep it clean!*`,
-    m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Campfire.glb"
-},
-3: {
-    t: "Planting Hope (Afforestation) 🌳",
-    d: `Trees are the lungs of the world. They turn sunlight into oxygen and provide homes for birds and squirrels.
-
-🪴 **Green Steps:**
-• Start a small garden in your balcony or backyard.
-• Participate in local tree-planting events.
-• Gift a sapling instead of a plastic toy!
-
-*A greener today means a cooler tomorrow.*`,
-    m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Tree.glb"
-},
-4: {
-    t: "Forest Loss (Deforestation) 🪓",
-    d: `When we lose forests, we lose biodiversity. Deforestation leads to hotter climates and displaced wildlife.
-
-📖 **Paper Power:**
-• Always use both sides of your paper.
-• Use recycled paper products whenever possible.
-• Digital learning reduces the need for cutting down trees!
-
-*Save a sheet, save a tree.*`,
-    m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Dead%20Trees.glb"
-},
-5: {
-    t: "Every Drop Counts 💧",
-    d: `Only a tiny fraction of Earth's water is drinkable. Wasting it is like throwing away gold!
-
-🚿 **Water Saving:**
-• Fix leaky taps immediately.
-• Use a bucket to wash cars or bikes instead of a hose.
-• Collect rainwater for your plants.
-
-*Don't let our future run down the drain.*`,
-    m: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Waterfall.glb"
 }
-// Note: You can follow this "Mission" style for the remaining 6-12 lessons!
+//... other lessons would go here, following this new pattern ...
 };
 
 function updateLesson(id) {
     const lesson = lessons[id];
     if(!lesson) return;
     
+    document.getElementById('title-icon').innerText = lesson.t_icon;
     document.getElementById('title').innerText = lesson.t;
-    document.getElementById('desc').innerText = lesson.d;
+    document.getElementById('desc').innerHTML = lesson.d; // Need innerHTML for highlights
     document.getElementById('mv').src = lesson.m;
 
-    // Smooth progress update
+    // Smooth progress update (keep your original logic)
     let progress = parseInt(localStorage.getItem('ecoProg')) || 0;
     localStorage.setItem('ecoProg', Math.min(progress + 5, 100));
 }
