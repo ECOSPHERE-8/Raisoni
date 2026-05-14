@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Eco Sphere | 3D Waste Scan</title>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #121212; /* Dark "Tech" background to make AR pop */
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* The "Scanner" HUD Overlay */
+        .hud {
+            position: absolute;
+            top: 20px;
+            width: 90%;
+            display: flex;
+            justify-content: space-between;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .stat-box {
+            background: rgba(45, 106, 79, 0.8);
+            padding: 10px 25px;
+            border-radius: 15px;
+            border: 2px solid #b7e4c7;
+            font-size: 20px;
+        }
+
+        /* 3D Scanner Window */
+        .scanner-window {
+            width: 100%;
+            height: 70vh;
+            background: radial-gradient(circle, #1b4332 0%, #0a0a0a 100%);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Fake "AR" Reticle */
+        .reticle {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border: 2px solid rgba(183, 228, 199, 0.5);
+            border-radius: 30px;
+            pointer-events: none;
+            box-shadow: 0 0 20px rgba(0, 255, 127, 0.2);
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 100%;
+            --poster-color: transparent;
+        }
+
+        /* Decision Buttons */
+        .controls {
+            flex-grow: 1;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            background: #1b4332;
+        }
+
+        .bin-btn {
+            padding: 20px 40px;
+            font-size: 18px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+            color: white;
+        }
+
+        .recycle { background: #2d6a4f; border-bottom: 5px solid #1b4332; }
+        .trash { background: #bc4749; border-bottom: 5px solid #6a1b1b; }
+
+        .bin-btn:hover { transform: translateY(-5px); }
+        .bin-btn:active { transform: translateY(2px); border-bottom: none; }
+    </style>
+</head>
+<body>
+
+    <div class="hud">
+        <div class="stat-box">🔋 Scanner Energy: <span id="energy">100</span>%</div>
+        <div class="stat-box">✨ Score: <span id="score">0</span></div>
+    </div>
+
+    <div class="scanner-window">
+        <div class="reticle"></div>
+        <model-viewer id="scanner" 
+            src="https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Recycle%20bin.glb" 
+            auto-rotate 
+            camera-controls 
+            exposure="1.2">
+        </model-viewer>
+    </div>
+
+    <div class="controls">
+        <button class="bin-btn trash" onclick="checkAnswer('trash')">🔴 SEND TO LANDFILL</button>
+        <button class="bin-btn recycle" onclick="checkAnswer('recycle')">🟢 RECYCLE ITEM</button>
+    </div>
+
+    <script>
+        // List of items that "look" like AR objects
+        const items = [
+            { name: "Plastic Bin", type: "recycle", model: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Recycle%20bin.glb" },
+            { name: "Old Trash", type: "trash", model: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/trash.glb" },
+            { name: "Waste Can", type: "trash", model: "https://raw.githubusercontent.com/ECOSPHERE-8/Raisoni/main/Trashcan.glb" }
+        ];
+
+        let currentItem = 0;
+        let score = 0;
+
+        function checkAnswer(choice) {
+            const item = items[currentItem];
+            
+            if (choice === item.type) {
+                score += 50;
+                alert("Correct! Item Analyzed. ✅");
+            } else {
+                alert("Warning: Incorrect Disposal! ❌");
+            }
+
+            document.getElementById('score').innerText = score;
+            nextItem();
+        }
+
+        function nextItem() {
+            currentItem = (currentItem + 1) % items.length;
+            const viewer = document.getElementById('scanner');
+            
+            // Fade out effect
+            viewer.style.opacity = 0;
+            
+            setTimeout(() => {
+                viewer.src = items[currentItem].model;
+                viewer.style.opacity = 1;
+            }, 300);
+
+            if (currentItem === 0 && score > 0) {
+                finishGame();
+            }
+        }
+
+        function finishGame() {
+            alert("Scanner Mission Complete! Your final score: " + score);
+            let currentProg = parseInt(localStorage.getItem('ecoProg')) || 0;
+            localStorage.setItem('ecoProg', Math.min(currentProg + 10, 100));
+            window.location.href = "dashboard.html";
+        }
+    </script>
+</body>
+</html>
