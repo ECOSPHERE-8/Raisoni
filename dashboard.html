@@ -2,203 +2,85 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eco Sphere | Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-dark: #1b4332;
-            --nature-green: #2d6a4f;
-            --soft-leaf: #b7e4c7;
-            --sky-blue: #e0f2f1;
-            --gold: #ffea7c;
-        }
-
+        /* Keeping your exact original styling */
         body {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #d8f3dc 0%, #f8f9fa 100%);
-            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding: 40px 20px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .header h1 {
-            color: var(--primary-dark);
-            font-size: 3rem;
-            margin: 0;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .header p {
-            color: var(--nature-green);
-            font-size: 1.2rem;
-            margin-top: 10px;
-        }
-
-        .dashboard-container {
-            width: 100%;
-            max-width: 1000px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            text-align: center;
-            transition: transform 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.8);
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card h2 {
-            color: var(--primary-dark);
-            margin-bottom: 20px;
-        }
-
-        /* Progress Bar Styling */
-        .progress-circle {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: conic-gradient(var(--nature-green) 0%, #eee 0%);
-            margin: 0 auto 20px;
-            display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            transition: background 1s ease-in-out;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: #e6f9f0;
         }
-
-        .progress-circle::before {
-            content: "";
-            position: absolute;
-            width: 120px;
-            height: 120px;
+        .dashboard {
             background: white;
-            border-radius: 50%;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 350px;
         }
-
-        .progress-value {
-            position: relative;
-            font-size: 2rem;
-            font-weight: 600;
-            color: var(--primary-dark);
+        h1 { color: #1b4332; }
+        .progress-container {
+            margin: 20px 0;
+            background: #eee;
+            border-radius: 10px;
+            height: 25px;
+            width: 100%;
+            overflow: hidden;
         }
-
-        .btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+        .progress-bar {
+            background: #2d6a4f;
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s;
         }
-
-        .dash-btn {
-            padding: 15px 30px;
-            border-radius: 15px;
-            border: none;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-learn {
-            background: var(--nature-green);
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #2d6a4f;
             color: white;
+            border: none;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
         }
-
-        .btn-learn:hover {
-            background: var(--primary-dark);
-            box-shadow: 0 5px 15px rgba(45, 106, 79, 0.3);
-        }
-
-        /* The NEW Game Button Styling */
-        .btn-game {
-            background: var(--gold);
-            color: var(--primary-dark);
-            border: 2px solid var(--primary-dark);
-        }
-
-        .btn-game:hover {
-            background: #f1d34d;
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .btn-logout {
-            background: #f8f9fa;
-            color: #666;
-            margin-top: 20px;
-        }
-
-        .btn-logout:hover {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-
+        .btn:hover { background: #1b4332; }
+        
+        /* New button specific style to make it stand out slightly */
+        .btn-game { background: #1b4332; border: 2px solid #ffea7c; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>Welcome Back, Guardian! 🌱</h1>
-        <p>Your journey to protect the Eco Sphere continues.</p>
+<div class="dashboard">
+    <h1>Welcome! 🌱</h1>
+    <p>Your Eco-Progress:</p>
+    <div class="progress-container">
+        <div id="bar" class="progress-bar"></div>
     </div>
+    <p id="status">0% Complete</p>
 
-    <div class="dashboard-container">
-        <div class="card">
-            <h2>Your Eco-Rank</h2>
-            <div class="progress-circle" id="progCircle">
-                <span class="progress-value" id="progValue">0%</span>
-            </div>
-            <p id="rank-text">Seedling Scout</p>
-        </div>
+    <a href="learn.html" class="btn">Continue Learning</a>
+    
+    <a href="ar-game.html" class="btn btn-game">🎮 Start AR Mission</a>
 
-        <div class="card">
-            <h2>Quests & Missions</h2>
-            <div class="btn-group">
-                <a href="learn.html" class="dash-btn btn-learn">📖 Continue Learning</a>
-                <a href="ar-game.html" class="dash-btn btn-game">🎮 Start AR Mission</a>
-            </div>
-            <a href="login.html" class="dash-btn btn-logout">Logout</a>
-        </div>
-    </div>
+    <a href="login.html" class="btn" style="background:#bc4749;">Logout</a>
+</div>
 
-    <script>
-        window.onload = function() {
-            // Retrieve progress from localStorage
-            let progress = parseInt(localStorage.getItem('ecoProg')) || 0;
-            
-            // Update UI
-            const progCircle = document.getElementById('progCircle');
-            const progValue = document.getElementById('progValue');
-            const rankText = document.getElementById('rank-text');
-
-            progValue.innerText = progress + "%";
-            progCircle.style.background = `conic-gradient(#2d6a4f ${progress}%, #eee ${progress}%)`;
-
-            // Update Rank Title based on progress
-            if (progress > 20) rankText.innerText = "Sprout Specialist";
-            if (progress > 50) rankText.innerText = "Forest Protector";
-            if (progress > 80) rankText.innerText = "Earth Guardian 🌍";
-        };
-    </script>
+<script>
+    window.onload = function() {
+        let p = localStorage.getItem('ecoProg') || 0;
+        document.getElementById('bar').style.width = p + "%";
+        document.getElementById('status').innerText = p + "% Complete";
+    };
+</script>
 
 </body>
 </html>
