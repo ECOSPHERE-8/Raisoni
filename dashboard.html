@@ -1,61 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Eco Sphere | Dashboard</title>
-    <style>
-        /* Keeping your exact original styling */
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background: #e6f9f0;
-        }
-        .dashboard {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            text-align: center;
-            width: 350px;
-        }
-        h1 { color: #1b4332; }
-        .progress-container {
-            margin: 20px 0;
-            background: #eee;
-            border-radius: 10px;
-            height: 25px;
-            width: 100%;
-            overflow: hidden;
-        }
-        .progress-bar {
-            background: #2d6a4f;
-            height: 100%;
-            width: 0%;
-            transition: width 0.5s;
-        }
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            background: #2d6a4f;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            text-decoration: none;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .btn:hover { background: #1b4332; }
-        
-        /* New button specific style to make it stand out slightly */
-        .btn-game { background: #1b4332; border: 2px solid #ffea7c; }
-    </style>
+<meta charset="UTF-8">
+<title>Eco Sphere | Dashboard</title>
+<style>
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #e6f9f0;
+}
+.dashboard {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    text-align: center;
+    width: 350px;
+}
+h1 {
+    color: #1b4332;
+}
+.progress-container {
+    margin: 20px 0;
+    background: #eee;
+    border-radius: 10px;
+    height: 25px;
+    width: 100%;
+    overflow: hidden;
+}
+.progress-bar {
+    background: #2d6a4f;
+    height: 100%;
+    width: 0%;
+    transition: width 0.5s;
+}
+.btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    background: #2d6a4f;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+.btn:hover {
+    background: #1b4332;
+}
+</style>
 </head>
 <body>
 
@@ -68,18 +68,15 @@
     <p id="status">0% Complete</p>
 
     <a href="learn.html" class="btn">Continue Learning</a>
-    
-    <a href="ar-game.html" class="btn btn-game">🎮 Start AR Mission</a>
-
     <a href="login.html" class="btn" style="background:#bc4749;">Logout</a>
 </div>
 
 <script>
-    window.onload = function() {
-        let p = localStorage.getItem('ecoProg') || 0;
-        document.getElementById('bar').style.width = p + "%";
-        document.getElementById('status').innerText = p + "% Complete";
-    };
+window.onload = function() {
+    let p = localStorage.getItem('ecoProg') || 0;
+    document.getElementById('bar').style.width = p + "%";
+    document.getElementById('status').innerText = p + "% Complete";
+};
 </script>
 
 </body>
