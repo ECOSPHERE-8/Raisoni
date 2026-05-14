@@ -4,236 +4,200 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eco Sphere | Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        :root {
+            --primary-dark: #1b4332;
+            --nature-green: #2d6a4f;
+            --soft-leaf: #b7e4c7;
+            --sky-blue: #e0f2f1;
+            --gold: #ffea7c;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #d8f3dc 0%, #f8f9fa 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 20px;
-            
-            /* High-Definition Environmental Background */
-            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
-                        url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=1920&q=80');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: white;
+            padding: 40px 20px;
         }
 
-        .header { text-align: center; margin-bottom: 20px; } /* Reduced margin for welcome text */
-        h1 { 
-            font-size: 3.5rem; 
-            color: #10b981; 
-            text-shadow: 3px 3px 15px rgba(0,0,0,0.6); 
-            letter-spacing: 2px;
-        }
-        .header p { font-size: 1.2rem; color: #d1fae5; }
-
-        /* Personal Welcome Style */
-        .welcome-section {
+        .header {
             text-align: center;
-            margin-bottom: 30px;
-            animation: fadeInDown 0.8s ease;
-        }
-        #user-greeting {
-            font-size: 1.8rem;
-            color: #ffffff;
-            font-weight: 300;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
-        }
-        #user-greeting span {
-            color: #10b981;
-            font-weight: bold;
+            margin-bottom: 40px;
         }
 
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .header h1 {
+            color: var(--primary-dark);
+            font-size: 3rem;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        /* Main Menu Layout */
-        .menu-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+        .header p {
+            color: var(--nature-green);
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        .dashboard-container {
             width: 100%;
             max-width: 1000px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
         }
 
-        /* Glassmorphism Buttons */
-        .main-btn {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            padding: 45px 20px;
+        .card {
+            background: white;
+            padding: 30px;
             border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             text-align: center;
-            text-decoration: none;
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: 0.3s ease;
-            cursor: pointer;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+        }
+
+        /* Progress Bar Styling */
+        .progress-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(var(--nature-green) 0%, #eee 0%);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: background 1s ease-in-out;
+        }
+
+        .progress-circle::before {
+            content: "";
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .progress-value {
+            position: relative;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .btn-group {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            gap: 15px;
         }
 
-        .main-btn:hover {
-            background: rgba(16, 185, 129, 0.25);
-            border-color: #10b981;
-            transform: translateY(-8px);
-        }
-
-        .icon { font-size: 50px; margin-bottom: 15px; }
-        h3 { font-size: 1.5rem; margin-bottom: 5px; color: #d1fae5; }
-
-        /* Game Selection Menu */
-        #game-selection-area {
-            display: none;
-            margin-top: 20px;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(25px);
-            border-radius: 35px;
-            width: 100%;
-            max-width: 950px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .game-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-        }
-
-        .game-choice {
-            background: rgba(16, 185, 129, 0.15);
-            border: 2px solid #10b981;
-            color: white;
-            padding: 25px;
-            border-radius: 20px;
-            text-decoration: none;
-            text-align: center;
-            transition: 0.3s;
-        }
-
-        .game-choice:hover {
-            background: #10b981;
-            color: #064e3b;
-            transform: scale(1.05);
-        }
-
-        .back-btn {
-            background: #ef4444;
-            color: white;
+        .dash-btn {
+            padding: 15px 30px;
+            border-radius: 15px;
             border: none;
-            padding: 10px 25px;
-            border-radius: 50px;
-            margin-bottom: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
         }
-        .back-btn:hover { background: #b91c1c; transform: translateX(-5px); }
+
+        .btn-learn {
+            background: var(--nature-green);
+            color: white;
+        }
+
+        .btn-learn:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 5px 15px rgba(45, 106, 79, 0.3);
+        }
+
+        /* The NEW Game Button Styling */
+        .btn-game {
+            background: var(--gold);
+            color: var(--primary-dark);
+            border: 2px solid var(--primary-dark);
+        }
+
+        .btn-game:hover {
+            background: #f1d34d;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-logout {
+            background: #f8f9fa;
+            color: #666;
+            margin-top: 20px;
+        }
+
+        .btn-logout:hover {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>ECO SPHERE</h1>
-        <p>Connecting Technology with Nature for a Greener Tomorrow</p>
+        <h1>Welcome Back, Guardian! 🌱</h1>
+        <p>Your journey to protect the Eco Sphere continues.</p>
     </div>
 
-    <div class="welcome-section">
-        <h2 id="user-greeting">Welcome, <span id="display-name">Eco-Explorer</span>! Have a great learning! 🌿</h2>
-    </div>
-
-    <div class="menu-container" id="main-menu">
-        <a href="learn.html" class="main-btn">
-            <span class="icon">📚</span>
-            <h3>Learning</h3>
-        </a>
-
-        <a href="practice.html" class="main-btn">
-            <span class="icon">🧠</span>
-            <h3>Practice</h3>
-        </a>
-
-        <div class="main-btn" onclick="showGames()">
-            <span class="icon">🎮</span>
-            <h3>Games</h3>
+    <div class="dashboard-container">
+        <div class="card">
+            <h2>Your Eco-Rank</h2>
+            <div class="progress-circle" id="progCircle">
+                <span class="progress-value" id="progValue">0%</span>
+            </div>
+            <p id="rank-text">Seedling Scout</p>
         </div>
 
-        <a href="about.html" class="main-btn">
-            <span class="icon">🌿</span>
-            <h3>About Us</h3>
-        </a>
-
-        <a href="index.html" class="main-btn" style="border-color: #ef4444; color: #ef4444;">
-            <span class="icon">🚪</span>
-            <h3>Logout</h3>
-        </a>
-    </div>
-
-    <div id="game-selection-area">
-        <button class="back-btn" onclick="hideGames()">← Back to Dashboard</button>
-        <h2 style="text-align: center; margin-bottom: 30px;">Select Your Eco-Mission</h2>
-        
-        <div class="game-grid">
-            <a href="games.html" class="game-choice">
-                <span style="font-size: 40px; display: block; margin-bottom: 10px;">♻️</span>
-                <strong>Waste Segregator</strong>
-                <p style="font-size: 13px; margin-top: 8px; font-weight: normal;">Sort trash into the correct bins!</p>
-            </a>
-
-            <a href="explorer.html" class="game-choice">
-                <span style="font-size: 40px; display: block; margin-bottom: 10px;">🕵️</span>
-                <strong>Hazardous Detective</strong>
-                <p style="font-size: 13px; margin-top: 8px; font-weight: normal;">Find and scan hidden pollution!</p>
-            </a>
-
-            <a href="catcher.html" class="game-choice">
-                <span style="font-size: 40px; display: block; margin-bottom: 10px;">🪣</span>
-                <strong>Eco Catcher (AR)</strong>
-                <p style="font-size: 13px; margin-top: 8px; font-weight: normal;">Catch items to keep Earth healthy!</p>
-            </a>
+        <div class="card">
+            <h2>Quests & Missions</h2>
+            <div class="btn-group">
+                <a href="learn.html" class="dash-btn btn-learn">📖 Continue Learning</a>
+                <a href="ar-game.html" class="dash-btn btn-game">🎮 Start AR Mission</a>
+            </div>
+            <a href="login.html" class="dash-btn btn-logout">Logout</a>
         </div>
     </div>
 
     <script>
-        // Personalization Logic
         window.onload = function() {
-            const name = localStorage.getItem('currentUser');
-            if (name) {
-                document.getElementById('display-name').innerText = name;
-            }
+            // Retrieve progress from localStorage
+            let progress = parseInt(localStorage.getItem('ecoProg')) || 0;
+            
+            // Update UI
+            const progCircle = document.getElementById('progCircle');
+            const progValue = document.getElementById('progValue');
+            const rankText = document.getElementById('rank-text');
+
+            progValue.innerText = progress + "%";
+            progCircle.style.background = `conic-gradient(#2d6a4f ${progress}%, #eee ${progress}%)`;
+
+            // Update Rank Title based on progress
+            if (progress > 20) rankText.innerText = "Sprout Specialist";
+            if (progress > 50) rankText.innerText = "Forest Protector";
+            if (progress > 80) rankText.innerText = "Earth Guardian 🌍";
         };
-
-        function showGames() {
-            document.getElementById('main-menu').style.display = 'none';
-            document.getElementById('game-selection-area').style.display = 'block';
-            // Hide welcome text when games are open to save space
-            document.querySelector('.welcome-section').style.display = 'none';
-        }
-
-        function hideGames() {
-            document.getElementById('main-menu').style.display = 'grid';
-            document.getElementById('game-selection-area').style.display = 'none';
-            // Show welcome text again
-            document.querySelector('.welcome-section').style.display = 'block';
-        }
     </script>
 
 </body>
